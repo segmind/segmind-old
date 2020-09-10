@@ -7,14 +7,11 @@ logging metadata and artifacts for DeepLearning Algorithms.
 # importing other modules.
 # See: https://github.com/numpy/numpy/pull/432/commits/170ed4e33d6196d7
 import warnings
-#import cral.tracking.tracking as tracking  # noqa
 # pylint: disable=wrong-import-position
-#import cral.tracking.projects as projects  # noqa
 from segmind_track import projects  # noqa
 from segmind_track import tracking  # noqa
 from .tracking import fluent
-# from .utils import autologging_utils
-from .utils.logging_utils import _configure_mlflow_loggers
+from .utils.logging_utils import _configure_mlflow_loggers, log_params_decorator
 
 warnings.filterwarnings(
     'ignore', message='numpy.dtype size changed')  # noqa: E402
@@ -24,6 +21,8 @@ warnings.filterwarnings(
 warnings.filterwarnings('module', category=DeprecationWarning)
 
 _configure_mlflow_loggers(__name__)
+
+from .version import VERSION as __version__
 
 
 def ActiveRun(*args, **kwargs):
@@ -296,17 +295,17 @@ def log_batch(*args, **kwargs):
     return fluent.log_batch(*args, **kwargs)
 
 
-def log_params_decorator(*args, **kwargs):
-    """Summary.
+# def log_params_decorator(*args, **kwargs):
+#     """Summary.
 
-    Args:
-        *args: Description
-        **kwargs: Description
+#     Args:
+#         *args: Description
+#         **kwargs: Description
 
-    Returns:
-        TYPE: Description
-    """
-    return autologging_utils.log_params_decorator(*args, **kwargs)
+#     Returns:
+#         TYPE: Description
+#     """
+#     return log_params_decorator(*args, **kwargs)
 
 
 get_experiment = fluent.get_experiment
