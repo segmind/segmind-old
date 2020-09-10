@@ -10,6 +10,8 @@ import warnings
 # pylint: disable=wrong-import-position
 from segmind_track import projects  # noqa
 from segmind_track import tracking  # noqa
+
+from .callbacks import KerasCallback
 from .tracking import fluent
 from .utils.logging_utils import _configure_mlflow_loggers, log_params_decorator
 

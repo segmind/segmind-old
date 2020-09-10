@@ -3,6 +3,7 @@ import logging
 import logging.config
 import sys
 import inspect
+import warnings
 
 from segmind_track.tracking import fluent
 
