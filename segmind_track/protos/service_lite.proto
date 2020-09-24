@@ -4,6 +4,7 @@ package mlflow;
 
 import "scalapb/scalapb.proto";
 import "errorcodes.proto";
+import "google/protobuf/struct.proto";
 
 option java_package = "org.cral.tracking.api.proto";
 option py_generic_services = true;
@@ -591,6 +592,36 @@ message Artifact {
 
   // Path associated with this artifact.
   optional string path = 2;
+
+  // Type of this artifact.
+  optional string artifact_type = 3;
+
+  // The timestamp at which this artifact was recorded.
+  optional int64 timestamp = 4;
+
+  // The size in bytes of this artifact.
+  optional int64 size = 5;
+
+  // Dictionary containing bboxes or masks or both, in case it is a prediction from a model.
+  optional google.protobuf.Struct prediction = 6;
+
+  // Dictionary containing the associated ground truth.
+  optional google.protobuf.Struct ground_truth = 7;
+
+  // Step at which to log the artifact.
+  optional int64 step = 8;
+
+  // Tags associated with this artifact.
+  repeated ArtifactTag tags = 9;
+}
+
+// Tag associated with an artifact, represented as a key-value pair.
+message ArtifactTag {
+  // The tag key.
+  optional string key = 1;
+
+  // The tag value.
+  optional string value = 2;
 }
 
 // A single run.
@@ -963,6 +994,24 @@ message LogArtifact {
 
   // ID of the associated experiment.
   optional string experiment_id = 5;
+
+  // Type of this artifact.
+  optional string type = 6;
+
+  // The timestamp at which this artifact was recorded.
+  optional int64 timestamp = 7;
+
+  // The size in bytes of this artifact.
+  optional int64 size = 8;
+
+  // Dictionary containing bboxes or masks or both, in case it is a prediction from a model.
+  optional google.protobuf.Struct prediction = 9;
+
+  // Dictionary containing the associated ground truth.
+  optional google.protobuf.Struct ground_truth = 10;
+
+  // Step at which to log the artifact.
+  optional int64 step = 11;
 
   message Response {
     // URL to POST.

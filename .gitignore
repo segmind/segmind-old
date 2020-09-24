@@ -1,2 +1,4 @@
 *.pyc
 segmind_track.egg-info/
+
+Dockerfile.staging

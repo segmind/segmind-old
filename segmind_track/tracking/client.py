@@ -5,6 +5,9 @@ This is a lower level API than the :py:mod:`segmind_track.tracking.fluent`
 module, and is exposed in the :py:mod:`segmind_track.tracking` module.
 """
 
+import os
+import time
+
 from segmind_track.entities import ViewType
 from segmind_track.exceptions import MlflowException
 from segmind_track.lite_extensions.client_utils import get_host_uri
@@ -222,7 +225,10 @@ class MlflowClient(object):
         param = LogParam(key=str(key), value=str(value))
         self._tracking_client.log_param(run_id, param)
 
-    def log_artifact_lite(self, run_id, experiment_id, key, path):
+    def log_artifact_lite(
+        self, run_id, experiment_id, key, path, artifact_type='data', timestamp=None, size=None,
+        prediction=None, ground_truth=None, step=None
+    ):
         """Log an artifact against the run ID.
 
         :param run_id: The run ID against which the artifact should be logged.
@@ -230,7 +236,12 @@ class MlflowClient(object):
         :param key: Artifact name.
         :param path: Artifact path. This value should be the absolute path of the local artifact.
         """
-        artifact = Artifact(key=key, path=path)
+        timestamp = timestamp or int(time.time() * 1000)
+        size = os.path.getsize(path)
+        artifact = Artifact(
+            key=key, path=path, type=artifact_type, timestamp=timestamp, size=size,
+            prediction=prediction, ground_truth=ground_truth, step=step
+        )
         self._tracking_client.log_artifact(run_id, experiment_id, artifact)
 
     def set_experiment_tag(self, experiment_id, key, value):
