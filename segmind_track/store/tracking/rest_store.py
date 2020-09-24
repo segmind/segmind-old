@@ -195,7 +195,12 @@ class RestStore(AbstractStore):
         # Generate a presigned S3 POST URL
         req_body = message_to_json(
             LogArtifact(
-                run_id=run_id, experiment_id=experiment_id, key=artifact.key))
+                run_id=run_id, experiment_id=experiment_id, key=artifact.key,
+                type=artifact.type, timestamp=artifact.timestamp, size=artifact.size,
+                prediction=artifact.prediction, ground_truth=artifact.ground_truth,
+                step=artifact.step
+            )
+        )
         response_proto = self._call_endpoint(LogArtifact, req_body)
         if response_proto is None:
             _logger.warning(
