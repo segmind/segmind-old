@@ -18,11 +18,19 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     # url="https://github.com/pk00095/keras_jukebox/archive/0.0.3.tar.gz",
     packages=setuptools.find_packages(),
-    # install_requires=['PyQt5','paho-mqtt'],
-    # entry_points={
-    #   "console_scripts": [
-    #       'start_jukebox=keras_jukebox.jukebox_ui:main']
-    # },
+    install_requires=[
+        'pycocotools', 
+        'click', 
+        'protobuf==3.13.0',
+        'lxml',
+        'pascal_voc_writer',
+        'GPUtil',
+        'PYyaml',
+        'pandas'],
+    entry_points={
+      "console_scripts": [
+          "segmind=segmind_track.cli:cli"]
+    },
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",

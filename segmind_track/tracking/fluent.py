@@ -2,6 +2,10 @@
 active MLflow run.
 
 This module is exposed to users at the top-level :py:mod:`mlflow` module.
+
+Attributes:
+    NUM_RUNS_PER_PAGE_PANDAS (int): Description
+    SEARCH_MAX_RESULTS_PANDAS (int): Description
 """
 
 from __future__ import print_function
@@ -9,9 +13,13 @@ import atexit
 import logging
 import os
 import time
+from tempfile import gettempdir
 
 import numpy as np
 import pandas as pd
+import PIL.Image
+
+from google.protobuf.struct_pb2 import Struct
 
 from segmind_track.entities import (Metric, Param, Run, RunStatus, RunTag,
                                     ViewType)
@@ -27,6 +35,8 @@ from segmind_track.utils.mlflow_tags import (MLFLOW_PARENT_RUN_ID,
                                              MLFLOW_RUN_NAME)
 from segmind_track.utils.validation import _validate_run_id
 
+from segmind_track.data.converters.object_detection import coco_to_voc_bbox, yolo_to_voc_bbox
+
 #_EXPERIMENT_ID_ENV_VAR = "MLFLOW_EXPERIMENT_ID"
 _EXPERIMENT_NAME_ENV_VAR = 'MLFLOW_EXPERIMENT_NAME'
 #_RUN_ID_ENV_VAR = "MLFLOW_RUN_ID"
@@ -39,11 +49,32 @@ NUM_RUNS_PER_PAGE_PANDAS = 10000
 _logger = logging.getLogger(__name__)
 
 
+def convert_to_imagefile(image):
+    image_name = os.path.join(gettempdir(), 'temp_image.jpg')
+
+    if isinstance(image, PIL.Image.Image):
+        image.save(image_name)
+        path = image_name
+    elif isinstance(image, np.ndarray):
+        image = PIL.Image.fromarray(image)
+        image.save(image_name)
+        path = image_name
+    else:
+        path = image
+
+    return path
+
 def set_experiment(experiment_id):
     """Set given experiment as active experiment. If experiment does not exist,
     create an experiment with provided name.
-
+    
     :param experiment_name: Name of experiment to be activated.
+    
+    Args:
+        experiment_id (TYPE): Description
+    
+    Raises:
+        MlflowException: Description
     """
     os.environ[_EXPERIMENT_ID_ENV_VAR] = experiment_id
 
@@ -66,20 +97,46 @@ def set_experiment(experiment_id):
 
 
 def set_runid(run_id):
+    """Summary
+    
+    Args:
+        run_id (TYPE): Description
+    """
     os.environ[_RUN_ID_ENV_VAR] = run_id
 
 
 class ActiveRun(Run):  # pylint: disable=W0223
     """Wrapper around :py:class:`segmind_track.entities.Run` to enable using
-    Python ``with`` syntax."""
+    Python ``with`` syntax.
+    """
 
     def __init__(self, run):
+        """Summary
+        
+        Args:
+            run (TYPE): Description
+        """
         Run.__init__(self, run.info, run.data)
 
     def __enter__(self):
+        """Summary
+        
+        Returns:
+            TYPE: Description
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Summary
+        
+        Args:
+            exc_type (TYPE): Description
+            exc_val (TYPE): Description
+            exc_tb (TYPE): Description
+        
+        Returns:
+            TYPE: Description
+        """
         status = RunStatus.FINISHED if exc_type is None else RunStatus.FAILED
         end_run(RunStatus.to_string(status))
         return exc_type is None
@@ -90,14 +147,14 @@ def start_run(run_name=None, nested=False):
     and parameters will be logged. The return value can be used as a context
     manager within a ``with`` block; otherwise, you must call ``end_run()`` to
     terminate the current run.
-
+    
     If you pass a ``run_id`` or the ``MLFLOW_RUN_ID`` environment variable is set,
     ``start_run`` attempts to resume a run with the specified run ID and
     other parameters are ignored. ``run_id`` takes precedence over ``MLFLOW_RUN_ID``.
-
+    
     MLflow sets a variety of default tags on the run, as defined in
     :ref:`MLflow system tags <system_tags>`.
-
+    
     :param run_id: If specified, get the run with the specified UUID and log parameters
                      and metrics under that run. The run's end time is unset and its status
                      is set to running, but the run's other attributes (``source_version``,
@@ -113,6 +170,17 @@ def start_run(run_name=None, nested=False):
     :param nested: Controls whether run is nested in parent run. ``True`` creates a nest run.
     :return: :py:class:`segmind_track.ActiveRun` object that acts as a context manager wrapping
              the run's state.
+    
+    Args:
+        run_name (None, optional): Description
+        nested (bool, optional): Description
+    
+    Returns:
+        TYPE: Description
+    
+    Raises:
+        Exception: Description
+        MlflowException: Description
     """
     global _active_run_stack
     # back compat for int experiment_id
@@ -180,7 +248,11 @@ def start_run(run_name=None, nested=False):
 
 
 def end_run(status=RunStatus.to_string(RunStatus.FINISHED)):
-    """End an active MLflow run (if there is one)."""
+    """End an active MLflow run (if there is one).
+    
+    Args:
+        status (TYPE, optional): Description
+    """
     global _active_run_stack
     if len(_active_run_stack) > 0:
         MlflowClient().set_terminated(_active_run_stack[-1].info.run_id,
@@ -195,15 +267,18 @@ atexit.register(end_run)
 
 def active_run():
     """Get the currently active ``Run``, or None if no such run exists.
-
+    
     **Note**: You cannot access currently-active run attributes
     (parameters, metrics, etc.) through the run returned by ``segmind_track.active_run``. In order
     to access such attributes, use the :py:class:`segmind_track.tracking.MlflowClient` as follows:
-
+    
     .. code-block:: py
-
+    
         client = segmind_track.tracking.MlflowClient()
         data = client.get_run(segmind_track.active_run().info.run_id).data
+    
+    Returns:
+        TYPE: Description
     """
     return _active_run_stack[-1] if len(_active_run_stack) > 0 else None
 
@@ -216,11 +291,17 @@ def get_run(run_id):
     :py:class:`RunData <segmind_track.entities.RunData>`. In the case where multiple metrics with the
     same key are logged for the run, the :py:class:`RunData <segmind_track.entities.RunData>` contains
     the most recently logged value at the largest step for each metric.
-
+    
     :param run_id: Unique identifier for the run.
-
+    
     :return: A single :py:class:`segmind_track.entities.Run` object, if the run exists. Otherwise,
                 raises an exception.
+    
+    Args:
+        run_id (TYPE): Description
+    
+    Returns:
+        TYPE: Description
     """
     return MlflowClient().get_run(run_id)
 
@@ -228,9 +309,13 @@ def get_run(run_id):
 def log_param(key, value):
     """Log a parameter under the current run. If no run is active, this method
     will create a new active run.
-
+    
     :param key: Parameter name (string)
     :param value: Parameter value (string, but will be string-ified if not)
+    
+    Args:
+        key (TYPE): Description
+        value (TYPE): Description
     """
     run_id = _get_or_start_run().info.run_id
     MlflowClient().log_param(run_id, key, value)
@@ -239,9 +324,13 @@ def log_param(key, value):
 def set_tag(key, value):
     """Set a tag under the current run. If no run is active, this method will
     create a new active run.
-
+    
     :param key: Tag name (string)
     :param value: Tag value (string, but will be string-ified if not)
+    
+    Args:
+        key (TYPE): Description
+        value (TYPE): Description
     """
     run_id = _get_or_start_run().info.run_id
     MlflowClient().set_tag(run_id, key, value)
@@ -250,8 +339,11 @@ def set_tag(key, value):
 def delete_tag(key):
     """Delete a tag from a run. This is irreversible. If no run is active, this
     method will create a new active run.
-
+    
     :param key: Name of the tag
+    
+    Args:
+        key (TYPE): Description
     """
     run_id = _get_or_start_run().info.run_id
     MlflowClient().delete_tag(run_id, key)
@@ -260,12 +352,17 @@ def delete_tag(key):
 def log_metric(key, value, step=None):
     """Log a metric under the current run. If no run is active, this method
     will create a new active run.
-
+    
     :param key: Metric name (string).
     :param value: Metric value (float). Note that some special values such as +/- Infinity may be
                   replaced by other values depending on the store. For example, sFor example, the
                   SQLAlchemy store replaces +/- Inf with max / min float values.
     :param step: Metric step (int). Defaults to zero if unspecified.
+    
+    Args:
+        key (TYPE): Description
+        value (TYPE): Description
+        step (None, optional): Description
     """
     run_id = _get_or_start_run().info.run_id
     MlflowClient().log_metric(run_id, key, value, int(time.time() * 1000), step
@@ -275,14 +372,18 @@ def log_metric(key, value, step=None):
 def log_metrics(metrics, step=None):
     """Log multiple metrics for the current run. If no run is active, this
     method will create a new active run.
-
+    
     :param metrics: Dictionary of metric_name: String -> value: Float. Note that some special values
                     such as +/- Infinity may be replaced by other values depending on the store.
                     For example, sql based store may replace +/- Inf with max / min float values.
     :param step: A single integer step at which to log the specified
                  Metrics. If unspecified, each metric is logged at step zero.
-
+    
     :returns: None
+    
+    Args:
+        metrics (TYPE): Description
+        step (None, optional): Description
     """
     run_id = _get_or_start_run().info.run_id
     timestamp = int(time.time() * 1000)
@@ -297,10 +398,13 @@ def log_metrics(metrics, step=None):
 def log_params(params):
     """Log a batch of params for the current run. If no run is active, this
     method will create a new active run.
-
+    
     :param params: Dictionary of param_name: String -> value: (String, but will be string-ified if
                    not)
     :returns: None
+    
+    Args:
+        params (TYPE): Description
     """
     run_id = _get_or_start_run().info.run_id
     params_arr = [Param(key, str(value)) for key, value in params.items()]
@@ -308,26 +412,183 @@ def log_params(params):
         run_id=run_id, metrics=[], params=params_arr, tags=[])
 
 
-def log_artifact(key, path):
+def log_artifact(key, path, step=None):
     """Log a local file or directory as an artifact of the currently active
     run. If no run is active, this method will create a new active run.
-
-    :param key: Name of the artifact to upload.
-    :param path: Path of the artifact to upload.
+    
+    Args:
+        key (str): Name of the artifact to upload.
+        path (str): Path of the artifact to upload.
+        step (None, optional): integer indicating the step at which artifact was generated
     """
     run = _get_or_start_run()
     run_id = run.info.run_id
     experiment_id = run.info.experiment_id
-    MlflowClient().log_artifact_lite(run_id, experiment_id, key, path)
+    MlflowClient().log_artifact_lite(run_id, experiment_id, key, path, step=step)
 
+def log_image(key, image, step=None):
+    """logs an image artifact
+    
+    Args:
+        key (str): name of the table
+        image (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a PIL.Image object
+        step (None, optional): integer indicating the step at which artifact was generated
+    """
+
+    path = convert_to_imagefile(image)
+
+    run = _get_or_start_run()
+    run_id = run.info.run_id
+    experiment_id = run.info.experiment_id
+    MlflowClient().log_artifact_lite(run_id, experiment_id, key, path, artifact_type='image', step=step)
+
+def log_table(key, table, step=None):
+    """logs a pandas dataframe/csv file as a table artifact
+    
+    Args:
+        key (str): name of the table
+        table (pandas.Dataframe, str): A pandas dataframe or path to a csv file
+        step (None, optional): integer indicating the step at which artifact was generated    
+    Raises:
+        MlflowException: Description
+    """
+
+    if not isinstance(table, (str, pd.DataFrame)):
+        raise MlflowException(f"table must be a pandas.DataFrame or a string to a csv file")
+
+    path = table
+    if isinstance(table, pd.DataFrame):
+        path = os.path.join(gettempdir(),'temp_table.csv')
+        table.to_csv(path, index=False)
+
+    run = _get_or_start_run()
+    run_id = run.info.run_id
+    experiment_id = run.info.experiment_id
+    MlflowClient().log_artifact_lite(run_id, experiment_id, key, path, artifact_type='table', step=step)
+
+def log_bbox_prediction(
+    key, 
+    image, 
+    bbox_pred, 
+    bbox_gt=None, 
+    bbox_type='pascal_voc', 
+    step=None):
+    """logs artifact for object detection
+    
+    Args:
+        key (str): name of the image
+        image (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a PIL.Image object
+        bbox_pred (np.ndarray, list): a list or a np.ndarray of dimension (Nx4). All elemnts will be onverted to int32 
+        bbox_gt (None, optional): a list or a np.ndarray of dimension (Nx4). All elemnts will be onverted to int32 
+        bbox_type (str, optional): can be one of 'yolo', 'pascal_voc', 'coco' indicating the format of bbox and prediction
+        step (None, optional): integer indicating the step at which artifact was generated
+    
+    Raises:
+        MlflowException: Description
+    """
+
+    if not bbox_type in ['pascal_voc', 'coco', 'yolo']:
+        raise MlflowException(f'bbox_type should be one-of "pascal_voc, coco, yolo" not {bbox_type}')
+
+    path = convert_to_imagefile(image)
+
+    bbox_pred = np.array(bbox_pred)
+    assert isinstance(bbox_pred, np.ndarray) and bbox_pred.ndim==2 and bbox_pred.shape[1]==4, f"bbox_pred should be numpy of dimension (Nx4), got {bbox_pred.shape}"
+
+    if bbox_type == 'coco':
+        bbox_pred=coco_to_voc_bbox(bbox_pred)
+        if bbox_gt:
+            bbox_gt=coco_to_voc_bbox(bbox_gt)
+    elif bbox_type == 'yolo':
+        bbox_pred = yolo_to_voc_bbox(path, bbox_pred)
+        if bbox_gt:
+            bbox_gt=yolo_to_voc_bbox(path, bbox_gt)
+
+    if bbox_gt == None:
+        bbox_gt = np.array([])
+
+    run = _get_or_start_run()
+    run_id = run.info.run_id
+    experiment_id = run.info.experiment_id
+
+    prediction_struct = Struct()
+    prediction_struct.update({"bbox": bbox_pred.tolist()})
+
+    ground_truth_struct = Struct()
+
+    ground_truth_struct.update({"bbox": bbox_gt.tolist()})
+
+    MlflowClient().log_artifact_lite(
+        run_id, 
+        experiment_id, 
+        key, 
+        path, 
+        prediction=prediction_struct, 
+        ground_truth=ground_truth_struct,
+        artifact_type='object_detection_image', 
+        step=step)
+
+def log_mask_prediction(
+    key, 
+    image, 
+    pred_mask, 
+    bbox_pred=None, 
+    mask_gt=None, 
+    bbox_gt=None, 
+    bbox_type='pascal_voc', 
+    step=None):
+    """logs artifact for instance/semantic segmentation
+    
+    Args:
+        key (str): name of the image
+        image (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a PIL.Image object
+        pred_mask (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a PIL.Image object
+        bbox_pred (None, optional): Description
+        mask_gt (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a PIL.Image object
+        bbox_gt (None, optional): a list or a np.ndarray of dimension (Nx4). All elemnts will be onverted to int32 
+        bbox_type (str, optional): Description
+        step (None, optional): integer indicating the step at which artifact was generated
+    """
+    if not bbox_type in ['pascal_voc', 'coco', 'yolo']:
+        raise MlflowException(f'bbox_type should be one-of "pascal_voc, coco, yolo" not {bbox_type}')
+
+    path = convert_to_imagefile(image)
+
+    bbox_pred = np.array(bbox_pred)
+    assert isinstance(bbox_pred, np.ndarray) and bbox_pred.ndim==2 and bbox_pred.shape[1]==4, f"bbox_pred should be numpy of dimension (Nx4), got {bbox_pred.shape}"
+
+    if bbox_type == 'coco':
+        bbox_pred=coco_to_voc_bbox(bbox_pred)
+        if bbox_gt:
+            bbox_gt=coco_to_voc_bbox(bbox_gt)
+    else:
+        bbox_pred = yolo_to_voc_bbox(image, bbox_pred)
+        if bbox_gt:
+            bbox_gt=yolo_to_voc_bbox(image, bbox_gt)
+
+    run = _get_or_start_run()
+    run_id = run.info.run_id
+    experiment_id = run.info.experiment_id
+    MlflowClient().log_artifact_lite(
+        run_id, 
+        experiment_id, 
+        key, 
+        path, 
+        prediction=prediction, 
+        ground_truth=ground_truth,      
+        artifact_type='segmentation_mask', 
+        step=step)
 
 def set_tags(tags):
     """Log a batch of tags for the current run. If no run is active, this
     method will create a new active run.
-
+    
     :param tags: Dictionary of tag_name: String -> value: (String, but will be string-ified if
                  not)
     :returns: None
+    
+    Args:
+        tags (TYPE): Description
     """
     run_id = _get_or_start_run().info.run_id
     tags_arr = [RunTag(key, str(value)) for key, value in tags.items()]
@@ -336,6 +597,14 @@ def set_tags(tags):
 
 
 def log_batch(metrics={}, params={}, tags={}, step=None):
+    """Summary
+    
+    Args:
+        metrics (dict, optional): Description
+        params (dict, optional): Description
+        tags (dict, optional): Description
+        step (None, optional): Description
+    """
     run_id = _get_or_start_run().info.run_id
     tags_arr = [RunTag(key, str(value)) for key, value in tags.items()]
     params_arr = [Param(key, str(value)) for key, value in params.items()]
@@ -352,27 +621,42 @@ def log_batch(metrics={}, params={}, tags={}, step=None):
 
 #TO DO: @pk00095
 #remove this
-def log_artifacts(local_dir, artifact_path=None):
-    """Log all the contents of a local directory as artifacts of the run. If no
-    run is active, this method will create a new active run.
-
-    :param local_dir: Path to the directory of files to write.
-    :param artifact_path: If provided, the directory in ``artifact_uri`` to write to.
-    """
-    run_id = _get_or_start_run().info.run_id
-    MlflowClient().log_artifacts(run_id, local_dir, artifact_path)
+# def log_artifacts(local_dir, artifact_path=None):
+#     """Log all the contents of a local directory as artifacts of the run. If no
+#     run is active, this method will create a new active run.
+    
+#     :param local_dir: Path to the directory of files to write.
+#     :param artifact_path: If provided, the directory in ``artifact_uri`` to write to.
+    
+#     Args:
+#         local_dir (TYPE): Description
+#         artifact_path (None, optional): Description
+#     """
+#     run_id = _get_or_start_run().info.run_id
+#     MlflowClient().log_artifacts(run_id, local_dir, artifact_path)
 
 
 def _record_logged_model(mlflow_model):
+    """Summary
+    
+    Args:
+        mlflow_model (TYPE): Description
+    """
     run_id = _get_or_start_run().info.run_id
     MlflowClient()._record_logged_model(run_id, mlflow_model)
 
 
 def get_experiment(experiment_id):
     """Retrieve an experiment by experiment_id from the backend store.
-
+    
     :param experiment_id: The experiment ID returned from ``create_experiment``.
     :return: :py:class:`segmind_track.entities.Experiment`
+    
+    Args:
+        experiment_id (TYPE): Description
+    
+    Returns:
+        TYPE: Description
     """
     return MlflowClient().get_experiment(experiment_id)
 
@@ -381,36 +665,55 @@ def get_experiment(experiment_id):
 #remove this
 def get_experiment_by_name(name):
     """Retrieve an experiment by experiment name from the backend store.
-
+    
     :param name: The experiment name.
     :return: :py:class:`segmind_track.entities.Experiment`
+    
+    Args:
+        name (TYPE): Description
+    
+    Returns:
+        TYPE: Description
     """
     return MlflowClient().get_experiment_by_name(name)
 
 
 def create_experiment(name, artifact_location=None):
     """Create an experiment.
-
+    
     :param name: The experiment name. Must be unique.
     :param artifact_location: The location to store run artifacts.
                               If not provided, the server picks an appropriate default.
     :return: Integer ID of the created experiment.
+    
+    Args:
+        name (TYPE): Description
+        artifact_location (None, optional): Description
+    
+    Returns:
+        TYPE: Description
     """
     return MlflowClient().create_experiment(name, artifact_location)
 
 
 def delete_experiment(experiment_id):
     """Delete an experiment from the backend store.
-
+    
     :param experiment_id: The experiment ID returned from ``create_experiment``.
+    
+    Args:
+        experiment_id (TYPE): Description
     """
     MlflowClient().delete_experiment(experiment_id)
 
 
 def delete_run(run_id):
     """Deletes a run with the given ID.
-
+    
     :param run_id: Unique identifier for the run to delete.
+    
+    Args:
+        run_id (TYPE): Description
     """
     MlflowClient().delete_run(run_id)
 
@@ -444,7 +747,7 @@ def search_runs(experiment_ids=None,
                 max_results=SEARCH_MAX_RESULTS_PANDAS,
                 order_by=None):
     """Get a pandas DataFrame of runs that fit the search criteria.
-
+    
     :param experiment_ids: List of experiment IDs. None will default to the active experiment.
     :param filter_string: Filter query string, defaults to searching all runs.
     :param run_view_type: one of enum values ``ACTIVE_ONLY``, ``DELETED_ONLY``, or ``ALL`` runs
@@ -454,11 +757,21 @@ def search_runs(experiment_ids=None,
     :param order_by: List of columns to order by (e.g., "metrics.rmse"). The ``order_by`` column
                      can contain an optional ``DESC`` or ``ASC`` value. The default is ``ASC``.
                      The default ordering is to sort by ``start_time DESC``, then ``run_id``.
-
+    
     :return: A pandas.DataFrame of runs, where each metric, parameter, and tag
         are expanded into their own columns named metrics.*, params.*, and tags.*
         respectively. For runs that don't have a particular metric, parameter, or tag, their
         value will be (NumPy) Nan, None, or None respectively.
+    
+    Args:
+        experiment_ids (None, optional): Description
+        filter_string (str, optional): Description
+        run_view_type (TYPE, optional): Description
+        max_results (TYPE, optional): Description
+        order_by (None, optional): Description
+    
+    Returns:
+        TYPE: Description
     """
     if not experiment_ids:
         experiment_ids = _get_experiment_id()
@@ -534,6 +847,18 @@ def search_runs(experiment_ids=None,
 
 def _get_paginated_runs(experiment_ids, filter_string, run_view_type,
                         max_results, order_by):
+    """Summary
+    
+    Args:
+        experiment_ids (TYPE): Description
+        filter_string (TYPE): Description
+        run_view_type (TYPE): Description
+        max_results (TYPE): Description
+        order_by (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
     all_runs = []
     next_page_token = None
     while (len(all_runs) < max_results):
@@ -557,6 +882,11 @@ def _get_paginated_runs(experiment_ids, filter_string, run_view_type,
 
 
 def _get_or_start_run():
+    """Summary
+    
+    Returns:
+        TYPE: Description
+    """
     if len(_active_run_stack) > 0:
         return _active_run_stack[-1]
 
@@ -565,6 +895,11 @@ def _get_or_start_run():
 
 
 def _get_experiment_id_from_env():
+    """Summary
+    
+    Returns:
+        TYPE: Description
+    """
     experiment_name = env.get_env(_EXPERIMENT_NAME_ENV_VAR)
     if experiment_name is not None:
         exp = MlflowClient().get_experiment_by_name(experiment_name)

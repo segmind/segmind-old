@@ -81,7 +81,7 @@ class TestKerasCallback(unittest.TestCase):
 
         model = define_mnist_model((28, 28), hidden_neurons=28)
 
-        keras_cb = KerasCallback(log_evry_n_step=5)
+        keras_cb = KerasCallback()
 
         model.fit(
             train_images,
