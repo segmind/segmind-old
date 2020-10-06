@@ -11,7 +11,7 @@ import warnings
 from segmind_track import projects  # noqa
 from segmind_track import tracking  # noqa
 
-from .callbacks import KerasCallback
+from .callbacks import KerasCallback, CheckpointCallback
 from .tracking import fluent
 from .utils.logging_utils import _configure_mlflow_loggers, log_params_decorator
 
@@ -327,6 +327,10 @@ get_tracking_uri = tracking.get_tracking_uri
 #register_model = _model_registry.fluent.register_model
 #log_artifacts = fluent.log_artifacts
 log_artifact = fluent.log_artifact
+log_table = fluent.log_table
+log_image = fluent.log_image
+log_bbox_prediction = fluent.log_bbox_prediction
+log_mask_prediction = fluent.log_mask_prediction
 
 run = projects.run
 

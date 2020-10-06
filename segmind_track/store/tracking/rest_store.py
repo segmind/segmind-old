@@ -196,7 +196,7 @@ class RestStore(AbstractStore):
         req_body = message_to_json(
             LogArtifact(
                 run_id=run_id, experiment_id=experiment_id, key=artifact.key,
-                type=artifact.type, timestamp=artifact.timestamp, size=artifact.size,
+                type=artifact.artifact_type, timestamp=artifact.timestamp, size=artifact.size,
                 prediction=artifact.prediction, ground_truth=artifact.ground_truth,
                 step=artifact.step
             )

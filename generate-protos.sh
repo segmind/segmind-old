@@ -9,6 +9,7 @@ if [ "$PROTOC_VERSION" != "libprotoc 3.6.0" || "$PROTOC_VERSION" != "libprotoc 3
 fi
 PROTOS="segmind_track/protos"
 protoc -I="$PROTOS" \
+	-I=/usr/include \
     --python_out="$PROTOS" \
     "$PROTOS"/errorcodes.proto \
     "$PROTOS"/model_registry.proto \

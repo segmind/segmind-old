@@ -13,7 +13,7 @@ import sys
 import tempfile
 from distutils import dir_util
 
-import docker
+# import docker
 import yaml
 from six.moves import urllib
 

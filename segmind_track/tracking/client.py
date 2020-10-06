@@ -239,7 +239,7 @@ class MlflowClient(object):
         timestamp = timestamp or int(time.time() * 1000)
         size = os.path.getsize(path)
         artifact = Artifact(
-            key=key, path=path, type=artifact_type, timestamp=timestamp, size=size,
+            key=key, path=path, artifact_type=artifact_type, timestamp=timestamp, size=size,
             prediction=prediction, ground_truth=ground_truth, step=step
         )
         self._tracking_client.log_artifact(run_id, experiment_id, artifact)

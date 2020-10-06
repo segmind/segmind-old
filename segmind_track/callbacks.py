@@ -1,37 +1,66 @@
 """Summary."""
 from __future__ import absolute_import
+from __future__ import print_function
+import sys
+
+import psutil
 import copy
 import os
 import shutil
 import tempfile
+from zipfile import ZipFile
+import zipfile
 
-import GPUtil
+import tensorflow as tf
 from tensorflow import keras
+from tensorflow.keras.callbacks import ModelCheckpoint #, TensorBoard
 
-from .utils.logging_utils import try_mlflow_log
-from .tracking.fluent import log_artifact, log_metrics, log_param, set_tag
+from segmind_track.utils.logging_utils import try_mlflow_log
+from segmind_track.tracking.fluent import log_artifact, log_metrics, log_param, set_tag
+from segmind_track.sys_data import system_metrics, gpu_metrics
 
 
-def log_gpu_metric():
-    gpu_data = {}
-    try:
-        i = 0
-        gpus = GPUtil.getGPUs()
-        if len(gpus) > 1:
-            for gpu in gpus:
-                # gpu_data[f'GPU_Name_{i}']=gpu.name
-                gpu_data[f'GPU_load_{i}'] = gpu.load
-                gpu_data[f'GPU_Memory_util_{i}'] = gpu.memoryUtil
-                # gpu_data[f'GPU_Memory_total_{i}']=gpu.memoryTotal
-                i += 1
-        else:
-            gpu = gpus[0]
-            gpu_data[f'GPU_load'] = gpu.load
-            gpu_data[f'GPU_Memory_util'] = gpu.memoryUtil
-            # gpu_data[f'GPU_Memory_total']=gpu.memoryTotal
-    except Exception as e:
-        e = e
-    return gpu_data
+class ModelCheckpointAndUpload(ModelCheckpoint):
+    """docstring for ModelCheckpointAndUpload"""
+
+    def _save_model(self, epoch, logs):
+        super(ModelCheckpointAndUpload, self)._save_model(epoch, logs)
+        filepath = self._get_file_path(epoch, logs)
+
+        if os.path.exists(filepath):
+            output_filename = os.path.join(tempfile.gettempdir(),'checkpoint_segmind_track') # .zip is automatically postfixed
+
+            if os.path.isfile(output_filename):
+                os.remove(output_filename)
+            # zip filepath folder
+
+            if os.path.isdir(filepath):
+                shutil.make_archive(output_filename, 'zip', filepath)
+                # log as artifact
+                print(f"Uploading checkpoint {output_filename} ...")
+                try_mlflow_log(log_artifact, key=os.path.basename(filepath)+'.zip', path=output_filename+'.zip')#, step=epoch)
+
+            else:
+                # log as artifact
+                print(f"Uploading checkpoint {filepath} ...")
+                try_mlflow_log(log_artifact, key=os.path.basename(filepath), path=filepath)#, step=epoch)
+
+
+def CheckpointCallback(snapshot_interval, snapshot_path, checkpoint_prefix, save_h5=True):
+
+    assert isinstance(save_h5, bool)
+
+    tf.io.gfile.makedirs(snapshot_path) #, exist_ok=True)
+
+    checkpoint_name = os.path.join(snapshot_path, str(checkpoint_prefix)+'_{epoch:02d}')
+
+    if save_h5:
+        checkpoint_name += '.h5'
+        
+    return ModelCheckpointAndUpload(
+        checkpoint_name,
+        verbose=1,
+        period=snapshot_interval//1)
 
 
 class KerasCallback(keras.callbacks.Callback):
@@ -117,9 +146,13 @@ class KerasCallback(keras.callbacks.Callback):
         if not logs:
             return
         if self.step_logging and self.num_step % self.log_evry_n_step == 0:
-            gpu_data = log_gpu_metric()
+            gpu_data = gpu_metrics()
             logs_copy = copy.deepcopy(logs)
             logs_copy.update(gpu_data)
+
+            cpu_data = system_metrics()
+            logs_copy.update(cpu_data)
+
             try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
 
     def on_test_batch_end(self, batch, logs=None):
@@ -136,9 +169,11 @@ class KerasCallback(keras.callbacks.Callback):
         if not logs:
             return
         if self.step_logging and self.num_test_step % self.log_evry_n_step == 0:
-            gpu_data = log_gpu_metric()
+            gpu_data = gpu_metrics()
             logs_copy = copy.deepcopy(logs)
             logs_copy.update(gpu_data)
+            cpu_data = system_metrics()
+            logs_copy.update(cpu_data)
             try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
 
     def on_test_end(self, logs=None):
@@ -166,9 +201,14 @@ class KerasCallback(keras.callbacks.Callback):
         self.current_epoch = epoch
         if not logs:
             return
-        #try_mlflow_log(log_metrics, logs, step=epoch)
-        # if not self.step_logging:
-        try_mlflow_log(log_metrics, logs, step=self.num_step)
+        gpu_data = gpu_metrics()
+        logs_copy = copy.deepcopy(logs)
+        logs_copy.update(gpu_data)
+
+        cpu_data = system_metrics()
+        logs_copy.update(cpu_data)
+
+        try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
 
     #def on_train_end(self, logs=None):
     #    try_mlflow_log(log_model, self.model, artifact_path='model')
