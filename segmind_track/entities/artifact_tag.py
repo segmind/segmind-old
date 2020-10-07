@@ -3,9 +3,7 @@ from mlflow_lite.protos.service_lite_pb2 import ArtifactTag as ProtoArtifactTag
 
 
 class ArtifactTag(_MLflowObject):
-    """
-    ArtifactTag object.
-    """
+    """ArtifactTag object."""
 
     def __init__(self, key, value):
         self._key = key

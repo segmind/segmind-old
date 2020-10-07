@@ -1,20 +1,21 @@
 #!/usr/bin/env python
-# -*- coding: utf8 -*-
-import sys
-import os
-from xml.etree import ElementTree
-from xml.etree.ElementTree import Element, SubElement
-from lxml import etree
 import codecs
+import os
+
 from segmind_track.data.converters.constants import DEFAULT_ENCODING
-import cv2
 
 TXT_EXT = '.txt'
 ENCODE_METHOD = DEFAULT_ENCODING
 
+
 class YOLOWriter:
 
-    def __init__(self, foldername, filename, imgSize, databaseSrc='Unknown', localImgPath=None):
+    def __init__(self,
+                 foldername,
+                 filename,
+                 imgSize,
+                 databaseSrc='Unknown',
+                 localImgPath=None):
         self.foldername = foldername
         self.filename = filename
         self.databaseSrc = databaseSrc
@@ -48,36 +49,35 @@ class YOLOWriter:
 
     def save(self, classList=[], targetFile=None):
 
-        out_file = None #Update yolo .txt
+        out_file = None  # Update yolo .txt
 
         if targetFile is None:
             out_file = open(
-            self.filename + TXT_EXT, 'w', encoding=ENCODE_METHOD)
+                self.filename + TXT_EXT, 'w', encoding=ENCODE_METHOD)
 
         else:
             out_file = codecs.open(targetFile, 'w', encoding=ENCODE_METHOD)
 
-
         for box in self.boxlist:
             classIndex, xcen, ycen, w, h = self.BndBox2YoloLine(box, classList)
             # print (classIndex, xcen, ycen, w, h)
-            out_file.write("%d %.6f %.6f %.6f %.6f\n" % (classIndex, xcen, ycen, w, h))
+            out_file.write('%d %.6f %.6f %.6f %.6f\n' %
+                           (classIndex, xcen, ycen, w, h))
 
         out_file.close()
-
 
 
 class YoloReader:
 
     def __init__(self, filepath, image, classListPath=None):
         # shapes type:
-        # [labbel, [(x1,y1), (x2,y2), (x3,y3), (x4,y4)], color, color, difficult]
+        # [label, [(x1,y1), (x2,y2), (x3,y3), (x4,y4)],color, color,difficult]
         self.shapes = []
         self.filepath = filepath
 
         if classListPath is None:
             dir_path = os.path.dirname(os.path.realpath(self.filepath))
-            self.classListPath = os.path.join(dir_path, "classes.txt")
+            self.classListPath = os.path.join(dir_path, 'classes.txt')
         else:
             self.classListPath = classListPath
 
@@ -88,8 +88,7 @@ class YoloReader:
 
         # print (self.classes)
 
-        imgSize = [image.shape[0], image.shape[1],
-                      image.shape[2]]
+        imgSize = [image.shape[0], image.shape[1], image.shape[2]]
 
         self.imgSize = imgSize
 
@@ -97,7 +96,7 @@ class YoloReader:
         # try:
         self.parseYoloFormat()
         # except:
-            # pass
+        # pass
 
     def getShapes(self):
         return self.shapes
@@ -130,7 +129,8 @@ class YoloReader:
         bndBoxFile = open(self.filepath, 'r')
         for bndBox in bndBoxFile:
             classIndex, xcen, ycen, w, h = bndBox.split(' ')
-            label, xmin, ymin, xmax, ymax = self.yoloLine2Shape(classIndex, xcen, ycen, w, h)
+            label, xmin, ymin, xmax, ymax = self.yoloLine2Shape(
+                classIndex, xcen, ycen, w, h)
 
             # Caveat: difficult flag is discarded when saved as yolo format.
             self.addShape(label, xmin, ymin, xmax, ymax, False)

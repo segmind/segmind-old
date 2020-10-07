@@ -3,9 +3,10 @@ from psutil._common import bytes2human
 
 # print(psutil.cpu_count())
 
+
 def fan_stats():
     data = {}
-    if not hasattr(psutil, "sensors_fans"):
+    if not hasattr(psutil, 'sensors_fans'):
         return data
     fans = psutil.sensors_fans()
     if fans:
@@ -13,6 +14,7 @@ def fan_stats():
             for entry in entries:
                 data[entry.label or name] = entry.current
     return data
+
 
 def bits_to_values(nt):
 
@@ -24,8 +26,10 @@ def bits_to_values(nt):
         data[name.capitalize()] = value
     return data
 
+
 def system_memory_stats():
     return bits_to_values(psutil.virtual_memory())
+
 
 def system_temp_stats():
     data = {}
@@ -34,30 +38,32 @@ def system_temp_stats():
         # print(name)
         for entry in entries:
 
-            data[f"{name}_{entry.label}_temperature"] = entry.current
+            data[f'{name}_{entry.label}_temperature'] = entry.current
 
     return data
+
 
 def battery_stats():
 
     data = {}
-    if not hasattr(psutil, "sensors_battery"):
+    if not hasattr(psutil, 'sensors_battery'):
         return data
     batt = psutil.sensors_battery()
     if batt is not None:
-        data["battery_percentage"] = round(batt.percent, 2)
-        data["battery_seconds_left"] = batt.secsleft
+        data['battery_percentage'] = round(batt.percent, 2)
+        data['battery_seconds_left'] = batt.secsleft
     else:
-        data["battery_percentage"] = 100
+        data['battery_percentage'] = 100
 
     return data
+
 
 def cpu_usage_stats():
     data = {}
     usage_list = psutil.cpu_percent(interval=1.0, percpu=True)
 
     for index, value in enumerate(usage_list):
-        data[f"CPU{index}_usage"] = value
+        data[f'CPU{index}_usage'] = value
 
     return data
 
