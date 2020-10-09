@@ -1,18 +1,17 @@
 import configparser
 import os
+import requests
 import sys
 from functools import wraps
 from pathlib import Path
-
-import requests
 
 from segmind_track.exceptions import MlflowException
 from segmind_track.lite_extensions.urls import SEGMIND_API_URL, TRACKING_URI
 from segmind_track.utils import env
 from .utils import cyan_print
 
-_EXPERIMENT_ID_ENV_VAR = 'MLFLOW_EXPERIMENT_ID'
-_RUN_ID_ENV_VAR = 'MLFLOW_RUN_ID'
+_EXPERIMENT_ID_ENV_VAR = 'TRACK_EXPERIMENT_ID'
+_RUN_ID_ENV_VAR = 'TRACK_RUN_ID'
 
 HOME = Path.home()
 
@@ -21,10 +20,9 @@ TOKENS_FILE = os.path.join(HOME, Path('.segmind/tokens.file'))
 
 
 def create_secret_file_guide():
-    # red_print(
-    #     "couldn't locate your '~/.segmind/secret.file'\nPlease create one like below:")
-    # message = "[secret]\nemail = john-doe@gmail.com\npassword=john's password"
-    message = "couldn't locate your credentials, please configure by typing `cral config` in a terminal"
+
+    message = "couldn't locate your credentials, please configure by typing \
+    `cral config` in a terminal"
     cyan_print(message)
 
 
@@ -106,7 +104,7 @@ def _get_experiment_id():
     return env.get_env(_EXPERIMENT_ID_ENV_VAR)
 
 
-#@catch_mlflowlite_exception
+@catch_mlflowlite_exception
 def _get_run_id():
     return env.get_env(_RUN_ID_ENV_VAR)
 

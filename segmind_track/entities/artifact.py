@@ -1,16 +1,22 @@
-
 from segmind_track.entities._mlflow_object import _MLflowObject
+from segmind_track.protos.service_lite_pb2 import Artifact as ProtoArtifact
 from segmind_track.protos.service_lite_pb2 import \
-    Artifact as ProtoArtifact, ArtifactTag as ProtoArtifactTag
+    ArtifactTag as ProtoArtifactTag
 
 
 class Artifact(_MLflowObject):
     """Artifact object."""
 
-    def __init__(
-        self, key, path, artifact_type, timestamp=None, size=None,
-        prediction=None, ground_truth=None, step=None, tags=[]
-    ):
+    def __init__(self,
+                 key,
+                 path,
+                 artifact_type,
+                 timestamp=None,
+                 size=None,
+                 prediction=None,
+                 ground_truth=None,
+                 step=None,
+                 tags=[]):
         self._key = key
         self._path = path
         self._artifact_type = artifact_type
@@ -38,7 +44,8 @@ class Artifact(_MLflowObject):
 
     @property
     def timestamp(self):
-        """Artifact timestamp as an integer (milliseconds since the Unix epoch)."""
+        """Artifact timestamp as an integer (milliseconds since the Unix
+        epoch)."""
         return self._timestamp
 
     @property
@@ -69,8 +76,7 @@ class Artifact(_MLflowObject):
 
     @property
     def tags(self):
-        """
-        The artifact tags, such as type.
+        """The artifact tags, such as type.
 
         :rtype: :py:class:`mlflow_lite.entities.ArtifactTag`
         """
@@ -94,18 +100,18 @@ class Artifact(_MLflowObject):
             artifact.ground_truth = self.ground_truth
         if self.step:
             artifact.step = self.step
-        artifact.tags.extend(
-            [ProtoArtifactTag(key=key, value=val) for key, val in self.tags.items()]
-        )
+        artifact.tags.extend([
+            ProtoArtifactTag(key=key, value=val)
+            for key, val in self.tags.items()
+        ])
 
         return artifact
 
     @classmethod
     def from_proto(cls, proto):
-        artifact = cls(
-            proto.name, proto.path, proto.artifact_type, proto.timestamp, proto.size,
-            proto.prediction, proto.ground_truth, proto.step
-        )
+        artifact = cls(proto.name, proto.path, proto.artifact_type,
+                       proto.timestamp, proto.size, proto.prediction,
+                       proto.ground_truth, proto.step)
         for proto_tag in proto.tags:
-            artifact._add_tag(ArtifactTag.from_proto(proto_tag))
+            artifact._add_tag(ProtoArtifactTag.from_proto(proto_tag))
         return artifact

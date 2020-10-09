@@ -1,19 +1,21 @@
 #!/usr/bin/env python
-# -*- coding: utf8 -*-
-import sys
+import codecs
+from lxml import etree
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element, SubElement
-from lxml import etree
-import codecs
-import os
-import cv2
 
 XML_EXT = '.xml'
 ENCODE_METHOD = 'utf-8'
 
+
 class PascalVocWriter:
 
-    def __init__(self, foldername, filename, imgSize,databaseSrc='Unknown', localImgPath=None):
+    def __init__(self,
+                 foldername,
+                 filename,
+                 imgSize,
+                 databaseSrc='Unknown',
+                 localImgPath=None):
         self.foldername = foldername
         self.filename = filename
         self.databaseSrc = databaseSrc
@@ -23,20 +25,18 @@ class PascalVocWriter:
         self.verified = False
 
     def prettify(self, elem):
-        """
-            Return a pretty-printed XML string for the Element.
-        """
+        """Return a pretty-printed XML string for the Element."""
         rough_string = ElementTree.tostring(elem, 'utf8')
         root = etree.fromstring(rough_string)
-        return etree.tostring(root, pretty_print=True, encoding=ENCODE_METHOD).replace("  ".encode(), "\t".encode())
+        return etree.tostring(
+            root, pretty_print=True,
+            encoding=ENCODE_METHOD).replace('  '.encode(), '\t'.encode())
         # minidom does not support UTF-8
         '''reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="\t", encoding=ENCODE_METHOD)'''
 
     def genXML(self):
-        """
-            Return XML root
-        """
+        """Return XML root."""
         # Check conditions
         if self.filename is None or \
                 self.foldername is None or \
@@ -92,16 +92,18 @@ class PascalVocWriter:
                 # Py3: NameError: name 'unicode' is not defined
                 name.text = each_object['name']
             pose = SubElement(object_item, 'pose')
-            pose.text = "Unspecified"
+            pose.text = 'Unspecified'
             truncated = SubElement(object_item, 'truncated')
-            if int(each_object['ymax']) == int(self.imgSize[0]) or (int(each_object['ymin'])== 1):
-                truncated.text = "1" # max == height or min
-            elif (int(each_object['xmax'])==int(self.imgSize[1])) or (int(each_object['xmin'])== 1):
-                truncated.text = "1" # max == width or min
+            if int(each_object['ymax']) == int(self.imgSize[0]) or (int(
+                    each_object['ymin']) == 1):
+                truncated.text = '1'  # max == height or min
+            elif (int(each_object['xmax']) == int(self.imgSize[1])) or (int(
+                    each_object['xmin']) == 1):
+                truncated.text = '1'  # max == width or min
             else:
-                truncated.text = "0"
+                truncated.text = '0'
             difficult = SubElement(object_item, 'difficult')
-            difficult.text = str( bool(each_object['difficult']) & 1 )
+            difficult.text = str(bool(each_object['difficult']) & 1)
             bndbox = SubElement(object_item, 'bndbox')
             xmin = SubElement(bndbox, 'xmin')
             xmin.text = str(each_object['xmin'])
@@ -129,28 +131,15 @@ class PascalVocWriter:
 
 class PascalVocReader:
 
-    def __init__(self, filepath,image,classListPath=None):
+    def __init__(self, filepath, image, classListPath=None):
         # shapes type:
-        # [labbel, [(x1,y1), (x2,y2), (x3,y3), (x4,y4)], color, color, difficult]
         self.shapes = []
         self.filepath = filepath
-        #if classListPath is None:
-            #dir_path = os.path.dirname(os.path.realpath(self.filepath))
-            #self.classListPath = os.path.join(dir_path, "classes.txt")
-        #else:
-            #self.classListPath = classListPath
-        
-        #classesFile = open(self.classListPath, 'r')
-        #self.classes = classesFile.Read().strip('\n').split('\n')
-        
+
         imgSize = [image.shape[0], image.shape[1], image.shape[2]]
         self.imgSize = imgSize
-        
         self.verified = False
-        #try:
         self.parseXML()
-        #except:
-            #pass
 
     def getShapes(self):
         return self.shapes
@@ -164,10 +153,10 @@ class PascalVocReader:
         self.shapes.append((label, points, None, None, difficult))
 
     def parseXML(self):
-        assert self.filepath.endswith(XML_EXT), "Unsupport file format"
+        assert self.filepath.endswith(XML_EXT), 'Unsupport file format'
         parser = etree.XMLParser(encoding=ENCODE_METHOD)
         xmltree = ElementTree.parse(self.filepath, parser=parser).getroot()
-        filename = xmltree.find('filename').text
+        # filename = xmltree.find('filename').text
         try:
             verified = xmltree.attrib['verified']
             if verified == 'yes':
@@ -176,7 +165,7 @@ class PascalVocReader:
             self.verified = False
 
         for object_iter in xmltree.findall('object'):
-            bndbox = object_iter.find("bndbox")
+            bndbox = object_iter.find('bndbox')
             label = object_iter.find('name').text
             # Add chris
             difficult = False

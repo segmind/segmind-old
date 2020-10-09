@@ -1,17 +1,18 @@
 from __future__ import print_function
+
+import inspect
 import logging
 import logging.config
 import sys
-import inspect
 import warnings
 
 from segmind_track.tracking import fluent
 
-
 # Logging format example:
-# 2018/11/20 12:36:37 INFO cral.tracking.sagemaker: Creating new SageMaker endpoint
+# 2018/11/20 12:36:37 INFO cral.tracking.sagemaker: Creating new SageMaker endpoint # noqa: E501
 LOGGING_LINE_FORMAT = '%(asctime)s %(levelname)s %(name)s: %(message)s'
 LOGGING_DATETIME_FORMAT = '%Y/%m/%d %H:%M:%S'
+
 
 def try_mlflow_log(fn, *args, **kwargs):
     """Catch exceptions and log a warning to avoid autolog throwing."""
@@ -20,6 +21,7 @@ def try_mlflow_log(fn, *args, **kwargs):
     except Exception as e:  # pylint: disable=broad-except
         warnings.warn(
             'Logging to Refine server failed: ' + str(e), stacklevel=2)
+
 
 def log_params_decorator(fn):
 
@@ -33,7 +35,7 @@ def log_params_decorator(fn):
         """
         # all_default_values has length n, corresponding to values of the
         # last n elements in all_param_names
-        all_param_names, _, _, all_default_values = inspect.getargspec(fn)  # pylint: disable=W1505
+        all_param_names, _, _, all_default_values = inspect.getargspec(fn)
 
         unnamed_args_length = len(args)
 
@@ -43,12 +45,9 @@ def log_params_decorator(fn):
             all_default_values)
         default_param_names = all_param_names[num_args_without_default_value:]
         _defaults_as_dict = dict(zip(default_param_names, all_default_values))
-        #print(defaults)
-        #default_args = defaults.copy()
         _defaults_as_dict.update(**kwargs)
 
         _args_as_dict.update(**_defaults_as_dict)
-        #final_args_dict = {**user_provided_args_dict, **defaults}
 
         result = fn(*args, **kwargs)
 
@@ -57,6 +56,7 @@ def log_params_decorator(fn):
         return result
 
     return log_fn_args_as_params
+
 
 def _configure_mlflow_loggers(root_module_name):
     logging.config.dictConfig({

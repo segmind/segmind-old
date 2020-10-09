@@ -1,18 +1,25 @@
 import json
 import logging
-import threading
-
 import requests
+import threading
 
 from segmind_track.entities import Experiment, Metric, Run, RunInfo, ViewType
 from segmind_track.exceptions import MlflowException
 from segmind_track.protos import errorcodes_pb2
-from segmind_track.protos.service_lite_pb2 import (
-    CreateExperiment, CreateRun, DeleteExperiment, DeleteRun, DeleteTag,
-    GetExperiment, GetExperimentByName, GetMetricHistory, GetRun,
-    ListExperiments, LogArtifact, LogBatch, LogMetric, LogModel, LogParam,
-    MlflowService, RestoreExperiment, RestoreRun, RunTag, SearchRuns,
-    SetExperimentTag, SetTag, UpdateExperiment, UpdateRun)
+from segmind_track.protos.service_lite_pb2 import (CreateExperiment, CreateRun,
+                                                   DeleteExperiment, DeleteRun,
+                                                   DeleteTag, GetExperiment,
+                                                   GetExperimentByName,
+                                                   GetMetricHistory, GetRun,
+                                                   ListExperiments,
+                                                   LogArtifact, LogBatch,
+                                                   LogMetric, LogModel,
+                                                   LogParam, MlflowService,
+                                                   RestoreExperiment,
+                                                   RestoreRun, RunTag,
+                                                   SearchRuns,
+                                                   SetExperimentTag, SetTag,
+                                                   UpdateExperiment, UpdateRun)
 from segmind_track.store.tracking.abstract_store import AbstractStore
 from segmind_track.utils.proto_json_utils import message_to_json
 from segmind_track.utils.rest_utils import (call_endpoint,
@@ -37,22 +44,15 @@ def artifact_uploader(artifact, response_proto):
 
 
 class RestStore(AbstractStore):
-    """Client for a remote tracking server accessed via REST API calls.
+    """Client for a remote tracking server accessed via REST API calls."""
 
-    :param get_host_creds: Method to be invoked prior to every REST request to get the
-      :py:class:`segmind_track.rest_utils.MlflowHostCreds` for the request. Note that this
-      is a function so that we can obtain fresh credentials in the case of expiry.
-    """
-
-    def __init__(self, ):  #get_host_creds):
+    def __init__(self, ):
         super(RestStore, self).__init__()
-        #self.get_host_creds = get_host_creds
 
     def _call_endpoint(self, api, json_body):
         endpoint, method = _METHOD_TO_INFO[api]
         response_proto = api.Response()
-        #return call_endpoint(self.get_host_creds(), endpoint, method, json_body, response_proto)
-        #print(endpoint)
+
         return call_endpoint(endpoint, method, json_body, response_proto)
 
     def list_experiments(self, view_type=ViewType.ACTIVE_ONLY):
@@ -72,7 +72,8 @@ class RestStore(AbstractStore):
 
         :param name: Desired name for an experiment
 
-        :return: experiment_id (string) for the newly created experiment if successful, else None
+        :return: experiment_id (string) for the newly created experiment
+                 if successful, else None
         """
         req_body = message_to_json(
             CreateExperiment(name=name, artifact_location=artifact_location))
@@ -84,8 +85,8 @@ class RestStore(AbstractStore):
 
         :param experiment_id: String id for the experiment
 
-        :return: A single :py:class:`segmind_track.entities.Experiment` object if it exists,
-        otherwise raises an Exception.
+        :return: A single :py:class:`segmind_track.entities.Experiment`
+                 object if it exists, otherwise raises an Exception.
         """
         req_body = message_to_json(
             GetExperiment(experiment_id=str(experiment_id)))
@@ -113,7 +114,8 @@ class RestStore(AbstractStore):
 
         :param run_id: Unique identifier for the run
 
-        :return: A single Run object if it exists, otherwise raises an Exception
+        :return: A single Run object if it exists,
+                 otherwise raises an Exception
         """
         req_body = message_to_json(GetRun(run_uuid=run_id, run_id=run_id))
         response_proto = self._call_endpoint(GetRun, req_body)
@@ -140,8 +142,6 @@ class RestStore(AbstractStore):
 
         :return: The created Run object
         """
-        #print([RunTag(key=tagkey, value=tagvalue) for tagkey, tagvalue in tags.items()])
-        #tag_protos = [tag.to_proto() for tag in tags]
         tag_protos = [
             RunTag(key=tagkey, value=tagvalue)
             for tagkey, tagvalue in tags.items()
@@ -195,12 +195,15 @@ class RestStore(AbstractStore):
         # Generate a presigned S3 POST URL
         req_body = message_to_json(
             LogArtifact(
-                run_id=run_id, experiment_id=experiment_id, key=artifact.key,
-                type=artifact.artifact_type, timestamp=artifact.timestamp, size=artifact.size,
-                prediction=artifact.prediction, ground_truth=artifact.ground_truth,
-                step=artifact.step
-            )
-        )
+                run_id=run_id,
+                experiment_id=experiment_id,
+                key=artifact.key,
+                type=artifact.artifact_type,
+                timestamp=artifact.timestamp,
+                size=artifact.size,
+                prediction=artifact.prediction,
+                ground_truth=artifact.ground_truth,
+                step=artifact.step))
         response_proto = self._call_endpoint(LogArtifact, req_body)
         if response_proto is None:
             _logger.warning(
@@ -217,7 +220,7 @@ class RestStore(AbstractStore):
         #         response_proto.url,
         #         data=data, files=files
         #     )
-        # _logger.info(f"Artifact upload HTTP status code: {s3_response.status_code}")
+        # _logger.info(f"Artifact upload HTTP status code: {s3_response.status_code}")  # noqa
         # artifact_uploader(artifact, response_proto)
 
         upload_thread = threading.Thread(
@@ -269,7 +272,8 @@ class RestStore(AbstractStore):
         :param run_id: Unique identifier for run
         :param metric_key: Metric name within the run
 
-        :return: A list of :py:class:`segmind_track.entities.Metric` entities if logged, else empty list
+        :return: A list of :py:class:`segmind_track.entities.Metric`
+                 entities if logged, else empty list
         """
         req_body = message_to_json(
             GetMetricHistory(
@@ -292,7 +296,7 @@ class RestStore(AbstractStore):
         req_body = message_to_json(sr)
         response_proto = self._call_endpoint(SearchRuns, req_body)
         runs = [Run.from_proto(proto_run) for proto_run in response_proto.runs]
-        # If next_page_token is not set, we will see it as "". We need to convert this to None.
+
         next_page_token = None
         if response_proto.next_page_token:
             next_page_token = response_proto.next_page_token
@@ -343,7 +347,6 @@ class RestStore(AbstractStore):
         self._call_endpoint(LogModel, req_body)
 
     def set_terminated(self, run_id, status, end_time):
-        #pass
         self.update_run_info(
             run_id=run_id, run_status=status, end_time=end_time)
 
@@ -352,10 +355,11 @@ class DatabricksRestStore(RestStore):
     """Databricks-specific RestStore implementation that provides different
     fallback.
 
-    behavior when hitting the GetExperimentByName REST API fails - in particular, we only
-    fall back to ListExperiments when the server responds with ENDPOINT_NOT_FOUND, rather than
-    on all internal server errors. This implementation should be deprecated once
-    GetExperimentByName is available everywhere.
+    behavior when hitting the GetExperimentByName REST API fails
+    - in particular, we only fall back to ListExperiments when
+    the server responds with ENDPOINT_NOT_FOUND, rather than
+    on all internal server errors. This implementation should
+    be deprecated once GetExperimentByName is available everywhere.
     """
 
     def get_experiment_by_name(self, experiment_name):
