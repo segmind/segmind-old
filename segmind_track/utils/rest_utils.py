@@ -1,21 +1,17 @@
 import json
 import logging
+import requests
 import time
 
-import requests
-
-from segmind_track.version import VERSION as __version__
 from segmind_track.exceptions import (MlflowException, MlflowliteException,
                                       RestException)
-#from segmind_track.tracking.fluent import _get_experiment_id
 from segmind_track.lite_extensions.client_utils import (_get_experiment_id,
                                                         get_host_uri,
                                                         get_token)
 from segmind_track.protos import errorcodes_pb2
 from segmind_track.utils.proto_json_utils import parse_dict
 from segmind_track.utils.string_utils import strip_suffix
-
-#get_host_uri
+from segmind_track.version import VERSION as __version__
 
 RESOURCE_DOES_NOT_EXIST = 'RESOURCE_DOES_NOT_EXIST'
 
@@ -24,10 +20,6 @@ _logger = logging.getLogger(__name__)
 _DEFAULT_HEADERS = {'User-Agent': 'mlflow-python-client/%s' % __version__}
 
 
-#TO DO @risabh
-# modify the function below to concatenate token when sending rest request
-#def http_request(host_creds, endpoint, retries=3, retry_interval=3,
-#                 max_rate_limit_interval=60, **kwargs):
 def http_request(endpoint,
                  retries=3,
                  retry_interval=3,
@@ -39,34 +31,21 @@ def http_request(endpoint,
     `max_rate_limit_interval` seconds.  Internal errors (500s) will be retried
     up to `retries` times.
 
-    , waiting `retry_interval` seconds between successive retries. Parses the API response
-    (assumed to be JSON) into a Python object and returns it.
+    , waiting `retry_interval` seconds between successive retries. Parses the
+    API response (assumed to be JSON) into a Python object and returns it.
 
-    :param host_creds: A :py:class:`segmind_track.rest_utils.MlflowHostCreds` object containing
-        hostname and optional authentication.
+    :param host_creds: A :py:class:`segmind_track.rest_utils.MlflowHostCreds`
+            object containing hostname and optional authentication.
     :return: Parsed API response
     """
-    '''
-    hostname = host_creds.host
-    auth_str = None
-    if host_creds.username and host_creds.password:
-        basic_auth_str = ("%s:%s" % (host_creds.username, host_creds.password)).encode("utf-8")
-        auth_str = "Basic " + base64.standard_b64encode(basic_auth_str).decode("utf-8")
-    elif host_creds.token:
-        auth_str = "Bearer %s" % host_creds.token
-    '''
 
     hostname = get_host_uri()
 
-    #TO DO @risabh
     token = get_token()
     experiment_id = None
     # TODO: @tanay Get create experiment endpoint from protos
     if endpoint != '/api/2.0/mlflow/experiments/create':
         experiment_id = _get_experiment_id()
-    #auth_str = "Bearer %s" % token
-
-    #print(kwargs)
 
     if 'params' in kwargs:
         kwargs['params'].update({
@@ -80,10 +59,8 @@ def http_request(endpoint,
             "no 'json' or 'params' field found to send in request")
 
     headers = dict(_DEFAULT_HEADERS)
-    #if auth_str:
-    #    headers['Authorization'] = auth_str
 
-    verify = True  #not host_creds.ignore_tls_verification
+    verify = True
 
     def request_with_ratelimit_retries(max_rate_limit_interval, **kwargs):
         response = requests.request(**kwargs)
@@ -91,8 +68,8 @@ def http_request(endpoint,
         sleep = 1
         while response.status_code == 429 and time_left > 0:
             _logger.warning(
-                'API request to {path} returned status code 429 (Rate limit exceeded). '
-                'Retrying in %d seconds. '
+                'API request to {path} returned status code 429 (Rate limit'
+                ' exceeded). Retrying in %d seconds. '
                 'Will continue to retry 429s for up to %d seconds.', sleep,
                 time_left)
             time.sleep(sleep)
@@ -105,8 +82,6 @@ def http_request(endpoint,
     cleaned_hostname = strip_suffix(hostname, '/')
     url = '%s%s' % (cleaned_hostname, endpoint)
     for i in range(retries):
-        #response = request_with_ratelimit_retries(max_rate_limit_interval,
-        #                                          url=url, headers=headers, verify=verify, **kwargs)
         response = request_with_ratelimit_retries(
             max_rate_limit_interval,
             url=url,
@@ -116,10 +91,9 @@ def http_request(endpoint,
         if response.status_code >= 200 and response.status_code < 500:
             return response
         else:
-            _logger.error(
-                'API request to %s failed with code %s != 200, retrying up to %s more times. '
-                'API response body: %s', url, response.status_code,
-                retries - i - 1, response.text)
+            _logger.error(f'API request to {url} failed with code \
+                {response.status_code} != 200, retrying up to \
+                {retries-i-1} more times. API response body: {response.text}')
             time.sleep(retry_interval)
     raise MlflowException(
         'API request to %s failed to return code 200 after %s tries' %
@@ -137,7 +111,6 @@ def _can_parse_as_json(string):
 def http_request_safe(host_creds, endpoint, **kwargs):
     """Wrapper around ``http_request`` that also verifies that the request
     succeeds with code 200."""
-    #response = http_request(host_creds=host_creds, endpoint=endpoint, **kwargs)
     response = http_request(endpoint=endpoint, **kwargs)
     return verify_rest_response(response, endpoint)
 
@@ -180,13 +153,9 @@ def call_endpoint(endpoint, method, json_body, response_proto):
     if json_body:
         json_body = json.loads(json_body)
     if method == 'GET':
-        #response = http_request(
-        #    host_creds=host_creds, endpoint=endpoint, method=method, params=json_body)
         response = http_request(
             endpoint=endpoint, method=method, params=json_body)
     else:
-        #response = http_request(
-        #    host_creds=host_creds, endpoint=endpoint, method=method, json=json_body)
         response = http_request(
             endpoint=endpoint, method=method, json=json_body)
     response = verify_rest_response(response, endpoint)
@@ -199,16 +168,16 @@ class MlflowHostCreds(object):
     """Provides a hostname and optional authentication for talking to an MLflow
     tracking server.
 
-    :param host: Hostname (e.g., http://localhost:5000) to MLflow server. Required.
-    :param username: Username to use with Basic authentication when talking to server.
-        If this is specified, password must also be specified.
-    :param password: Password to use with Basic authentication when talking to server.
-        If this is specified, username must also be specified.
-    :param token: Token to use with Bearer authentication when talking to server.
+    host: Hostname (e.g., http://localhost:5000) to MLflow server. Required.
+    username: Username to use with Basic authentication when talking to
+        server. If this is specified, password must also be specified.
+    password: Password to use with Basic authentication when talking to
+        server. If this is specified, username must also be specified.
+    token: Token to use with Bearer authentication when talking to server.
         If provided, user/password authentication will be ignored.
-    :param ignore_tls_verification: If true, we will not verify the server's hostname or TLS
-        certificate. This is useful for certain testing situations, but should never be
-        true in production.
+    ignore_tls_verification: If true, we will not verify the server's hostname
+        or TLS certificate. This is useful for certain testing situations, but
+        should never be true in production.
     """
 
     def __init__(self,

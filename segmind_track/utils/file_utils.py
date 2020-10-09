@@ -1,4 +1,3 @@
-
 import codecs
 import errno
 import gzip
@@ -8,7 +7,6 @@ import shutil
 import sys
 import tarfile
 import tempfile
-
 import yaml
 from six.moves import urllib
 from six.moves.urllib.parse import unquote
@@ -75,9 +73,10 @@ def find(root, name, full_path=False):
     """Search for a file in a root directory. Equivalent to: ``find $root -name
     "$name" -depth 1``
 
-    :param root: Name of root directory for find
-    :param name: Name of file or directory to find directly under root directory
-    :param full_path: If True will return results as full path including `root`
+    :Args
+        root: Name of root directory for find
+        name: Name of file or directory to find directly under root directory
+        full_path: If True will return results as full path including `root`
 
     :return: list of matching files or directories
     """
@@ -94,11 +93,9 @@ def mkdir_existok(root, name=None):  # noqa
     :return: Path to created directory
     """
     target = os.path.join(root, name) if name is not None else root
-    #try:
+
     os.makedirs(target, exist_ok=True)
-    #except OSError as e:
-    #    if e.errno != errno.EEXIST or not os.path.isdir(target):
-    #        raise e
+
     return target
 
 
@@ -130,10 +127,11 @@ def make_containing_dirs(path):
 def write_yaml(root, file_name, data, overwrite=False, ignore_if_exists=False):
     """Write dictionary data in yaml format.
 
-    :param root: Directory name.
-    :param file_name: Desired file name. Will automatically add .yaml extension if not given
-    :param data: data to be dumped as yaml format
-    :param overwrite: If True, will overwrite existing files
+    root: Directory name.
+    file_name: Desired file name. Will automatically add .yaml extension if
+            not given
+    data: data to be dumped as yaml format
+    overwrite: If True, will overwrite existing files
     """
     if not exists(root):
         raise MissingConfigException("Parent directory '%s' does not exist." %
@@ -299,11 +297,15 @@ def make_tarfile(output_filename,
         with tarfile.open(unzipped_filename, 'w') as tar:
             tar.add(
                 source_dir, arcname=archive_name, filter=_filter_timestamps)
-        # When gzipping the tar, don't include the tar's filename or modification time in the
-        # zipped archive (see https://docs.python.org/3/library/gzip.html#gzip.GzipFile)
-        with gzip.GzipFile(filename='', fileobj=open(output_filename, 'wb'), mode='wb', mtime=0) \
-                as gzipped_tar, open(unzipped_filename, 'rb') as tar:
-            gzipped_tar.write(tar.read())
+        # When gzipping the tar, don't include the tar's filename or modification time in the # noqa: E501
+        # zipped archive (see https://docs.python.org/3/library/gzip.html#gzip.GzipFile) # noqa: E501
+        with gzip.GzipFile(
+                filename='',
+                fileobj=open(output_filename, 'wb'),
+                mode='wb',
+                mtime=0) as gzipped_tar:  # noqa: E501
+            with open(unzipped_filename, 'rb') as tar:
+                gzipped_tar.write(tar.read())
     finally:
         os.remove(unzipped_filename)
 
@@ -311,8 +313,9 @@ def make_tarfile(output_filename,
 def _copy_project(src_path, dst_path=''):
     """Internal function used to copy MLflow project during development.
 
-    Copies the content of the whole directory tree except patterns defined in .dockerignore.
-    The MLflow is assumed to be accessible as a local directory in this case.
+    Copies the content of the whole directory tree except patterns defined in
+    .dockerignore. The MLflow is assumed to be accessible as a local directory
+    in this case.
 
 
     :param dst_path: MLflow will be copied here

@@ -3,7 +3,6 @@ from abc import ABCMeta, abstractmethod
 from segmind_track.entities import ViewType
 from segmind_track.store.entities.paged_list import PagedList
 from segmind_track.store.tracking import SEARCH_MAX_RESULTS_DEFAULT
-# from segmind_track.utils import experimental
 
 
 class AbstractStore:
@@ -25,10 +24,10 @@ class AbstractStore:
     @abstractmethod
     def list_experiments(self, view_type=ViewType.ACTIVE_ONLY):
         """
-
         :param view_type: Qualify requested type of experiments.
 
-        :return: a list of Experiment objects stored in store for requested view.
+        :return: a list of Experiment objects stored in store for requested
+        view.
         """
 
     @abstractmethod
@@ -36,10 +35,11 @@ class AbstractStore:
         """Create a new experiment. If an experiment with the given name
         already exists, throws exception.
 
-        :param name: Desired name for an experiment
-        :param artifact_location: Base location for artifacts in runs. May be None.
+        name: Desired name for an experiment
+        artifact_location: Base location for artifacts in runs. May be None.
 
-        :return: experiment_id (string) for the newly created experiment if successful, else None.
+        :return: experiment_id (string) for the newly created experiment if
+        successful, else None.
         """
 
     @abstractmethod
@@ -48,8 +48,8 @@ class AbstractStore:
 
         :param experiment_id: String id for the experiment
 
-        :return: A single :py:class:`segmind_track.entities.Experiment` object if it exists,
-            otherwise raises an exception.
+        :return: A single :py:class:`segmind_track.entities.Experiment` object
+            if it exists, otherwise raises an exception.
         """
 
     def get_experiment_by_name(self, experiment_name):
@@ -59,7 +59,8 @@ class AbstractStore:
 
         :param experiment_name: Name of experiment
 
-        :return: A single :py:class:`segmind_track.entities.Experiment` object if it exists.
+        :return: A single :py:class:`segmind_track.entities.Experiment` object
+                if it exists.
         """
         for experiment in self.list_experiments(ViewType.ALL):
             if experiment.name == experiment_name:
@@ -94,24 +95,28 @@ class AbstractStore:
 
         <segmind_track.entities.Run>`
 
-        contains a collection of run metadata - :py:class:`RunInfo <segmind_track.entities.RunInfo>`,
-        as well as a collection of run parameters, tags, and metrics -
-        :py:class`RunData <segmind_track.entities.RunData>`. In the case where multiple metrics with the
-        same key are logged for the run, the :py:class:`RunData <segmind_track.entities.RunData>` contains
-        the value at the latest timestamp for each metric. If there are multiple values with the
-        latest timestamp for a given metric, the maximum of these values is returned.
+        contains a collection of run metadata -
+        :py:class:`RunInfo <segmind_track.entities.RunInfo>`, as well as a
+        collection of run parameters, tags, and metrics -
+        :py:class`RunData <segmind_track.entities.RunData>`. In the case where
+        multiple metrics with the same key are logged for the run, the
+        :py:class:`RunData <segmind_track.entities.RunData>` contains the
+        value at the latest timestamp for each metric. If there are multiple
+        values with the latest timestamp for a given metric, the maximum of
+        these values is returned.
 
         :param run_id: Unique identifier for the run.
 
-        :return: A single :py:class:`segmind_track.entities.Run` object, if the run exists. Otherwise,
-                 raises an exception.
+        :return: A single :py:class:`segmind_track.entities.Run` object, if
+                the run exists. Otherwise, raises an exception.
         """
 
     @abstractmethod
     def update_run_info(self, run_id, run_status, end_time):
         """Update the metadata of the specified run.
 
-        :return: :py:class:`segmind_track.entities.RunInfo` describing the updated run.
+        :return: :py:class:`segmind_track.entities.RunInfo` describing the
+                updated run.
         """
 
     @abstractmethod
@@ -142,8 +147,8 @@ class AbstractStore:
     def log_metric(self, run_id, metric):
         """Log a metric for the specified run.
 
-        :param run_id: String id for the run
-        :param metric: :py:class:`segmind_track.entities.Metric` instance to log
+        run_id: String id for the run
+        metric: :py:class:`segmind_track.entities.Metric` instance to log
         """
         self.log_batch(run_id, metrics=[metric], params=[], tags=[])
 
@@ -158,22 +163,22 @@ class AbstractStore:
     def log_artifact(self, run_id, artifact):
         """Log an artifact for the specified run.
 
-        :param run_id: String id for the run
-        :param artifact: :py:class:`segmind_track.entities.Artifact` instance to log
+        run_id: String id for the run
+        artifact: :py:class:`segmind_track.entities.Artifact` instance to log
         """
 
     def set_experiment_tag(self, experiment_id, tag):
         """Set a tag for the specified experiment.
 
-        :param experiment_id: String id for the experiment
-        :param tag: :py:class:`segmind_track.entities.ExperimentTag` instance to set
+        experiment_id: String id for the experiment
+        tag: :py:class:`segmind_track.entities.ExperimentTag` instance to set
         """
 
     def set_tag(self, run_id, tag):
         """Set a tag for the specified run.
 
-        :param run_id: String id for the run
-        :param tag: :py:class:`segmind_track.entities.RunTag` instance to set
+        run_id: String id for the run
+        tag: :py:class:`segmind_track.entities.RunTag` instance to set
         """
         self.log_batch(run_id, metrics=[], params=[], tags=[tag])
 
@@ -182,10 +187,11 @@ class AbstractStore:
         """Return a list of metric objects corresponding to all values logged
         for a given metric.
 
-        :param run_id: Unique identifier for run
-        :param metric_key: Metric name within the run
+        run_id: Unique identifier for run
+        metric_key: Metric name within the run
 
-        :return: A list of :py:class:`segmind_track.entities.Metric` entities if logged, else empty list
+        :return: A list of :py:class:`segmind_track.entities.Metric` entities
+                if logged, else empty list
         """
 
     def search_runs(self,
@@ -198,20 +204,22 @@ class AbstractStore:
         """Return runs that match the given list of search expressions within
         the experiments.
 
-        :param page_token:
-        :param page_token:
-        :param experiment_ids: List of experiment ids to scope the search
-        :param filter_string: A search filter string.
-        :param run_view_type: ACTIVE_ONLY, DELETED_ONLY, or ALL runs
-        :param max_results: Maximum number of runs desired.
-        :param order_by: List of order_by clauses.
-        :param page_token: Token specifying the next page of results. It should be obtained from
-            a ``search_runs`` call.
+        page_token:
+        page_token:
+        experiment_ids: List of experiment ids to scope the search
+        filter_string: A search filter string.
+        run_view_type: ACTIVE_ONLY, DELETED_ONLY, or ALL runs
+        max_results: Maximum number of runs desired.
+        order_by: List of order_by clauses.
+        page_token: Token specifying the next page of results. It should be
+                    obtained from a ``search_runs`` call.
 
-        :return: A list of :py:class:`segmind_track.entities.Run` objects that satisfy the search
-            expressions. The pagination token for the next page can be obtained via the ``token``
-            attribute of the object; however, some store implementations may not support pagination
-            and thus the returned token would not be meaningful in such cases.
+        :return: A list of :py:class:`segmind_track.entities.Run` objects that
+                satisfy the search expressions. The pagination token for the
+                next page can be obtained via the ``token`` attribute of the
+                object; however, some store implementations may not support
+                pagination and thus the returned token would not be meaningful
+                in such cases.
         """
         runs, token = self._search_runs(experiment_ids, filter_string,
                                         run_view_type, max_results, order_by,
@@ -229,8 +237,9 @@ class AbstractStore:
         See ``search_runs`` for parameter descriptions.
 
         :return: A tuple of ``runs`` and ``token`` where ``runs`` is a list of
-            :py:class:`segmind_track.entities.Run` objects that satisfy the search expressions,
-            and ``token`` is the pagination token for the next page of results.
+            :py:class:`segmind_track.entities.Run` objects that satisfy the
+            search expressions, and ``token`` is the pagination token for the
+            next page of results.
         """
 
     def list_run_infos(self, experiment_id, run_view_type):
@@ -238,8 +247,8 @@ class AbstractStore:
 
         :param experiment_id: The experiment id which to search
 
-        :return: A list of :py:class:`segmind_track.entities.RunInfo` objects that satisfy the
-            search expressions
+        :return: A list of :py:class:`segmind_track.entities.RunInfo` objects
+                that satisfy the search expressions
         """
         runs = self.search_runs([experiment_id], None, run_view_type)
         return [run.info for run in runs]
@@ -248,28 +257,31 @@ class AbstractStore:
     def log_batch(self, run_id, metrics, params, tags):
         """Log multiple metrics, params, and tags for the specified run.
 
-        :param run_id: String id for the run
-        :param metrics: List of :py:class:`segmind_track.entities.Metric` instances to log
-        :param params: List of :py:class:`segmind_track.entities.Param` instances to log
-        :param tags: List of :py:class:`segmind_track.entities.RunTag` instances to log
+        run_id: String id for the run
+        metrics: List of :py:class:`segmind_track.entities.Metric` instances
+                to log
+        params: List of :py:class:`segmind_track.entities.Param` instances to
+                log
+        tags: List of :py:class:`segmind_track.entities.RunTag` instances to
+                log
 
         :return: None.
         """
 
-    # @experimental
     @abstractmethod
     def record_logged_model(self, run_id, mlflow_model):
         """Record logged model information with tracking store. The list of
         logged model infos is maintained in a segmind_track.models tag in JSON
         format.
 
-        Note: The actual models are logged as artifacts via artifact repository.
+        Note: The actual models are logged as artifacts via artifact
+            repository.
 
         :param run_id: String id for the run
         :param mlflow_model: Model object to be recorded.
 
-        NB: This API is experimental and may change in the future. The default implementation is a
-        no-op.
+        NB: This API is experimental and may change in the future. The default
+        implementation is a no-op.
 
         :return: None.
         """

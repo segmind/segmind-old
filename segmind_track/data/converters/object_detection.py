@@ -1,187 +1,195 @@
 #!/usr/bin/python
 
-# pip install lxml
-import os.path
-import sys
-import json
-import argparse
-import shutil
-import os
 import cv2
-import tempfile
 import glob
+import json
 import numpy as np
-from os.path import isfile, isdir, join, dirname, splitext, basename
-from segmind_track.data.converters.pascal_voc_io import XML_EXT
-from segmind_track.data.converters.pascal_voc_io import PascalVocWriter
-from segmind_track.data.converters.pascal_voc_io import PascalVocReader
-from segmind_track.data.converters.yolo_io import YoloReader
-from segmind_track.data.converters.yolo_io import YOLOWriter
-from segmind_track.data.converters.utils import XMLReader
-from segmind_track.data.converters.utils import get, get_and_check, get_filename, process_file, get_directory_xml_files, check_argv
-from pycocotools.coco import COCO
-from pascal_voc_writer import Writer
+import os
+import os.path
+import shutil
+import tempfile
 import xml.etree.ElementTree as ET
+from pascal_voc_writer import Writer
+from pycocotools.coco import COCO
+
+from segmind_track.data.converters.pascal_voc_io import (PascalVocReader,
+                                                         PascalVocWriter)
+from segmind_track.data.converters.utils import (get, get_and_check,
+                                                 process_file)
+from segmind_track.data.converters.yolo_io import YoloReader, YOLOWriter
 
 # TODO: @shreeram
 # use glob.glob in place of os.listdir
 # use os.path.join() in place of + "/" +
 
+START_BOUNDING_BOX_ID = 1
+PRE_DEFINED_CATEGORIES = {}
+
+
 def coco_to_voc_bbox(bbox):
 
-    assert isinstance(bbox, np.ndarray) and bbox.ndim==2 and bbox.shape[1]==4, f"bbox should be numpy of dimension (Nx4), got {bbox.shape}"
+    assert isinstance(bbox, np.ndarray) and bbox.ndim == 2 and bbox.shape[
+        1] == 4, f'bbox should be numpy of dimension (Nx4), got {bbox.shape}'
 
-    bbox[:,2] = bbox[:,2]+bbox[:,0]
-    bbox[:,3] = bbox[:,3]+bbox[:,1]
+    bbox[:, 2] = bbox[:, 2] + bbox[:, 0]
+    bbox[:, 3] = bbox[:, 3] + bbox[:, 1]
 
     return bbox
+
 
 def yolo_to_voc_bbox(image, bbox):
 
     image_array = cv2.imread(image)
-    assert isinstance(bbox, np.ndarray) and bbox.ndim==2 and bbox.shape[1]==4, f"bbox should be numpy of dimension (Nx4)"
-    height, width, c =  image_array.shape
+    assert isinstance(bbox, np.ndarray) and bbox.ndim == 2 and bbox.shape[
+        1] == 4, 'bbox should be numpy of dimension (Nx4)'
+    height, width, c = image_array.shape
 
-    bbox_widths = bbox[:,2]*width
-    bbox_heights = bbox[:,3]*height
+    bbox_widths = bbox[:, 2] * width
+    bbox_heights = bbox[:, 3] * height
 
-    bbox[:,0] = bbox[:,0]*width-(bbox_widths/2)
-    bbox[:,1] = bbox[:,1]*height-(bbox_heights/2)
-    bbox[:,2] = bbox[:,0]+bbox_widths
-    bbox[:,3] = bbox[:,1]+bbox_heights
+    bbox[:, 0] = bbox[:, 0] * width - (bbox_widths / 2)
+    bbox[:, 1] = bbox[:, 1] * height - (bbox_heights / 2)
+    bbox[:, 2] = bbox[:, 0] + bbox_widths
+    bbox[:, 3] = bbox[:, 1] + bbox_heights
 
     return bbox
 
-def yolo_to_voc(ann_dir, imgfolderpath, classfilepath, output_dir=tempfile.gettempdir()):
+
+def yolo_to_voc(ann_dir,
+                imgfolderpath,
+                classfilepath,
+                output_dir=tempfile.gettempdir()):
     # TODO: @shreeram, make all argument names small
+    """arguments :
 
-    """ arguments :
-        ann_dir : path to the annotations folder
-        imgfolderpath : path to the iamges folder
-        classfilepath : path to the class file (.txt file)
-        output_dir : path where the converted files are to be stored """        
+    ann_dir : path to the annotations folder
+    imgfolderpath : path to the iamges folder
+    classfilepath : path to the class file (.txt file)
+    output_dir : path where the converted files are to be stored
+    """
 
-    directory = "ConvertedPascalVOCFiles"
-    dirpath = os.path.join(output_dir, directory)# TODO: @shreeram, delete and recreate this folder, everytime function is called
+    directory = 'ConvertedPascalVOCFiles'
+    dirpath = os.path.join(output_dir, directory)
     if os.path.exists(dirpath) and os.path.isdir(dirpath):
         shutil.rmtree(dirpath)
     os.mkdir(dirpath)
-    
-    
-    for file in glob.glob(os.path.join(ann_dir, "*")):# use glob.glob in place of os.listdir
-            if file.endswith(".txt") and file != "classes.txt":
-                    
-                #print("Converting", file)
-                split_name = os.path.basename(file)
-                print("Converting", split_name)
 
-                annotation_txt = os.path.splitext(split_name)[0]
-                imgPath = os.path.join(imgfolderpath, annotation_txt + ".jpg")
+    for file in glob.glob(os.path.join(ann_dir, '*')):
+        if file.endswith('.txt') and file != 'classes.txt':
 
-                #imgPath = imgFolderPath + "/" + annotation_txt + ".jpg"
+            split_name = os.path.basename(file)
+            print('Converting', split_name)
 
-                image = cv2.imread(imgPath)
-                imageShape = [image.shape[0], image.shape[1], image.shape[2]]
-                imgFolderName = os.path.basename(imgfolderpath)
-                imgFileName = os.path.basename(imgPath)
+            annotation_txt = os.path.splitext(split_name)[0]
+            imgPath = os.path.join(imgfolderpath, annotation_txt + '.jpg')
 
-                writer = PascalVocWriter(imgFolderName, imgFileName, imageShape, localImgPath=imgPath)
+            image = cv2.imread(imgPath)
+            imageShape = [image.shape[0], image.shape[1], image.shape[2]]
+            imgFolderName = os.path.basename(imgfolderpath)
+            imgFileName = os.path.basename(imgPath)
+
+            writer = PascalVocWriter(
+                imgFolderName, imgFileName, imageShape, localImgPath=imgPath)
+
+            # Read YOLO files
+            txt_path = os.path.join(ann_dir, split_name)
+            Yolo_reader = YoloReader(txt_path, image, classfilepath)
+            shapes = Yolo_reader.getShapes()
+            num_of_box = len(shapes)
+
+            for i in range(num_of_box):
+                label = shapes[i][0]
+                xmin = shapes[i][1][0][0]
+                ymin = shapes[i][1][0][1]
+                x_max = shapes[i][1][2][0]
+                y_max = shapes[i][1][2][1]
+
+                writer.addBndBox(xmin, ymin, x_max, y_max, label, 0)
+
+        # Write the converted PascalVOC xml files into a new Directory
+            writer.save(
+                targetFile=os.path.join(dirpath, annotation_txt + '.xml'))
+    return dirpath
 
 
-                # Read YOLO files
-                txt_path = os.path.join(ann_dir, split_name)
-                Yolo_reader = YoloReader(txt_path, image, classfilepath)
-                shapes = Yolo_reader.getShapes()
-                num_of_box = len(shapes)
-
-                for i in range(num_of_box):
-                        label = shapes[i][0]
-                        xmin = shapes[i][1][0][0]
-                        ymin = shapes[i][1][0][1]
-                        x_max = shapes[i][1][2][0]
-                        y_max = shapes[i][1][2][1]
-
-                        writer.addBndBox(xmin, ymin, x_max, y_max, label, 0)
-
-            # Write the converted PascalVOC xml files into a new Directory
-                writer.save(targetFile = os.path.join(dirpath, annotation_txt + ".xml"))
-                #writer.save(targetFile= path + "/" + annotation_txt + ".xml")
-    return dirpath                
-
-def voc_to_yolo(ann_dir, imgfolderpath, debug=False, output_dir=tempfile.gettempdir()):
+def voc_to_yolo(ann_dir,
+                imgfolderpath,
+                debug=False,
+                output_dir=tempfile.gettempdir()):
     # TODO: @shreeram, make all argument names small
-    
-    """ arguments :
-        ann_dir : path to the annotations folder
-        imgfolderpath : path to the iamges folder
-        output_dir : path where the converted files are to be stored """    
-    
-    directory = "ConverterdYolotxtFiles"
-    dirpath = os.path.join(output_dir, directory)# TODO: @shreeram, delete and recreate this folder, everytime function is called
+    """arguments :
+
+    ann_dir : path to the annotations folder
+    imgfolderpath : path to the iamges folder
+    output_dir : path where the converted files are to be stored
+    """
+
+    directory = 'ConverterdYolotxtFiles'
+    dirpath = os.path.join(output_dir, directory)
     if os.path.exists(dirpath) and os.path.isdir(dirpath):
         shutil.rmtree(dirpath)
     os.mkdir(dirpath)
     classes = []
 
-
     # Search all pascal annotation (xml files) in this folder
-    for file in glob.glob(os.path.join(ann_dir, "*")):# use glob.glob in place of os.listdir
-            if file.endswith(".xml"):
-            
-                #annotation_xml = os.path.splitext(file)[0]
-                split_name = os.path.basename(file)
-                if debug:   
-                    print(f"Converting :: {split_name}")
-                annotation_xml = os.path.splitext(split_name)[0]
-                
-            
-                #imagePath = imgFolderPath + "/" + annotation_xml + ".jpg"
-                imagePath = os.path.join(imgfolderpath, annotation_xml + ".jpg")
+    for file in glob.glob(os.path.join(
+            ann_dir, '*')):  # use glob.glob in place of os.listdir
+        if file.endswith('.xml'):
 
-                image = cv2.imread(imagePath)
-                imageShape = [image.shape[0], image.shape[1], image.shape[2]]
-                imgFolderName = os.path.basename(imgfolderpath)
-                imgFileName = os.path.basename(imagePath)
-            
-                writer = YOLOWriter(imgFolderName, imgFileName, imageShape, localImgPath=imagePath)
+            split_name = os.path.basename(file)
+            if debug:
+                print(f'Converting :: {split_name}')
+            annotation_xml = os.path.splitext(split_name)[0]
 
-                parser = ET.XMLParser(encoding='utf-8')
-                tree = ET.parse(os.path.join(ann_dir, str(split_name)), parser=parser)
-                root = tree.getroot()
-                for obj in root.findall('object'):
-                    if str(obj.find('name').text) not in classes:
-                        classes.append(str(obj.find('name').text))
+            imagePath = os.path.join(imgfolderpath, annotation_xml + '.jpg')
 
-                # Read VOC file
-                filePath = os.path.join(ann_dir, split_name)
-                Voc_Reader = PascalVocReader(filePath, image)
-                shapes = Voc_Reader.getShapes()
-                num_boxes = len(shapes)
+            image = cv2.imread(imagePath)
+            imageShape = [image.shape[0], image.shape[1], image.shape[2]]
+            imgFolderName = os.path.basename(imgfolderpath)
+            imgFileName = os.path.basename(imagePath)
 
-                for i in range(num_boxes):
-                        label = classes.index(shapes[i][0])
-                        xmin = shapes[i][1][0][0]
-                        ymin = shapes[i][1][0][1]
-                        x_max = shapes[i][1][2][0]
-                        y_max = shapes[i][1][2][1]
+            writer = YOLOWriter(
+                imgFolderName, imgFileName, imageShape, localImgPath=imagePath)
 
-                        writer.addBndBox(xmin, ymin, x_max, y_max, label, 0)
+            parser = ET.XMLParser(encoding='utf-8')
+            tree = ET.parse(
+                os.path.join(ann_dir, str(split_name)), parser=parser)
+            root = tree.getroot()
+            for obj in root.findall('object'):
+                if str(obj.find('name').text) not in classes:
+                    classes.append(str(obj.find('name').text))
 
-                writer.save(targetFile= os.path.join(dirpath, annotation_xml + ".txt"))
-                # os.chdir(output_dir)
-                classFile = open(os.path.join(output_dir,'classes.txt'), 'w')
-                for element in classes:
-                    classFile.write(element + '\n')
+            # Read VOC file
+            filePath = os.path.join(ann_dir, split_name)
+            Voc_Reader = PascalVocReader(filePath, image)
+            shapes = Voc_Reader.getShapes()
+            num_boxes = len(shapes)
+
+            for i in range(num_boxes):
+                label = classes.index(shapes[i][0])
+                xmin = shapes[i][1][0][0]
+                ymin = shapes[i][1][0][1]
+                x_max = shapes[i][1][2][0]
+                y_max = shapes[i][1][2][1]
+
+                writer.addBndBox(xmin, ymin, x_max, y_max, label, 0)
+
+            writer.save(
+                targetFile=os.path.join(dirpath, annotation_xml + '.txt'))
+
+            classFile = open(os.path.join(output_dir, 'classes.txt'), 'w')
+            for element in classes:
+                classFile.write(element + '\n')
     return dirpath
-    
-                
+
 
 def coco_to_voc(ann_file, output_dir=tempfile.gettempdir()):
-    
-    """ arguments :
-        ann_file : path to the annotations file (.json file)
-        output_dir : path where the converted files are to be stored """    
-    
+    """arguments :
+
+    ann_file : path to the annotations file (.json file)
+    output_dir : path where the converted files are to be stored
+    """
+
     coco = COCO(ann_file)
     cats = coco.loadCats(coco.getCatIds())
     cat_idx = {}
@@ -195,7 +203,8 @@ def coco_to_voc(ann_file, output_dir=tempfile.gettempdir()):
             image_fname_ls = img_fname.split('.')
             image_fname_ls[-1] = 'xml'
             label_fname = '.'.join(image_fname_ls)
-            writer = Writer(img_fname, coco.imgs[img]['width'], coco.imgs[img]['height'])
+            writer = Writer(img_fname, coco.imgs[img]['width'],
+                            coco.imgs[img]['height'])
             anns = coco.loadAnns(annIds)
             for a in anns:
                 bbox = a['bbox']
@@ -203,41 +212,33 @@ def coco_to_voc(ann_file, output_dir=tempfile.gettempdir()):
                 bbox = [str(b) for b in bbox]
                 catname = cat_idx[a['category_id']]
                 writer.addObject(catname, bbox[0], bbox[1], bbox[2], bbox[3])
-                writer.save(output_dir+'/'+label_fname)
+                writer.save(output_dir + '/' + label_fname)
 
     return output_dir
 
-START_BOUNDING_BOX_ID = 1
-PRE_DEFINED_CATEGORIES = {}
-# If necessary, pre-define category and its id
-#  PRE_DEFINE_CATEGORIES = {"aeroplane": 1, "bicycle": 2, "bird": 3, "boat": 4,
-                         #  "bottle":5, "bus": 6, "car": 7, "cat": 8, "chair": 9,
-                         #  "cow": 10, "diningtable": 11, "dog": 12, "horse": 13,
-                         #  "motorbike": 14, "person": 15, "pottedplant": 16,
-                         #  "sheep": 17, "sofa": 18, "train": 19, "tvmonitor": 20}
-
-
-
-        
 
 def voc_to_coco(ann_dir, debug=False, output_dir=tempfile.gettempdir()):
-    
-    """ arguments :
-        ann_dir : path to the annotations folder
-        output_dir : path where the converted files are to be stored """    
-  
-      #@shreeram: why os.chdir ?
+    """
+    ann_dir : path to the annotations folder
+    output_dir : path where the converted files are to be stored
+    """
+
     categories = PRE_DEFINED_CATEGORIES
     bnd_id = START_BOUNDING_BOX_ID
-    json_dict = {"images":[], "type": "instances", "annotations": [], "categories": []}
+    json_dict = {
+        'images': [],
+        'type': 'instances',
+        'annotations': [],
+        'categories': []
+    }
     image_id = 1
-    for file in glob.glob(os.path.join(ann_dir, "*")):# use glob.glob in place of os.listdir
-        if file.endswith("xml"):
+    for file in glob.glob(os.path.join(
+            ann_dir, '*')):  # use glob.glob in place of os.listdir
+        if file.endswith('xml'):
 
-            #print("Converting %s"%(file))
             split_name = os.path.basename(file)
-            if debug: 
-                print(f"Converting :: {split_name}")
+            if debug:
+                print(f'Converting :: {split_name}')
             xml_f = os.path.join(ann_dir, split_name)
             tree = ET.parse(xml_f)
             root = tree.getroot()
@@ -245,143 +246,117 @@ def voc_to_coco(ann_dir, debug=False, output_dir=tempfile.gettempdir()):
             if path is None:
                 filename = root.findtext('filename')
             else:
-                filename = os.path.basename(path)            
-            #path = get(root, 'path')
-            #if len(path) == 1:
-                #filename = os.path.basename(path[0].text)
-            #elif len(path) == 0:
-                #filename = get_and_check(root, 'filename', 1).text
-            #else:
-                #raise NotImplementedError('%d paths found in %s'%(len(path), line))
-            
-            #image_id = get_filename(filename)
+                filename = os.path.basename(path)
+
             size = get_and_check(root, 'size', 1)
             width = int(get_and_check(size, 'width', 1).text)
             height = int(get_and_check(size, 'height', 1).text)
-            image = {'file_name': filename, 'height': height, 'width': width,
-                 'id':image_id}
+            image = {
+                'file_name': filename,
+                'height': height,
+                'width': width,
+                'id': image_id
+            }
             json_dict['images'].append(image)
-            
+
             for obj in get(root, 'object'):
-            
+
                 category = get_and_check(obj, 'name', 1).text
                 if category not in categories:
                     new_id = len(categories)
                     categories[category] = new_id
                 category_id = categories[category]
                 bndbox = get_and_check(obj, 'bndbox', 1)
-                xmin = float(get_and_check(bndbox, 'xmin', 1).text) 
+                xmin = float(get_and_check(bndbox, 'xmin', 1).text)
                 ymin = float(get_and_check(bndbox, 'ymin', 1).text)
                 xmax = float(get_and_check(bndbox, 'xmax', 1).text)
                 ymax = float(get_and_check(bndbox, 'ymax', 1).text)
-                assert(xmax > xmin)
-                assert(ymax > ymin)
+                assert (xmax > xmin)
+                assert (ymax > ymin)
                 o_width = abs(xmax - xmin)
                 o_height = abs(ymax - ymin)
-                ann = {'area': o_width*o_height, 'iscrowd': 0, 'image_id':
-                   image_id, 'bbox':[xmin, ymin, o_width, o_height],
-                   'category_id': category_id, 'id': bnd_id, 'ignore': 0,
-                   'segmentation': []}
+                ann = {
+                    'area': o_width * o_height,
+                    'iscrowd': 0,
+                    'image_id': image_id,
+                    'bbox': [xmin, ymin, o_width, o_height],
+                    'category_id': category_id,
+                    'id': bnd_id,
+                    'ignore': 0,
+                    'segmentation': []
+                }
                 json_dict['annotations'].append(ann)
                 bnd_id = bnd_id + 1
 
-            for cate, cid in categories.items():    
+            for cate, cid in categories.items():
                 cat = {'supercategory': 'none', 'id': cid, 'name': cate}
                 json_dict['categories'].append(cat)
-            image_id += 1     
-            
-            
-            json_file = 'converted_file.json'     
+            image_id += 1
+
+            json_file = 'converted_file.json'
             path = os.path.join(output_dir, json_file)
             json_fp = open(path, 'w')
-            #json_fp = open(json_file, 'w')
             json_str = json.dumps(json_dict)
             json_fp.write(json_str)
             json_fp.close()
 
     return (os.path.join(output_dir, json_file))
-           
-      
-        
-                                                                
-       
 
-
-if __name__ == '__main__':
-    if len(sys.argv) <= 1:
-        print('2 auguments are needed.')
-        print('Usage: %s XML_LIST.txt XML_DIR OUTPU_JSON.json'%(sys.argv[0]))
-        exit(1)
-
-    #voc_to_coco(sys.argv[1])
 
 def voc_to_kitti(ann_dir, output_dir=tempfile.gettempdir()):
-    
-    """ arguments :
-        ann_dir : path to the annotations folder
-        output_dir : path where the converted files are to be stored """            
-    
-    #args = sys.argv[1:]
+    """
+    ann_dir : path to the annotations folder
+    output_dir : path where the converted files are to be stored
+    """
+
     file_count = 0
 
-    #for path in args:
-        #files = []
+    for file in glob.glob(os.path.join(ann_dir, '*')):
 
-        #if isfile(path):
-            #files.append(path)
-        #elif isdir(path):
-            #files += get_directory_xml_files(path)
-
-    for file in glob.glob(os.path.join(ann_dir, "*")): # use glob.glob in place of os.listdir
-        
         split_name = os.path.basename(file)
         path = os.path.join(ann_dir, split_name)
-        if process_file(path, output_dir): file_count += 1
+        if process_file(path, output_dir):
+            file_count += 1
 
-    print("Conversion completed. {0} Files are processed".format(file_count))
+    print('Conversion completed. {0} Files are processed'.format(file_count))
 
-if __name__ == "__main__":
-    main()
-    
-    
-    
+
 def kitti_to_voc(ann_dir, imgfolderpath, output_dir):
-       
-    """ arguments :
-        ann_dir : path to the annotations folder
-        imgfolderpath : path to the iamges folder
-        output_dir : path where the converted files are to be stored """            
-        
-    #read the annotations 
-    filter_item = ["DontCare"]
-    for filename in glob.glob(os.path.join(ann_dir, "*")): # use glob.glob in place of os.listdir
-     
-       
+    """
+    ann_dir : path to the annotations folder
+    imgfolderpath : path to the iamges folder
+    output_dir : path where the converted files are to be stored
+    """
+
+    filter_item = ['DontCare']
+    for filename in glob.glob(os.path.join(ann_dir, '*')):
+
         split_name = os.path.basename(filename)
         annotation_kitti = os.path.splitext(split_name)[0]
-        
-        imagePath = os.path.join(imgfolderpath, annotation_kitti + ".jpg")
-        
+
+        imagePath = os.path.join(imgfolderpath, annotation_kitti + '.jpg')
+
         img = cv2.imread(imagePath)
         imageShape = [img.shape[0], img.shape[1], img.shape[2]]
         img_name = os.path.basename(imagePath)
-        
-        #image_shape=img.shape  # a tuple
-        #define the xml instance
+
         voc_writer = PascalVocWriter(output_dir, img_name, imageShape)
-        count = 0 
-        kitti_ant = open(ann_dir + "/" + split_name, 'r')
+        count = 0
+        kitti_ant = open(ann_dir + '/' + split_name, 'r')
         for line in kitti_ant:
             item_list = line.split(' ')
-            if item_list[0] not in filter_item :
+            if item_list[0] not in filter_item:
                 count += 1
-                voc_writer.addBndBox((float(item_list[4])),(float(item_list[5])),(float(item_list[6])),(float(item_list[7])),item_list[0],0) 
-            
+                voc_writer.addBndBox(
+                    (float(item_list[4])), (float(item_list[5])),
+                    (float(item_list[6])), (float(item_list[7])), item_list[0],
+                    0)
+
             else:
 
-                img[(float(item_list[5])):(float(item_list[7])),(float(item_list[4])):(float(item_list[6])),:] =0
-               
+                img[(float(item_list[5])):(float(item_list[7])),
+                    (float(item_list[4])):(float(item_list[6])), :] = 0
 
-        if count>0:
-            voc_writer.save(targetFile = os.path.join(output_dir, annotation_kitti + ".xml" ))
-            #cv2.imwrite(image_path_dst+image_name,img)
+        if count > 0:
+            voc_writer.save(
+                targetFile=os.path.join(output_dir, annotation_kitti + '.xml'))

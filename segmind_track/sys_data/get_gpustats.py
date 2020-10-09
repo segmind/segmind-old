@@ -1,5 +1,6 @@
 import GPUtil
 
+
 def gpu_metrics():
     gpu_data = {}
     gpus = GPUtil.getGPUs()

@@ -2,126 +2,150 @@
 # source: service_lite.proto
 
 import sys
-_b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
-from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
-from google.protobuf import symbol_database as _symbol_database
 from google.protobuf import service as _service
 from google.protobuf import service_reflection
+from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
+from google.protobuf import symbol_database as _symbol_database
+from google.protobuf.internal import enum_type_wrapper
+
+from . import errorcodes_pb2 as errorcodes__pb2
+from .scalapb import scalapb_pb2 as scalapb_dot_scalapb__pb2
+
+_b = sys.version_info[0] < 3 and (lambda x: x) or (
+    lambda x: x.encode('latin1'))
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
-
-from .scalapb import scalapb_pb2 as scalapb_dot_scalapb__pb2
-from . import errorcodes_pb2 as errorcodes__pb2
-from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
-
-
 DESCRIPTOR = _descriptor.FileDescriptor(
-  name='service_lite.proto',
-  package='mlflow',
-  syntax='proto2',
-  serialized_options=_b('\n\033org.cral.tracking.api.proto\220\001\001\342?\002\020\001'),
-  serialized_pb=_b('\n\x12service_lite.proto\x12\x06mlflow\x1a\x15scalapb/scalapb.proto\x1a\x10\x65rrorcodes.proto\x1a\x1cgoogle/protobuf/struct.proto\"H\n\x06Metric\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x01\x12\x11\n\ttimestamp\x18\x03 \x01(\x03\x12\x0f\n\x04step\x18\x04 \x01(\x03:\x01\x30\"#\n\x05Param\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xea\x01\n\x08\x41rtifact\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\x15\n\rartifact_type\x18\x03 \x01(\t\x12\x11\n\ttimestamp\x18\x04 \x01(\x03\x12\x0c\n\x04size\x18\x05 \x01(\x03\x12+\n\nprediction\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\x0cground_truth\x18\x07 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x0c\n\x04step\x18\x08 \x01(\x03\x12!\n\x04tags\x18\t \x03(\x0b\x32\x13.mlflow.ArtifactTag\")\n\x0b\x41rtifactTag\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"C\n\x03Run\x12\x1d\n\x04info\x18\x01 \x01(\x0b\x32\x0f.mlflow.RunInfo\x12\x1d\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x0f.mlflow.RunData\"g\n\x07RunData\x12\x1f\n\x07metrics\x18\x01 \x03(\x0b\x32\x0e.mlflow.Metric\x12\x1d\n\x06params\x18\x02 \x03(\x0b\x32\r.mlflow.Param\x12\x1c\n\x04tags\x18\x03 \x03(\x0b\x32\x0e.mlflow.RunTag\"$\n\x06RunTag\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"+\n\rExperimentTag\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xcb\x01\n\x07RunInfo\x12\x0e\n\x06run_id\x18\x0f \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x15\n\rexperiment_id\x18\x02 \x01(\t\x12\x0f\n\x07user_id\x18\x06 \x01(\t\x12!\n\x06status\x18\x07 \x01(\x0e\x32\x11.mlflow.RunStatus\x12\x12\n\nstart_time\x18\x08 \x01(\x03\x12\x10\n\x08\x65nd_time\x18\t \x01(\x03\x12\x14\n\x0c\x61rtifact_uri\x18\r \x01(\t\x12\x17\n\x0flifecycle_stage\x18\x0e \x01(\t\"\xbb\x01\n\nExperiment\x12\x15\n\rexperiment_id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x19\n\x11\x61rtifact_location\x18\x03 \x01(\t\x12\x17\n\x0flifecycle_stage\x18\x04 \x01(\t\x12\x18\n\x10last_update_time\x18\x05 \x01(\x03\x12\x15\n\rcreation_time\x18\x06 \x01(\x03\x12#\n\x04tags\x18\x07 \x03(\x0b\x32\x15.mlflow.ExperimentTag\"\xa0\x01\n\x10\x43reateExperiment\x12\r\n\x05token\x18\x0c \x01(\t\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x12\x19\n\x11\x61rtifact_location\x18\x02 \x01(\t\x1a!\n\x08Response\x12\x15\n\rexperiment_id\x18\x01 \x01(\t:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xa7\x01\n\x0fListExperiments\x12\r\n\x05token\x18\x0c \x01(\t\x12#\n\tview_type\x18\x01 \x01(\x0e\x32\x10.mlflow.ViewType\x1a\x33\n\x08Response\x12\'\n\x0b\x65xperiments\x18\x01 \x03(\x0b\x32\x12.mlflow.Experiment:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xbf\x01\n\rGetExperiment\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1b\n\rexperiment_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1aU\n\x08Response\x12&\n\nexperiment\x18\x01 \x01(\x0b\x32\x12.mlflow.Experiment\x12!\n\x04runs\x18\x02 \x03(\x0b\x32\x0f.mlflow.RunInfoB\x02\x18\x01:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"w\n\x10\x44\x65leteExperiment\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1b\n\rexperiment_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"x\n\x11RestoreExperiment\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1b\n\rexperiment_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\x89\x01\n\x10UpdateExperiment\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1b\n\rexperiment_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x12\x10\n\x08new_name\x18\x02 \x01(\t\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xc7\x01\n\tCreateRun\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\t\x12\x12\n\nstart_time\x18\x07 \x01(\x03\x12\x1c\n\x04tags\x18\t \x03(\x0b\x32\x0e.mlflow.RunTag\x1a$\n\x08Response\x12\x18\n\x03run\x18\x01 \x01(\x0b\x32\x0b.mlflow.Run:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xe4\x01\n\tUpdateRun\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x05 \x01(\t\x12\x0e\n\x06run_id\x18\x04 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12!\n\x06status\x18\x02 \x01(\x0e\x32\x11.mlflow.RunStatus\x12\x10\n\x08\x65nd_time\x18\x03 \x01(\x03\x1a-\n\x08Response\x12!\n\x08run_info\x18\x01 \x01(\x0b\x32\x0f.mlflow.RunInfo:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\x80\x01\n\tDeleteRun\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x02 \x01(\t\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\x81\x01\n\nRestoreRun\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x02 \x01(\t\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xde\x01\n\tLogMetric\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x07 \x01(\t\x12\x0e\n\x06run_id\x18\x06 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x12\x13\n\x05value\x18\x03 \x01(\x01\x42\x04\xf8\x86\x19\x01\x12\x17\n\ttimestamp\x18\x04 \x01(\x03\x42\x04\xf8\x86\x19\x01\x12\x0f\n\x04step\x18\x05 \x01(\x03:\x01\x30\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xb3\x01\n\x08LogParam\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x05 \x01(\t\x12\x0e\n\x06run_id\x18\x04 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x12\x13\n\x05value\x18\x03 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xf3\x02\n\x0bLogArtifact\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x12\x0e\n\x06run_id\x18\x03 \x01(\t\x12\r\n\x05token\x18\x04 \x01(\t\x12\x15\n\rexperiment_id\x18\x05 \x01(\t\x12\x0c\n\x04type\x18\x06 \x01(\t\x12\x11\n\ttimestamp\x18\x07 \x01(\x03\x12\x0c\n\x04size\x18\x08 \x01(\x03\x12+\n\nprediction\x18\t \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\x0cground_truth\x18\n \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x0c\n\x04step\x18\x0b \x01(\x03\x1a\x43\n\x08Response\x12\x0b\n\x03url\x18\x01 \x01(\t\x12*\n\x06\x66ields\x18\x02 \x01(\x0b\x32\x1a.mlflow.PresignedPOSTField:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xd1\x01\n\x12PresignedPOSTField\x12\x0b\n\x03key\x18\x01 \x01(\t\x12(\n\x0fx_amz_algorithm\x18\x02 \x01(\tR\x0fx-amz-algorithm\x12*\n\x10x_amz_credential\x18\x03 \x01(\tR\x10x-amz-credential\x12\x1e\n\nx_amz_date\x18\x04 \x01(\tR\nx-amz-date\x12\x0e\n\x06policy\x18\x05 \x01(\t\x12(\n\x0fx_amz_signature\x18\x06 \x01(\tR\x0fx-amz-signature\"\x9f\x01\n\x10SetExperimentTag\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1b\n\rexperiment_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x12\x13\n\x05value\x18\x03 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xb1\x01\n\x06SetTag\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x05 \x01(\t\x12\x0e\n\x06run_id\x18\x04 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x12\x13\n\x05value\x18\x03 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\x93\x01\n\tDeleteTag\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x03 \x01(\t\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xa3\x01\n\x06GetRun\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x03 \x01(\t\x12\x0e\n\x06run_id\x18\x02 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x1a$\n\x08Response\x12\x18\n\x03run\x18\x01 \x01(\x0b\x32\x0b.mlflow.Run:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xa7\x02\n\nSearchRuns\x12\r\n\x05token\x18\x0c \x01(\t\x12\x16\n\x0e\x65xperiment_ids\x18\x01 \x03(\t\x12\x0e\n\x06\x66ilter\x18\x04 \x01(\t\x12\x34\n\rrun_view_type\x18\x03 \x01(\x0e\x32\x10.mlflow.ViewType:\x0b\x41\x43TIVE_ONLY\x12\x19\n\x0bmax_results\x18\x05 \x01(\x05:\x04\x31\x30\x30\x30\x12\x10\n\x08order_by\x18\x06 \x03(\t\x12\x12\n\npage_token\x18\x07 \x01(\t\x1a>\n\x08Response\x12\x19\n\x04runs\x18\x01 \x03(\x0b\x32\x0b.mlflow.Run\x12\x17\n\x0fnext_page_token\x18\x02 \x01(\t:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xba\x01\n\rListArtifacts\x12\r\n\x05token\x18\x0c \x01(\t\x12\x0e\n\x06run_id\x18\x03 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x0c\n\x04path\x18\x02 \x01(\t\x1a=\n\x08Response\x12\x10\n\x08root_uri\x18\x01 \x01(\t\x12\x1f\n\x05\x66iles\x18\x02 \x03(\x0b\x32\x10.mlflow.FileInfo:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\";\n\x08\x46ileInfo\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0e\n\x06is_dir\x18\x02 \x01(\x08\x12\x11\n\tfile_size\x18\x03 \x01(\x03\"\xb7\x01\n\x10GetMetricHistory\x12\r\n\x05token\x18\x0c \x01(\t\x12\x0e\n\x06run_id\x18\x03 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x18\n\nmetric_key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x1a+\n\x08Response\x12\x1f\n\x07metrics\x18\x01 \x03(\x0b\x32\x0e.mlflow.Metric:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xd7\x01\n\x08LogBatch\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x05 \x01(\t\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x1f\n\x07metrics\x18\x02 \x03(\x0b\x32\x0e.mlflow.Metric\x12\x1d\n\x06params\x18\x03 \x03(\x0b\x32\r.mlflow.Param\x12\x1c\n\x04tags\x18\x04 \x03(\x0b\x32\x0e.mlflow.RunTag\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"v\n\x08LogModel\x12\r\n\x05token\x18\x0c \x01(\t\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x12\n\nmodel_json\x18\x02 \x01(\t\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xa4\x01\n\x13GetExperimentByName\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1d\n\x0f\x65xperiment_name\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1a\x32\n\x08Response\x12&\n\nexperiment\x18\x01 \x01(\x0b\x32\x12.mlflow.Experiment:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]*6\n\x08ViewType\x12\x0f\n\x0b\x41\x43TIVE_ONLY\x10\x01\x12\x10\n\x0c\x44\x45LETED_ONLY\x10\x02\x12\x07\n\x03\x41LL\x10\x03*I\n\nSourceType\x12\x0c\n\x08NOTEBOOK\x10\x01\x12\x07\n\x03JOB\x10\x02\x12\x0b\n\x07PROJECT\x10\x03\x12\t\n\x05LOCAL\x10\x04\x12\x0c\n\x07UNKNOWN\x10\xe8\x07*M\n\tRunStatus\x12\x0b\n\x07RUNNING\x10\x01\x12\r\n\tSCHEDULED\x10\x02\x12\x0c\n\x08\x46INISHED\x10\x03\x12\n\n\x06\x46\x41ILED\x10\x04\x12\n\n\x06KILLED\x10\x05\x32\x94 \n\rMlflowService\x12\xa6\x01\n\x13getExperimentByName\x12\x1b.mlflow.GetExperimentByName\x1a$.mlflow.GetExperimentByName.Response\"L\xf2\x86\x19H\n,\n\x03GET\x12\x1f/mlflow/experiments/get-by-name\x1a\x04\x08\x02\x10\x00\x10\x01*\x16Get Experiment By Name\x12\xc6\x01\n\x10\x63reateExperiment\x12\x18.mlflow.CreateExperiment\x1a!.mlflow.CreateExperiment.Response\"u\xf2\x86\x19q\n(\n\x04POST\x12\x1a/mlflow/experiments/create\x1a\x04\x08\x02\x10\x00\n0\n\x04POST\x12\"/preview/mlflow/experiments/create\x1a\x04\x08\x02\x10\x00\x10\x01*\x11\x43reate Experiment\x12\xbc\x01\n\x0flistExperiments\x12\x17.mlflow.ListExperiments\x1a .mlflow.ListExperiments.Response\"n\xf2\x86\x19j\n%\n\x03GET\x12\x18/mlflow/experiments/list\x1a\x04\x08\x02\x10\x00\n-\n\x03GET\x12 /preview/mlflow/experiments/list\x1a\x04\x08\x02\x10\x00\x10\x01*\x10List Experiments\x12\xb2\x01\n\rgetExperiment\x12\x15.mlflow.GetExperiment\x1a\x1e.mlflow.GetExperiment.Response\"j\xf2\x86\x19\x66\n$\n\x03GET\x12\x17/mlflow/experiments/get\x1a\x04\x08\x02\x10\x00\n,\n\x03GET\x12\x1f/preview/mlflow/experiments/get\x1a\x04\x08\x02\x10\x00\x10\x01*\x0eGet Experiment\x12\xc6\x01\n\x10\x64\x65leteExperiment\x12\x18.mlflow.DeleteExperiment\x1a!.mlflow.DeleteExperiment.Response\"u\xf2\x86\x19q\n(\n\x04POST\x12\x1a/mlflow/experiments/delete\x1a\x04\x08\x02\x10\x00\n0\n\x04POST\x12\"/preview/mlflow/experiments/delete\x1a\x04\x08\x02\x10\x00\x10\x01*\x11\x44\x65lete Experiment\x12\xcc\x01\n\x11restoreExperiment\x12\x19.mlflow.RestoreExperiment\x1a\".mlflow.RestoreExperiment.Response\"x\xf2\x86\x19t\n)\n\x04POST\x12\x1b/mlflow/experiments/restore\x1a\x04\x08\x02\x10\x00\n1\n\x04POST\x12#/preview/mlflow/experiments/restore\x1a\x04\x08\x02\x10\x00\x10\x01*\x12Restore Experiment\x12\xc6\x01\n\x10updateExperiment\x12\x18.mlflow.UpdateExperiment\x1a!.mlflow.UpdateExperiment.Response\"u\xf2\x86\x19q\n(\n\x04POST\x12\x1a/mlflow/experiments/update\x1a\x04\x08\x02\x10\x00\n0\n\x04POST\x12\"/preview/mlflow/experiments/update\x1a\x04\x08\x02\x10\x00\x10\x01*\x11Update Experiment\x12\x9c\x01\n\tcreateRun\x12\x11.mlflow.CreateRun\x1a\x1a.mlflow.CreateRun.Response\"`\xf2\x86\x19\\\n!\n\x04POST\x12\x13/mlflow/runs/create\x1a\x04\x08\x02\x10\x00\n)\n\x04POST\x12\x1b/preview/mlflow/runs/create\x1a\x04\x08\x02\x10\x00\x10\x01*\nCreate Run\x12\x9c\x01\n\tupdateRun\x12\x11.mlflow.UpdateRun\x1a\x1a.mlflow.UpdateRun.Response\"`\xf2\x86\x19\\\n!\n\x04POST\x12\x13/mlflow/runs/update\x1a\x04\x08\x02\x10\x00\n)\n\x04POST\x12\x1b/preview/mlflow/runs/update\x1a\x04\x08\x02\x10\x00\x10\x01*\nUpdate Run\x12\x9c\x01\n\tdeleteRun\x12\x11.mlflow.DeleteRun\x1a\x1a.mlflow.DeleteRun.Response\"`\xf2\x86\x19\\\n!\n\x04POST\x12\x13/mlflow/runs/delete\x1a\x04\x08\x02\x10\x00\n)\n\x04POST\x12\x1b/preview/mlflow/runs/delete\x1a\x04\x08\x02\x10\x00\x10\x01*\nDelete Run\x12\xa2\x01\n\nrestoreRun\x12\x12.mlflow.RestoreRun\x1a\x1b.mlflow.RestoreRun.Response\"c\xf2\x86\x19_\n\"\n\x04POST\x12\x14/mlflow/runs/restore\x1a\x04\x08\x02\x10\x00\n*\n\x04POST\x12\x1c/preview/mlflow/runs/restore\x1a\x04\x08\x02\x10\x00\x10\x01*\x0bRestore Run\x12\xa4\x01\n\tlogMetric\x12\x11.mlflow.LogMetric\x1a\x1a.mlflow.LogMetric.Response\"h\xf2\x86\x19\x64\n%\n\x04POST\x12\x17/mlflow/runs/log-metric\x1a\x04\x08\x02\x10\x00\n-\n\x04POST\x12\x1f/preview/mlflow/runs/log-metric\x1a\x04\x08\x02\x10\x00\x10\x01*\nLog Metric\x12\xa6\x01\n\x08logParam\x12\x10.mlflow.LogParam\x1a\x19.mlflow.LogParam.Response\"m\xf2\x86\x19i\n(\n\x04POST\x12\x1a/mlflow/runs/log-parameter\x1a\x04\x08\x02\x10\x00\n0\n\x04POST\x12\"/preview/mlflow/runs/log-parameter\x1a\x04\x08\x02\x10\x00\x10\x01*\tLog Param\x12\xb0\x01\n\x0blogArtifact\x12\x13.mlflow.LogArtifact\x1a\x1c.mlflow.LogArtifact.Response\"n\xf2\x86\x19j\n\'\n\x04POST\x12\x19/mlflow/runs/log-artifact\x1a\x04\x08\x02\x10\x00\n/\n\x04POST\x12!/preview/mlflow/runs/log-artifact\x1a\x04\x08\x02\x10\x00\x10\x01*\x0cLog Artifact\x12\xe1\x01\n\x10setExperimentTag\x12\x18.mlflow.SetExperimentTag\x1a!.mlflow.SetExperimentTag.Response\"\x8f\x01\xf2\x86\x19\x8a\x01\n4\n\x04POST\x12&/mlflow/experiments/set-experiment-tag\x1a\x04\x08\x02\x10\x00\n<\n\x04POST\x12./preview/mlflow/experiments/set-experiment-tag\x1a\x04\x08\x02\x10\x00\x10\x01*\x12Set Experiment Tag\x12\x92\x01\n\x06setTag\x12\x0e.mlflow.SetTag\x1a\x17.mlflow.SetTag.Response\"_\xf2\x86\x19[\n\"\n\x04POST\x12\x14/mlflow/runs/set-tag\x1a\x04\x08\x02\x10\x00\n*\n\x04POST\x12\x1c/preview/mlflow/runs/set-tag\x1a\x04\x08\x02\x10\x00\x10\x01*\x07Set Tag\x12\xa4\x01\n\tdeleteTag\x12\x11.mlflow.DeleteTag\x1a\x1a.mlflow.DeleteTag.Response\"h\xf2\x86\x19\x64\n%\n\x04POST\x12\x17/mlflow/runs/delete-tag\x1a\x04\x08\x02\x10\x00\n-\n\x04POST\x12\x1f/preview/mlflow/runs/delete-tag\x1a\x04\x08\x02\x10\x00\x10\x01*\nDelete Tag\x12\x88\x01\n\x06getRun\x12\x0e.mlflow.GetRun\x1a\x17.mlflow.GetRun.Response\"U\xf2\x86\x19Q\n\x1d\n\x03GET\x12\x10/mlflow/runs/get\x1a\x04\x08\x02\x10\x00\n%\n\x03GET\x12\x18/preview/mlflow/runs/get\x1a\x04\x08\x02\x10\x00\x10\x01*\x07Get Run\x12\xcc\x01\n\nsearchRuns\x12\x12.mlflow.SearchRuns\x1a\x1b.mlflow.SearchRuns.Response\"\x8c\x01\xf2\x86\x19\x87\x01\n!\n\x04POST\x12\x13/mlflow/runs/search\x1a\x04\x08\x02\x10\x00\n)\n\x04POST\x12\x1b/preview/mlflow/runs/search\x1a\x04\x08\x02\x10\x00\n(\n\x03GET\x12\x1b/preview/mlflow/runs/search\x1a\x04\x08\x02\x10\x00\x10\x01*\x0bSearch Runs\x12\xb0\x01\n\rlistArtifacts\x12\x15.mlflow.ListArtifacts\x1a\x1e.mlflow.ListArtifacts.Response\"h\xf2\x86\x19\x64\n#\n\x03GET\x12\x16/mlflow/artifacts/list\x1a\x04\x08\x02\x10\x00\n+\n\x03GET\x12\x1e/preview/mlflow/artifacts/list\x1a\x04\x08\x02\x10\x00\x10\x01*\x0eList Artifacts\x12\xc7\x01\n\x10getMetricHistory\x12\x18.mlflow.GetMetricHistory\x1a!.mlflow.GetMetricHistory.Response\"v\xf2\x86\x19r\n(\n\x03GET\x12\x1b/mlflow/metrics/get-history\x1a\x04\x08\x02\x10\x00\n0\n\x03GET\x12#/preview/mlflow/metrics/get-history\x1a\x04\x08\x02\x10\x00\x10\x01*\x12Get Metric History\x12\x9e\x01\n\x08logBatch\x12\x10.mlflow.LogBatch\x1a\x19.mlflow.LogBatch.Response\"e\xf2\x86\x19\x61\n$\n\x04POST\x12\x16/mlflow/runs/log-batch\x1a\x04\x08\x02\x10\x00\n,\n\x04POST\x12\x1e/preview/mlflow/runs/log-batch\x1a\x04\x08\x02\x10\x00\x10\x01*\tLog Batch\x12\x9e\x01\n\x08logModel\x12\x10.mlflow.LogModel\x1a\x19.mlflow.LogModel.Response\"e\xf2\x86\x19\x61\n$\n\x04POST\x12\x16/mlflow/runs/log-model\x1a\x04\x08\x02\x10\x00\n,\n\x04POST\x12\x1e/preview/mlflow/runs/log-model\x1a\x04\x08\x02\x10\x00\x10\x01*\tLog ModelB%\n\x1borg.cral.tracking.api.proto\x90\x01\x01\xe2?\x02\x10\x01')
-  ,
-  dependencies=[scalapb_dot_scalapb__pb2.DESCRIPTOR,errorcodes__pb2.DESCRIPTOR,google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,])
+    name='service_lite.proto',
+    package='mlflow',
+    syntax='proto2',
+    serialized_options=_b(
+        '\n\033org.cral.tracking.api.proto\220\001\001\342?\002\020\001'),
+    serialized_pb=_b(
+        '\n\x12service_lite.proto\x12\x06mlflow\x1a\x15scalapb/scalapb.proto\x1a\x10\x65rrorcodes.proto\x1a\x1cgoogle/protobuf/struct.proto\"H\n\x06Metric\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x01\x12\x11\n\ttimestamp\x18\x03 \x01(\x03\x12\x0f\n\x04step\x18\x04 \x01(\x03:\x01\x30\"#\n\x05Param\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xea\x01\n\x08\x41rtifact\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\x15\n\rartifact_type\x18\x03 \x01(\t\x12\x11\n\ttimestamp\x18\x04 \x01(\x03\x12\x0c\n\x04size\x18\x05 \x01(\x03\x12+\n\nprediction\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\x0cground_truth\x18\x07 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x0c\n\x04step\x18\x08 \x01(\x03\x12!\n\x04tags\x18\t \x03(\x0b\x32\x13.mlflow.ArtifactTag\")\n\x0b\x41rtifactTag\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"C\n\x03Run\x12\x1d\n\x04info\x18\x01 \x01(\x0b\x32\x0f.mlflow.RunInfo\x12\x1d\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x0f.mlflow.RunData\"g\n\x07RunData\x12\x1f\n\x07metrics\x18\x01 \x03(\x0b\x32\x0e.mlflow.Metric\x12\x1d\n\x06params\x18\x02 \x03(\x0b\x32\r.mlflow.Param\x12\x1c\n\x04tags\x18\x03 \x03(\x0b\x32\x0e.mlflow.RunTag\"$\n\x06RunTag\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"+\n\rExperimentTag\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xcb\x01\n\x07RunInfo\x12\x0e\n\x06run_id\x18\x0f \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x15\n\rexperiment_id\x18\x02 \x01(\t\x12\x0f\n\x07user_id\x18\x06 \x01(\t\x12!\n\x06status\x18\x07 \x01(\x0e\x32\x11.mlflow.RunStatus\x12\x12\n\nstart_time\x18\x08 \x01(\x03\x12\x10\n\x08\x65nd_time\x18\t \x01(\x03\x12\x14\n\x0c\x61rtifact_uri\x18\r \x01(\t\x12\x17\n\x0flifecycle_stage\x18\x0e \x01(\t\"\xbb\x01\n\nExperiment\x12\x15\n\rexperiment_id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x19\n\x11\x61rtifact_location\x18\x03 \x01(\t\x12\x17\n\x0flifecycle_stage\x18\x04 \x01(\t\x12\x18\n\x10last_update_time\x18\x05 \x01(\x03\x12\x15\n\rcreation_time\x18\x06 \x01(\x03\x12#\n\x04tags\x18\x07 \x03(\x0b\x32\x15.mlflow.ExperimentTag\"\xa0\x01\n\x10\x43reateExperiment\x12\r\n\x05token\x18\x0c \x01(\t\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x12\x19\n\x11\x61rtifact_location\x18\x02 \x01(\t\x1a!\n\x08Response\x12\x15\n\rexperiment_id\x18\x01 \x01(\t:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xa7\x01\n\x0fListExperiments\x12\r\n\x05token\x18\x0c \x01(\t\x12#\n\tview_type\x18\x01 \x01(\x0e\x32\x10.mlflow.ViewType\x1a\x33\n\x08Response\x12\'\n\x0b\x65xperiments\x18\x01 \x03(\x0b\x32\x12.mlflow.Experiment:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xbf\x01\n\rGetExperiment\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1b\n\rexperiment_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1aU\n\x08Response\x12&\n\nexperiment\x18\x01 \x01(\x0b\x32\x12.mlflow.Experiment\x12!\n\x04runs\x18\x02 \x03(\x0b\x32\x0f.mlflow.RunInfoB\x02\x18\x01:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"w\n\x10\x44\x65leteExperiment\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1b\n\rexperiment_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"x\n\x11RestoreExperiment\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1b\n\rexperiment_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\x89\x01\n\x10UpdateExperiment\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1b\n\rexperiment_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x12\x10\n\x08new_name\x18\x02 \x01(\t\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xc7\x01\n\tCreateRun\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\t\x12\x12\n\nstart_time\x18\x07 \x01(\x03\x12\x1c\n\x04tags\x18\t \x03(\x0b\x32\x0e.mlflow.RunTag\x1a$\n\x08Response\x12\x18\n\x03run\x18\x01 \x01(\x0b\x32\x0b.mlflow.Run:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xe4\x01\n\tUpdateRun\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x05 \x01(\t\x12\x0e\n\x06run_id\x18\x04 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12!\n\x06status\x18\x02 \x01(\x0e\x32\x11.mlflow.RunStatus\x12\x10\n\x08\x65nd_time\x18\x03 \x01(\x03\x1a-\n\x08Response\x12!\n\x08run_info\x18\x01 \x01(\x0b\x32\x0f.mlflow.RunInfo:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\x80\x01\n\tDeleteRun\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x02 \x01(\t\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\x81\x01\n\nRestoreRun\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x02 \x01(\t\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xde\x01\n\tLogMetric\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x07 \x01(\t\x12\x0e\n\x06run_id\x18\x06 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x12\x13\n\x05value\x18\x03 \x01(\x01\x42\x04\xf8\x86\x19\x01\x12\x17\n\ttimestamp\x18\x04 \x01(\x03\x42\x04\xf8\x86\x19\x01\x12\x0f\n\x04step\x18\x05 \x01(\x03:\x01\x30\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xb3\x01\n\x08LogParam\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x05 \x01(\t\x12\x0e\n\x06run_id\x18\x04 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x12\x13\n\x05value\x18\x03 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xf3\x02\n\x0bLogArtifact\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x12\x0e\n\x06run_id\x18\x03 \x01(\t\x12\r\n\x05token\x18\x04 \x01(\t\x12\x15\n\rexperiment_id\x18\x05 \x01(\t\x12\x0c\n\x04type\x18\x06 \x01(\t\x12\x11\n\ttimestamp\x18\x07 \x01(\x03\x12\x0c\n\x04size\x18\x08 \x01(\x03\x12+\n\nprediction\x18\t \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\x0cground_truth\x18\n \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x0c\n\x04step\x18\x0b \x01(\x03\x1a\x43\n\x08Response\x12\x0b\n\x03url\x18\x01 \x01(\t\x12*\n\x06\x66ields\x18\x02 \x01(\x0b\x32\x1a.mlflow.PresignedPOSTField:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xd1\x01\n\x12PresignedPOSTField\x12\x0b\n\x03key\x18\x01 \x01(\t\x12(\n\x0fx_amz_algorithm\x18\x02 \x01(\tR\x0fx-amz-algorithm\x12*\n\x10x_amz_credential\x18\x03 \x01(\tR\x10x-amz-credential\x12\x1e\n\nx_amz_date\x18\x04 \x01(\tR\nx-amz-date\x12\x0e\n\x06policy\x18\x05 \x01(\t\x12(\n\x0fx_amz_signature\x18\x06 \x01(\tR\x0fx-amz-signature\"\x9f\x01\n\x10SetExperimentTag\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1b\n\rexperiment_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x12\x13\n\x05value\x18\x03 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xb1\x01\n\x06SetTag\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x05 \x01(\t\x12\x0e\n\x06run_id\x18\x04 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x12\x13\n\x05value\x18\x03 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\x93\x01\n\tDeleteTag\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x03 \x01(\t\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x12\x11\n\x03key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xa3\x01\n\x06GetRun\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x03 \x01(\t\x12\x0e\n\x06run_id\x18\x02 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x1a$\n\x08Response\x12\x18\n\x03run\x18\x01 \x01(\x0b\x32\x0b.mlflow.Run:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xa7\x02\n\nSearchRuns\x12\r\n\x05token\x18\x0c \x01(\t\x12\x16\n\x0e\x65xperiment_ids\x18\x01 \x03(\t\x12\x0e\n\x06\x66ilter\x18\x04 \x01(\t\x12\x34\n\rrun_view_type\x18\x03 \x01(\x0e\x32\x10.mlflow.ViewType:\x0b\x41\x43TIVE_ONLY\x12\x19\n\x0bmax_results\x18\x05 \x01(\x05:\x04\x31\x30\x30\x30\x12\x10\n\x08order_by\x18\x06 \x03(\t\x12\x12\n\npage_token\x18\x07 \x01(\t\x1a>\n\x08Response\x12\x19\n\x04runs\x18\x01 \x03(\x0b\x32\x0b.mlflow.Run\x12\x17\n\x0fnext_page_token\x18\x02 \x01(\t:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xba\x01\n\rListArtifacts\x12\r\n\x05token\x18\x0c \x01(\t\x12\x0e\n\x06run_id\x18\x03 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x0c\n\x04path\x18\x02 \x01(\t\x1a=\n\x08Response\x12\x10\n\x08root_uri\x18\x01 \x01(\t\x12\x1f\n\x05\x66iles\x18\x02 \x03(\x0b\x32\x10.mlflow.FileInfo:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\";\n\x08\x46ileInfo\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0e\n\x06is_dir\x18\x02 \x01(\x08\x12\x11\n\tfile_size\x18\x03 \x01(\x03\"\xb7\x01\n\x10GetMetricHistory\x12\r\n\x05token\x18\x0c \x01(\t\x12\x0e\n\x06run_id\x18\x03 \x01(\t\x12\x10\n\x08run_uuid\x18\x01 \x01(\t\x12\x18\n\nmetric_key\x18\x02 \x01(\tB\x04\xf8\x86\x19\x01\x1a+\n\x08Response\x12\x1f\n\x07metrics\x18\x01 \x03(\x0b\x32\x0e.mlflow.Metric:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xd7\x01\n\x08LogBatch\x12\r\n\x05token\x18\x0c \x01(\t\x12\x15\n\rexperiment_id\x18\x05 \x01(\t\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x1f\n\x07metrics\x18\x02 \x03(\x0b\x32\x0e.mlflow.Metric\x12\x1d\n\x06params\x18\x03 \x03(\x0b\x32\r.mlflow.Param\x12\x1c\n\x04tags\x18\x04 \x03(\x0b\x32\x0e.mlflow.RunTag\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"v\n\x08LogModel\x12\r\n\x05token\x18\x0c \x01(\t\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x12\n\nmodel_json\x18\x02 \x01(\t\x1a\n\n\x08Response:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]\"\xa4\x01\n\x13GetExperimentByName\x12\r\n\x05token\x18\x0c \x01(\t\x12\x1d\n\x0f\x65xperiment_name\x18\x01 \x01(\tB\x04\xf8\x86\x19\x01\x1a\x32\n\x08Response\x12&\n\nexperiment\x18\x01 \x01(\x0b\x32\x12.mlflow.Experiment:+\xe2?(\n&com.databricks.rpc.RPC[$this.Response]*6\n\x08ViewType\x12\x0f\n\x0b\x41\x43TIVE_ONLY\x10\x01\x12\x10\n\x0c\x44\x45LETED_ONLY\x10\x02\x12\x07\n\x03\x41LL\x10\x03*I\n\nSourceType\x12\x0c\n\x08NOTEBOOK\x10\x01\x12\x07\n\x03JOB\x10\x02\x12\x0b\n\x07PROJECT\x10\x03\x12\t\n\x05LOCAL\x10\x04\x12\x0c\n\x07UNKNOWN\x10\xe8\x07*M\n\tRunStatus\x12\x0b\n\x07RUNNING\x10\x01\x12\r\n\tSCHEDULED\x10\x02\x12\x0c\n\x08\x46INISHED\x10\x03\x12\n\n\x06\x46\x41ILED\x10\x04\x12\n\n\x06KILLED\x10\x05\x32\x94 \n\rMlflowService\x12\xa6\x01\n\x13getExperimentByName\x12\x1b.mlflow.GetExperimentByName\x1a$.mlflow.GetExperimentByName.Response\"L\xf2\x86\x19H\n,\n\x03GET\x12\x1f/mlflow/experiments/get-by-name\x1a\x04\x08\x02\x10\x00\x10\x01*\x16Get Experiment By Name\x12\xc6\x01\n\x10\x63reateExperiment\x12\x18.mlflow.CreateExperiment\x1a!.mlflow.CreateExperiment.Response\"u\xf2\x86\x19q\n(\n\x04POST\x12\x1a/mlflow/experiments/create\x1a\x04\x08\x02\x10\x00\n0\n\x04POST\x12\"/preview/mlflow/experiments/create\x1a\x04\x08\x02\x10\x00\x10\x01*\x11\x43reate Experiment\x12\xbc\x01\n\x0flistExperiments\x12\x17.mlflow.ListExperiments\x1a .mlflow.ListExperiments.Response\"n\xf2\x86\x19j\n%\n\x03GET\x12\x18/mlflow/experiments/list\x1a\x04\x08\x02\x10\x00\n-\n\x03GET\x12 /preview/mlflow/experiments/list\x1a\x04\x08\x02\x10\x00\x10\x01*\x10List Experiments\x12\xb2\x01\n\rgetExperiment\x12\x15.mlflow.GetExperiment\x1a\x1e.mlflow.GetExperiment.Response\"j\xf2\x86\x19\x66\n$\n\x03GET\x12\x17/mlflow/experiments/get\x1a\x04\x08\x02\x10\x00\n,\n\x03GET\x12\x1f/preview/mlflow/experiments/get\x1a\x04\x08\x02\x10\x00\x10\x01*\x0eGet Experiment\x12\xc6\x01\n\x10\x64\x65leteExperiment\x12\x18.mlflow.DeleteExperiment\x1a!.mlflow.DeleteExperiment.Response\"u\xf2\x86\x19q\n(\n\x04POST\x12\x1a/mlflow/experiments/delete\x1a\x04\x08\x02\x10\x00\n0\n\x04POST\x12\"/preview/mlflow/experiments/delete\x1a\x04\x08\x02\x10\x00\x10\x01*\x11\x44\x65lete Experiment\x12\xcc\x01\n\x11restoreExperiment\x12\x19.mlflow.RestoreExperiment\x1a\".mlflow.RestoreExperiment.Response\"x\xf2\x86\x19t\n)\n\x04POST\x12\x1b/mlflow/experiments/restore\x1a\x04\x08\x02\x10\x00\n1\n\x04POST\x12#/preview/mlflow/experiments/restore\x1a\x04\x08\x02\x10\x00\x10\x01*\x12Restore Experiment\x12\xc6\x01\n\x10updateExperiment\x12\x18.mlflow.UpdateExperiment\x1a!.mlflow.UpdateExperiment.Response\"u\xf2\x86\x19q\n(\n\x04POST\x12\x1a/mlflow/experiments/update\x1a\x04\x08\x02\x10\x00\n0\n\x04POST\x12\"/preview/mlflow/experiments/update\x1a\x04\x08\x02\x10\x00\x10\x01*\x11Update Experiment\x12\x9c\x01\n\tcreateRun\x12\x11.mlflow.CreateRun\x1a\x1a.mlflow.CreateRun.Response\"`\xf2\x86\x19\\\n!\n\x04POST\x12\x13/mlflow/runs/create\x1a\x04\x08\x02\x10\x00\n)\n\x04POST\x12\x1b/preview/mlflow/runs/create\x1a\x04\x08\x02\x10\x00\x10\x01*\nCreate Run\x12\x9c\x01\n\tupdateRun\x12\x11.mlflow.UpdateRun\x1a\x1a.mlflow.UpdateRun.Response\"`\xf2\x86\x19\\\n!\n\x04POST\x12\x13/mlflow/runs/update\x1a\x04\x08\x02\x10\x00\n)\n\x04POST\x12\x1b/preview/mlflow/runs/update\x1a\x04\x08\x02\x10\x00\x10\x01*\nUpdate Run\x12\x9c\x01\n\tdeleteRun\x12\x11.mlflow.DeleteRun\x1a\x1a.mlflow.DeleteRun.Response\"`\xf2\x86\x19\\\n!\n\x04POST\x12\x13/mlflow/runs/delete\x1a\x04\x08\x02\x10\x00\n)\n\x04POST\x12\x1b/preview/mlflow/runs/delete\x1a\x04\x08\x02\x10\x00\x10\x01*\nDelete Run\x12\xa2\x01\n\nrestoreRun\x12\x12.mlflow.RestoreRun\x1a\x1b.mlflow.RestoreRun.Response\"c\xf2\x86\x19_\n\"\n\x04POST\x12\x14/mlflow/runs/restore\x1a\x04\x08\x02\x10\x00\n*\n\x04POST\x12\x1c/preview/mlflow/runs/restore\x1a\x04\x08\x02\x10\x00\x10\x01*\x0bRestore Run\x12\xa4\x01\n\tlogMetric\x12\x11.mlflow.LogMetric\x1a\x1a.mlflow.LogMetric.Response\"h\xf2\x86\x19\x64\n%\n\x04POST\x12\x17/mlflow/runs/log-metric\x1a\x04\x08\x02\x10\x00\n-\n\x04POST\x12\x1f/preview/mlflow/runs/log-metric\x1a\x04\x08\x02\x10\x00\x10\x01*\nLog Metric\x12\xa6\x01\n\x08logParam\x12\x10.mlflow.LogParam\x1a\x19.mlflow.LogParam.Response\"m\xf2\x86\x19i\n(\n\x04POST\x12\x1a/mlflow/runs/log-parameter\x1a\x04\x08\x02\x10\x00\n0\n\x04POST\x12\"/preview/mlflow/runs/log-parameter\x1a\x04\x08\x02\x10\x00\x10\x01*\tLog Param\x12\xb0\x01\n\x0blogArtifact\x12\x13.mlflow.LogArtifact\x1a\x1c.mlflow.LogArtifact.Response\"n\xf2\x86\x19j\n\'\n\x04POST\x12\x19/mlflow/runs/log-artifact\x1a\x04\x08\x02\x10\x00\n/\n\x04POST\x12!/preview/mlflow/runs/log-artifact\x1a\x04\x08\x02\x10\x00\x10\x01*\x0cLog Artifact\x12\xe1\x01\n\x10setExperimentTag\x12\x18.mlflow.SetExperimentTag\x1a!.mlflow.SetExperimentTag.Response\"\x8f\x01\xf2\x86\x19\x8a\x01\n4\n\x04POST\x12&/mlflow/experiments/set-experiment-tag\x1a\x04\x08\x02\x10\x00\n<\n\x04POST\x12./preview/mlflow/experiments/set-experiment-tag\x1a\x04\x08\x02\x10\x00\x10\x01*\x12Set Experiment Tag\x12\x92\x01\n\x06setTag\x12\x0e.mlflow.SetTag\x1a\x17.mlflow.SetTag.Response\"_\xf2\x86\x19[\n\"\n\x04POST\x12\x14/mlflow/runs/set-tag\x1a\x04\x08\x02\x10\x00\n*\n\x04POST\x12\x1c/preview/mlflow/runs/set-tag\x1a\x04\x08\x02\x10\x00\x10\x01*\x07Set Tag\x12\xa4\x01\n\tdeleteTag\x12\x11.mlflow.DeleteTag\x1a\x1a.mlflow.DeleteTag.Response\"h\xf2\x86\x19\x64\n%\n\x04POST\x12\x17/mlflow/runs/delete-tag\x1a\x04\x08\x02\x10\x00\n-\n\x04POST\x12\x1f/preview/mlflow/runs/delete-tag\x1a\x04\x08\x02\x10\x00\x10\x01*\nDelete Tag\x12\x88\x01\n\x06getRun\x12\x0e.mlflow.GetRun\x1a\x17.mlflow.GetRun.Response\"U\xf2\x86\x19Q\n\x1d\n\x03GET\x12\x10/mlflow/runs/get\x1a\x04\x08\x02\x10\x00\n%\n\x03GET\x12\x18/preview/mlflow/runs/get\x1a\x04\x08\x02\x10\x00\x10\x01*\x07Get Run\x12\xcc\x01\n\nsearchRuns\x12\x12.mlflow.SearchRuns\x1a\x1b.mlflow.SearchRuns.Response\"\x8c\x01\xf2\x86\x19\x87\x01\n!\n\x04POST\x12\x13/mlflow/runs/search\x1a\x04\x08\x02\x10\x00\n)\n\x04POST\x12\x1b/preview/mlflow/runs/search\x1a\x04\x08\x02\x10\x00\n(\n\x03GET\x12\x1b/preview/mlflow/runs/search\x1a\x04\x08\x02\x10\x00\x10\x01*\x0bSearch Runs\x12\xb0\x01\n\rlistArtifacts\x12\x15.mlflow.ListArtifacts\x1a\x1e.mlflow.ListArtifacts.Response\"h\xf2\x86\x19\x64\n#\n\x03GET\x12\x16/mlflow/artifacts/list\x1a\x04\x08\x02\x10\x00\n+\n\x03GET\x12\x1e/preview/mlflow/artifacts/list\x1a\x04\x08\x02\x10\x00\x10\x01*\x0eList Artifacts\x12\xc7\x01\n\x10getMetricHistory\x12\x18.mlflow.GetMetricHistory\x1a!.mlflow.GetMetricHistory.Response\"v\xf2\x86\x19r\n(\n\x03GET\x12\x1b/mlflow/metrics/get-history\x1a\x04\x08\x02\x10\x00\n0\n\x03GET\x12#/preview/mlflow/metrics/get-history\x1a\x04\x08\x02\x10\x00\x10\x01*\x12Get Metric History\x12\x9e\x01\n\x08logBatch\x12\x10.mlflow.LogBatch\x1a\x19.mlflow.LogBatch.Response\"e\xf2\x86\x19\x61\n$\n\x04POST\x12\x16/mlflow/runs/log-batch\x1a\x04\x08\x02\x10\x00\n,\n\x04POST\x12\x1e/preview/mlflow/runs/log-batch\x1a\x04\x08\x02\x10\x00\x10\x01*\tLog Batch\x12\x9e\x01\n\x08logModel\x12\x10.mlflow.LogModel\x1a\x19.mlflow.LogModel.Response\"e\xf2\x86\x19\x61\n$\n\x04POST\x12\x16/mlflow/runs/log-model\x1a\x04\x08\x02\x10\x00\n,\n\x04POST\x12\x1e/preview/mlflow/runs/log-model\x1a\x04\x08\x02\x10\x00\x10\x01*\tLog ModelB%\n\x1borg.cral.tracking.api.proto\x90\x01\x01\xe2?\x02\x10\x01'
+    ),
+    dependencies=[
+        scalapb_dot_scalapb__pb2.DESCRIPTOR,
+        errorcodes__pb2.DESCRIPTOR,
+        google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,
+    ])
 
 _VIEWTYPE = _descriptor.EnumDescriptor(
-  name='ViewType',
-  full_name='mlflow.ViewType',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='ACTIVE_ONLY', index=0, number=1,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='DELETED_ONLY', index=1, number=2,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='ALL', index=2, number=3,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5641,
-  serialized_end=5695,
+    name='ViewType',
+    full_name='mlflow.ViewType',
+    filename=None,
+    file=DESCRIPTOR,
+    values=[
+        _descriptor.EnumValueDescriptor(
+            name='ACTIVE_ONLY',
+            index=0,
+            number=1,
+            serialized_options=None,
+            type=None),
+        _descriptor.EnumValueDescriptor(
+            name='DELETED_ONLY',
+            index=1,
+            number=2,
+            serialized_options=None,
+            type=None),
+        _descriptor.EnumValueDescriptor(
+            name='ALL', index=2, number=3, serialized_options=None, type=None),
+    ],
+    containing_type=None,
+    serialized_options=None,
+    serialized_start=5641,
+    serialized_end=5695,
 )
 _sym_db.RegisterEnumDescriptor(_VIEWTYPE)
 
 ViewType = enum_type_wrapper.EnumTypeWrapper(_VIEWTYPE)
 _SOURCETYPE = _descriptor.EnumDescriptor(
-  name='SourceType',
-  full_name='mlflow.SourceType',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='NOTEBOOK', index=0, number=1,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='JOB', index=1, number=2,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='PROJECT', index=2, number=3,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='LOCAL', index=3, number=4,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='UNKNOWN', index=4, number=1000,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5697,
-  serialized_end=5770,
+    name='SourceType',
+    full_name='mlflow.SourceType',
+    filename=None,
+    file=DESCRIPTOR,
+    values=[
+        _descriptor.EnumValueDescriptor(
+            name='NOTEBOOK',
+            index=0,
+            number=1,
+            serialized_options=None,
+            type=None),
+        _descriptor.EnumValueDescriptor(
+            name='JOB', index=1, number=2, serialized_options=None, type=None),
+        _descriptor.EnumValueDescriptor(
+            name='PROJECT',
+            index=2,
+            number=3,
+            serialized_options=None,
+            type=None),
+        _descriptor.EnumValueDescriptor(
+            name='LOCAL',
+            index=3,
+            number=4,
+            serialized_options=None,
+            type=None),
+        _descriptor.EnumValueDescriptor(
+            name='UNKNOWN',
+            index=4,
+            number=1000,
+            serialized_options=None,
+            type=None),
+    ],
+    containing_type=None,
+    serialized_options=None,
+    serialized_start=5697,
+    serialized_end=5770,
 )
 _sym_db.RegisterEnumDescriptor(_SOURCETYPE)
 
 SourceType = enum_type_wrapper.EnumTypeWrapper(_SOURCETYPE)
 _RUNSTATUS = _descriptor.EnumDescriptor(
-  name='RunStatus',
-  full_name='mlflow.RunStatus',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='RUNNING', index=0, number=1,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='SCHEDULED', index=1, number=2,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='FINISHED', index=2, number=3,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='FAILED', index=3, number=4,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='KILLED', index=4, number=5,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5772,
-  serialized_end=5849,
+    name='RunStatus',
+    full_name='mlflow.RunStatus',
+    filename=None,
+    file=DESCRIPTOR,
+    values=[
+        _descriptor.EnumValueDescriptor(
+            name='RUNNING',
+            index=0,
+            number=1,
+            serialized_options=None,
+            type=None),
+        _descriptor.EnumValueDescriptor(
+            name='SCHEDULED',
+            index=1,
+            number=2,
+            serialized_options=None,
+            type=None),
+        _descriptor.EnumValueDescriptor(
+            name='FINISHED',
+            index=2,
+            number=3,
+            serialized_options=None,
+            type=None),
+        _descriptor.EnumValueDescriptor(
+            name='FAILED',
+            index=3,
+            number=4,
+            serialized_options=None,
+            type=None),
+        _descriptor.EnumValueDescriptor(
+            name='KILLED',
+            index=4,
+            number=5,
+            serialized_options=None,
+            type=None),
+    ],
+    containing_type=None,
+    serialized_options=None,
+    serialized_start=5772,
+    serialized_end=5849,
 )
 _sym_db.RegisterEnumDescriptor(_RUNSTATUS)
 
@@ -140,2540 +164,4030 @@ FINISHED = 3
 FAILED = 4
 KILLED = 5
 
-
-
 _METRIC = _descriptor.Descriptor(
-  name='Metric',
-  full_name='mlflow.Metric',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.Metric.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='mlflow.Metric.value', index=1,
-      number=2, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='timestamp', full_name='mlflow.Metric.timestamp', index=2,
-      number=3, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='step', full_name='mlflow.Metric.step', index=3,
-      number=4, type=3, cpp_type=2, label=1,
-      has_default_value=True, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=101,
-  serialized_end=173,
+    name='Metric',
+    full_name='mlflow.Metric',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.Metric.key',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='value',
+            full_name='mlflow.Metric.value',
+            index=1,
+            number=2,
+            type=1,
+            cpp_type=5,
+            label=1,
+            has_default_value=False,
+            default_value=float(0),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='timestamp',
+            full_name='mlflow.Metric.timestamp',
+            index=2,
+            number=3,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='step',
+            full_name='mlflow.Metric.step',
+            index=3,
+            number=4,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=True,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=101,
+    serialized_end=173,
 )
-
 
 _PARAM = _descriptor.Descriptor(
-  name='Param',
-  full_name='mlflow.Param',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.Param.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='mlflow.Param.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=175,
-  serialized_end=210,
+    name='Param',
+    full_name='mlflow.Param',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.Param.key',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='value',
+            full_name='mlflow.Param.value',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=175,
+    serialized_end=210,
 )
-
 
 _ARTIFACT = _descriptor.Descriptor(
-  name='Artifact',
-  full_name='mlflow.Artifact',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.Artifact.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='path', full_name='mlflow.Artifact.path', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='artifact_type', full_name='mlflow.Artifact.artifact_type', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='timestamp', full_name='mlflow.Artifact.timestamp', index=3,
-      number=4, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='size', full_name='mlflow.Artifact.size', index=4,
-      number=5, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='prediction', full_name='mlflow.Artifact.prediction', index=5,
-      number=6, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='ground_truth', full_name='mlflow.Artifact.ground_truth', index=6,
-      number=7, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='step', full_name='mlflow.Artifact.step', index=7,
-      number=8, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tags', full_name='mlflow.Artifact.tags', index=8,
-      number=9, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=213,
-  serialized_end=447,
+    name='Artifact',
+    full_name='mlflow.Artifact',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.Artifact.key',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='path',
+            full_name='mlflow.Artifact.path',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='artifact_type',
+            full_name='mlflow.Artifact.artifact_type',
+            index=2,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='timestamp',
+            full_name='mlflow.Artifact.timestamp',
+            index=3,
+            number=4,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='size',
+            full_name='mlflow.Artifact.size',
+            index=4,
+            number=5,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='prediction',
+            full_name='mlflow.Artifact.prediction',
+            index=5,
+            number=6,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='ground_truth',
+            full_name='mlflow.Artifact.ground_truth',
+            index=6,
+            number=7,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='step',
+            full_name='mlflow.Artifact.step',
+            index=7,
+            number=8,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='tags',
+            full_name='mlflow.Artifact.tags',
+            index=8,
+            number=9,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=213,
+    serialized_end=447,
 )
-
 
 _ARTIFACTTAG = _descriptor.Descriptor(
-  name='ArtifactTag',
-  full_name='mlflow.ArtifactTag',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.ArtifactTag.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='mlflow.ArtifactTag.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=449,
-  serialized_end=490,
+    name='ArtifactTag',
+    full_name='mlflow.ArtifactTag',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.ArtifactTag.key',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='value',
+            full_name='mlflow.ArtifactTag.value',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=449,
+    serialized_end=490,
 )
-
 
 _RUN = _descriptor.Descriptor(
-  name='Run',
-  full_name='mlflow.Run',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='info', full_name='mlflow.Run.info', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='data', full_name='mlflow.Run.data', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=492,
-  serialized_end=559,
+    name='Run',
+    full_name='mlflow.Run',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='info',
+            full_name='mlflow.Run.info',
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='data',
+            full_name='mlflow.Run.data',
+            index=1,
+            number=2,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=492,
+    serialized_end=559,
 )
-
 
 _RUNDATA = _descriptor.Descriptor(
-  name='RunData',
-  full_name='mlflow.RunData',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='metrics', full_name='mlflow.RunData.metrics', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='params', full_name='mlflow.RunData.params', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tags', full_name='mlflow.RunData.tags', index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=561,
-  serialized_end=664,
+    name='RunData',
+    full_name='mlflow.RunData',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='metrics',
+            full_name='mlflow.RunData.metrics',
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='params',
+            full_name='mlflow.RunData.params',
+            index=1,
+            number=2,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='tags',
+            full_name='mlflow.RunData.tags',
+            index=2,
+            number=3,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=561,
+    serialized_end=664,
 )
-
 
 _RUNTAG = _descriptor.Descriptor(
-  name='RunTag',
-  full_name='mlflow.RunTag',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.RunTag.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='mlflow.RunTag.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=666,
-  serialized_end=702,
+    name='RunTag',
+    full_name='mlflow.RunTag',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.RunTag.key',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='value',
+            full_name='mlflow.RunTag.value',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=666,
+    serialized_end=702,
 )
-
 
 _EXPERIMENTTAG = _descriptor.Descriptor(
-  name='ExperimentTag',
-  full_name='mlflow.ExperimentTag',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.ExperimentTag.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='mlflow.ExperimentTag.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=704,
-  serialized_end=747,
+    name='ExperimentTag',
+    full_name='mlflow.ExperimentTag',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.ExperimentTag.key',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='value',
+            full_name='mlflow.ExperimentTag.value',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=704,
+    serialized_end=747,
 )
-
 
 _RUNINFO = _descriptor.Descriptor(
-  name='RunInfo',
-  full_name='mlflow.RunInfo',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.RunInfo.run_id', index=0,
-      number=15, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_uuid', full_name='mlflow.RunInfo.run_uuid', index=1,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.RunInfo.experiment_id', index=2,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='user_id', full_name='mlflow.RunInfo.user_id', index=3,
-      number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='status', full_name='mlflow.RunInfo.status', index=4,
-      number=7, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=1,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='start_time', full_name='mlflow.RunInfo.start_time', index=5,
-      number=8, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='end_time', full_name='mlflow.RunInfo.end_time', index=6,
-      number=9, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='artifact_uri', full_name='mlflow.RunInfo.artifact_uri', index=7,
-      number=13, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='lifecycle_stage', full_name='mlflow.RunInfo.lifecycle_stage', index=8,
-      number=14, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=750,
-  serialized_end=953,
+    name='RunInfo',
+    full_name='mlflow.RunInfo',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.RunInfo.run_id',
+            index=0,
+            number=15,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_uuid',
+            full_name='mlflow.RunInfo.run_uuid',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.RunInfo.experiment_id',
+            index=2,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='user_id',
+            full_name='mlflow.RunInfo.user_id',
+            index=3,
+            number=6,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='status',
+            full_name='mlflow.RunInfo.status',
+            index=4,
+            number=7,
+            type=14,
+            cpp_type=8,
+            label=1,
+            has_default_value=False,
+            default_value=1,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='start_time',
+            full_name='mlflow.RunInfo.start_time',
+            index=5,
+            number=8,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='end_time',
+            full_name='mlflow.RunInfo.end_time',
+            index=6,
+            number=9,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='artifact_uri',
+            full_name='mlflow.RunInfo.artifact_uri',
+            index=7,
+            number=13,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='lifecycle_stage',
+            full_name='mlflow.RunInfo.lifecycle_stage',
+            index=8,
+            number=14,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=750,
+    serialized_end=953,
 )
-
 
 _EXPERIMENT = _descriptor.Descriptor(
-  name='Experiment',
-  full_name='mlflow.Experiment',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.Experiment.experiment_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='name', full_name='mlflow.Experiment.name', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='artifact_location', full_name='mlflow.Experiment.artifact_location', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='lifecycle_stage', full_name='mlflow.Experiment.lifecycle_stage', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='last_update_time', full_name='mlflow.Experiment.last_update_time', index=4,
-      number=5, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='creation_time', full_name='mlflow.Experiment.creation_time', index=5,
-      number=6, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tags', full_name='mlflow.Experiment.tags', index=6,
-      number=7, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=956,
-  serialized_end=1143,
+    name='Experiment',
+    full_name='mlflow.Experiment',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.Experiment.experiment_id',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='name',
+            full_name='mlflow.Experiment.name',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='artifact_location',
+            full_name='mlflow.Experiment.artifact_location',
+            index=2,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='lifecycle_stage',
+            full_name='mlflow.Experiment.lifecycle_stage',
+            index=3,
+            number=4,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='last_update_time',
+            full_name='mlflow.Experiment.last_update_time',
+            index=4,
+            number=5,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='creation_time',
+            full_name='mlflow.Experiment.creation_time',
+            index=5,
+            number=6,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='tags',
+            full_name='mlflow.Experiment.tags',
+            index=6,
+            number=7,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=956,
+    serialized_end=1143,
 )
 
-
 _CREATEEXPERIMENT_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.CreateExperiment.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.CreateExperiment.Response.experiment_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1261,
+    name='Response',
+    full_name='mlflow.CreateExperiment.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.CreateExperiment.Response.experiment_id',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1261,
 )
 
 _CREATEEXPERIMENT = _descriptor.Descriptor(
-  name='CreateExperiment',
-  full_name='mlflow.CreateExperiment',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.CreateExperiment.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='name', full_name='mlflow.CreateExperiment.name', index=1,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='artifact_location', full_name='mlflow.CreateExperiment.artifact_location', index=2,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_CREATEEXPERIMENT_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1146,
-  serialized_end=1306,
+    name='CreateExperiment',
+    full_name='mlflow.CreateExperiment',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.CreateExperiment.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='name',
+            full_name='mlflow.CreateExperiment.name',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='artifact_location',
+            full_name='mlflow.CreateExperiment.artifact_location',
+            index=2,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _CREATEEXPERIMENT_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1146,
+    serialized_end=1306,
 )
 
-
 _LISTEXPERIMENTS_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.ListExperiments.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='experiments', full_name='mlflow.ListExperiments.Response.experiments', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1380,
-  serialized_end=1431,
+    name='Response',
+    full_name='mlflow.ListExperiments.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='experiments',
+            full_name='mlflow.ListExperiments.Response.experiments',
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1380,
+    serialized_end=1431,
 )
 
 _LISTEXPERIMENTS = _descriptor.Descriptor(
-  name='ListExperiments',
-  full_name='mlflow.ListExperiments',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.ListExperiments.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='view_type', full_name='mlflow.ListExperiments.view_type', index=1,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=1,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_LISTEXPERIMENTS_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1309,
-  serialized_end=1476,
+    name='ListExperiments',
+    full_name='mlflow.ListExperiments',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.ListExperiments.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='view_type',
+            full_name='mlflow.ListExperiments.view_type',
+            index=1,
+            number=1,
+            type=14,
+            cpp_type=8,
+            label=1,
+            has_default_value=False,
+            default_value=1,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _LISTEXPERIMENTS_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1309,
+    serialized_end=1476,
 )
 
-
 _GETEXPERIMENT_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.GetExperiment.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='experiment', full_name='mlflow.GetExperiment.Response.experiment', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='runs', full_name='mlflow.GetExperiment.Response.runs', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\030\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1540,
-  serialized_end=1625,
+    name='Response',
+    full_name='mlflow.GetExperiment.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='experiment',
+            full_name='mlflow.GetExperiment.Response.experiment',
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='runs',
+            full_name='mlflow.GetExperiment.Response.runs',
+            index=1,
+            number=2,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\030\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1540,
+    serialized_end=1625,
 )
 
 _GETEXPERIMENT = _descriptor.Descriptor(
-  name='GetExperiment',
-  full_name='mlflow.GetExperiment',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.GetExperiment.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.GetExperiment.experiment_id', index=1,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETEXPERIMENT_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1479,
-  serialized_end=1670,
+    name='GetExperiment',
+    full_name='mlflow.GetExperiment',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.GetExperiment.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.GetExperiment.experiment_id',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _GETEXPERIMENT_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1479,
+    serialized_end=1670,
 )
 
-
 _DELETEEXPERIMENT_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.DeleteExperiment.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.DeleteExperiment.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _DELETEEXPERIMENT = _descriptor.Descriptor(
-  name='DeleteExperiment',
-  full_name='mlflow.DeleteExperiment',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.DeleteExperiment.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.DeleteExperiment.experiment_id', index=1,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_DELETEEXPERIMENT_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1672,
-  serialized_end=1791,
+    name='DeleteExperiment',
+    full_name='mlflow.DeleteExperiment',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.DeleteExperiment.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.DeleteExperiment.experiment_id',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _DELETEEXPERIMENT_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1672,
+    serialized_end=1791,
 )
 
-
 _RESTOREEXPERIMENT_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.RestoreExperiment.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.RestoreExperiment.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _RESTOREEXPERIMENT = _descriptor.Descriptor(
-  name='RestoreExperiment',
-  full_name='mlflow.RestoreExperiment',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.RestoreExperiment.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.RestoreExperiment.experiment_id', index=1,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_RESTOREEXPERIMENT_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1793,
-  serialized_end=1913,
+    name='RestoreExperiment',
+    full_name='mlflow.RestoreExperiment',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.RestoreExperiment.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.RestoreExperiment.experiment_id',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _RESTOREEXPERIMENT_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1793,
+    serialized_end=1913,
 )
 
-
 _UPDATEEXPERIMENT_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.UpdateExperiment.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.UpdateExperiment.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _UPDATEEXPERIMENT = _descriptor.Descriptor(
-  name='UpdateExperiment',
-  full_name='mlflow.UpdateExperiment',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.UpdateExperiment.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.UpdateExperiment.experiment_id', index=1,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='new_name', full_name='mlflow.UpdateExperiment.new_name', index=2,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_UPDATEEXPERIMENT_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1916,
-  serialized_end=2053,
+    name='UpdateExperiment',
+    full_name='mlflow.UpdateExperiment',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.UpdateExperiment.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.UpdateExperiment.experiment_id',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='new_name',
+            full_name='mlflow.UpdateExperiment.new_name',
+            index=2,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _UPDATEEXPERIMENT_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1916,
+    serialized_end=2053,
 )
 
-
 _CREATERUN_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.CreateRun.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='run', full_name='mlflow.CreateRun.Response.run', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2174,
-  serialized_end=2210,
+    name='Response',
+    full_name='mlflow.CreateRun.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='run',
+            full_name='mlflow.CreateRun.Response.run',
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=2174,
+    serialized_end=2210,
 )
 
 _CREATERUN = _descriptor.Descriptor(
-  name='CreateRun',
-  full_name='mlflow.CreateRun',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.CreateRun.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.CreateRun.experiment_id', index=1,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='user_id', full_name='mlflow.CreateRun.user_id', index=2,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='start_time', full_name='mlflow.CreateRun.start_time', index=3,
-      number=7, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tags', full_name='mlflow.CreateRun.tags', index=4,
-      number=9, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_CREATERUN_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2056,
-  serialized_end=2255,
+    name='CreateRun',
+    full_name='mlflow.CreateRun',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.CreateRun.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.CreateRun.experiment_id',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='user_id',
+            full_name='mlflow.CreateRun.user_id',
+            index=2,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='start_time',
+            full_name='mlflow.CreateRun.start_time',
+            index=3,
+            number=7,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='tags',
+            full_name='mlflow.CreateRun.tags',
+            index=4,
+            number=9,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _CREATERUN_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=2056,
+    serialized_end=2255,
 )
 
-
 _UPDATERUN_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.UpdateRun.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='run_info', full_name='mlflow.UpdateRun.Response.run_info', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2396,
-  serialized_end=2441,
+    name='Response',
+    full_name='mlflow.UpdateRun.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='run_info',
+            full_name='mlflow.UpdateRun.Response.run_info',
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=2396,
+    serialized_end=2441,
 )
 
 _UPDATERUN = _descriptor.Descriptor(
-  name='UpdateRun',
-  full_name='mlflow.UpdateRun',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.UpdateRun.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.UpdateRun.experiment_id', index=1,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.UpdateRun.run_id', index=2,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_uuid', full_name='mlflow.UpdateRun.run_uuid', index=3,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='status', full_name='mlflow.UpdateRun.status', index=4,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=1,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='end_time', full_name='mlflow.UpdateRun.end_time', index=5,
-      number=3, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_UPDATERUN_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2258,
-  serialized_end=2486,
+    name='UpdateRun',
+    full_name='mlflow.UpdateRun',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.UpdateRun.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.UpdateRun.experiment_id',
+            index=1,
+            number=5,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.UpdateRun.run_id',
+            index=2,
+            number=4,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_uuid',
+            full_name='mlflow.UpdateRun.run_uuid',
+            index=3,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='status',
+            full_name='mlflow.UpdateRun.status',
+            index=4,
+            number=2,
+            type=14,
+            cpp_type=8,
+            label=1,
+            has_default_value=False,
+            default_value=1,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='end_time',
+            full_name='mlflow.UpdateRun.end_time',
+            index=5,
+            number=3,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _UPDATERUN_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=2258,
+    serialized_end=2486,
 )
 
-
 _DELETERUN_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.DeleteRun.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.DeleteRun.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _DELETERUN = _descriptor.Descriptor(
-  name='DeleteRun',
-  full_name='mlflow.DeleteRun',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.DeleteRun.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.DeleteRun.experiment_id', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.DeleteRun.run_id', index=2,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_DELETERUN_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2489,
-  serialized_end=2617,
+    name='DeleteRun',
+    full_name='mlflow.DeleteRun',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.DeleteRun.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.DeleteRun.experiment_id',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.DeleteRun.run_id',
+            index=2,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _DELETERUN_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=2489,
+    serialized_end=2617,
 )
 
-
 _RESTORERUN_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.RestoreRun.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.RestoreRun.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _RESTORERUN = _descriptor.Descriptor(
-  name='RestoreRun',
-  full_name='mlflow.RestoreRun',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.RestoreRun.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.RestoreRun.experiment_id', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.RestoreRun.run_id', index=2,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_RESTORERUN_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2620,
-  serialized_end=2749,
+    name='RestoreRun',
+    full_name='mlflow.RestoreRun',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.RestoreRun.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.RestoreRun.experiment_id',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.RestoreRun.run_id',
+            index=2,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _RESTORERUN_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=2620,
+    serialized_end=2749,
 )
 
-
 _LOGMETRIC_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.LogMetric.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.LogMetric.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _LOGMETRIC = _descriptor.Descriptor(
-  name='LogMetric',
-  full_name='mlflow.LogMetric',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.LogMetric.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.LogMetric.experiment_id', index=1,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.LogMetric.run_id', index=2,
-      number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_uuid', full_name='mlflow.LogMetric.run_uuid', index=3,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.LogMetric.key', index=4,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='mlflow.LogMetric.value', index=5,
-      number=3, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='timestamp', full_name='mlflow.LogMetric.timestamp', index=6,
-      number=4, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='step', full_name='mlflow.LogMetric.step', index=7,
-      number=5, type=3, cpp_type=2, label=1,
-      has_default_value=True, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_LOGMETRIC_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2752,
-  serialized_end=2974,
+    name='LogMetric',
+    full_name='mlflow.LogMetric',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.LogMetric.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.LogMetric.experiment_id',
+            index=1,
+            number=7,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.LogMetric.run_id',
+            index=2,
+            number=6,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_uuid',
+            full_name='mlflow.LogMetric.run_uuid',
+            index=3,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.LogMetric.key',
+            index=4,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='value',
+            full_name='mlflow.LogMetric.value',
+            index=5,
+            number=3,
+            type=1,
+            cpp_type=5,
+            label=1,
+            has_default_value=False,
+            default_value=float(0),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='timestamp',
+            full_name='mlflow.LogMetric.timestamp',
+            index=6,
+            number=4,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='step',
+            full_name='mlflow.LogMetric.step',
+            index=7,
+            number=5,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=True,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _LOGMETRIC_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=2752,
+    serialized_end=2974,
 )
 
-
 _LOGPARAM_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.LogParam.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.LogParam.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _LOGPARAM = _descriptor.Descriptor(
-  name='LogParam',
-  full_name='mlflow.LogParam',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.LogParam.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.LogParam.experiment_id', index=1,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.LogParam.run_id', index=2,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_uuid', full_name='mlflow.LogParam.run_uuid', index=3,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.LogParam.key', index=4,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='mlflow.LogParam.value', index=5,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_LOGPARAM_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2977,
-  serialized_end=3156,
+    name='LogParam',
+    full_name='mlflow.LogParam',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.LogParam.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.LogParam.experiment_id',
+            index=1,
+            number=5,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.LogParam.run_id',
+            index=2,
+            number=4,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_uuid',
+            full_name='mlflow.LogParam.run_uuid',
+            index=3,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.LogParam.key',
+            index=4,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='value',
+            full_name='mlflow.LogParam.value',
+            index=5,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _LOGPARAM_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=2977,
+    serialized_end=3156,
 )
 
-
 _LOGARTIFACT_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.LogArtifact.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='url', full_name='mlflow.LogArtifact.Response.url', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='fields', full_name='mlflow.LogArtifact.Response.fields', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3418,
-  serialized_end=3485,
+    name='Response',
+    full_name='mlflow.LogArtifact.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='url',
+            full_name='mlflow.LogArtifact.Response.url',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='fields',
+            full_name='mlflow.LogArtifact.Response.fields',
+            index=1,
+            number=2,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=3418,
+    serialized_end=3485,
 )
 
 _LOGARTIFACT = _descriptor.Descriptor(
-  name='LogArtifact',
-  full_name='mlflow.LogArtifact',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='run_uuid', full_name='mlflow.LogArtifact.run_uuid', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.LogArtifact.key', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.LogArtifact.run_id', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.LogArtifact.token', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.LogArtifact.experiment_id', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='type', full_name='mlflow.LogArtifact.type', index=5,
-      number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='timestamp', full_name='mlflow.LogArtifact.timestamp', index=6,
-      number=7, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='size', full_name='mlflow.LogArtifact.size', index=7,
-      number=8, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='prediction', full_name='mlflow.LogArtifact.prediction', index=8,
-      number=9, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='ground_truth', full_name='mlflow.LogArtifact.ground_truth', index=9,
-      number=10, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='step', full_name='mlflow.LogArtifact.step', index=10,
-      number=11, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_LOGARTIFACT_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3159,
-  serialized_end=3530,
+    name='LogArtifact',
+    full_name='mlflow.LogArtifact',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='run_uuid',
+            full_name='mlflow.LogArtifact.run_uuid',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.LogArtifact.key',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.LogArtifact.run_id',
+            index=2,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.LogArtifact.token',
+            index=3,
+            number=4,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.LogArtifact.experiment_id',
+            index=4,
+            number=5,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='type',
+            full_name='mlflow.LogArtifact.type',
+            index=5,
+            number=6,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='timestamp',
+            full_name='mlflow.LogArtifact.timestamp',
+            index=6,
+            number=7,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='size',
+            full_name='mlflow.LogArtifact.size',
+            index=7,
+            number=8,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='prediction',
+            full_name='mlflow.LogArtifact.prediction',
+            index=8,
+            number=9,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='ground_truth',
+            full_name='mlflow.LogArtifact.ground_truth',
+            index=9,
+            number=10,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='step',
+            full_name='mlflow.LogArtifact.step',
+            index=10,
+            number=11,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _LOGARTIFACT_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=3159,
+    serialized_end=3530,
 )
-
 
 _PRESIGNEDPOSTFIELD = _descriptor.Descriptor(
-  name='PresignedPOSTField',
-  full_name='mlflow.PresignedPOSTField',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.PresignedPOSTField.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='x_amz_algorithm', full_name='mlflow.PresignedPOSTField.x_amz_algorithm', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='x-amz-algorithm', file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='x_amz_credential', full_name='mlflow.PresignedPOSTField.x_amz_credential', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='x-amz-credential', file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='x_amz_date', full_name='mlflow.PresignedPOSTField.x_amz_date', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='x-amz-date', file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='policy', full_name='mlflow.PresignedPOSTField.policy', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='x_amz_signature', full_name='mlflow.PresignedPOSTField.x_amz_signature', index=5,
-      number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='x-amz-signature', file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3533,
-  serialized_end=3742,
+    name='PresignedPOSTField',
+    full_name='mlflow.PresignedPOSTField',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.PresignedPOSTField.key',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='x_amz_algorithm',
+            full_name='mlflow.PresignedPOSTField.x_amz_algorithm',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            json_name='x-amz-algorithm',
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='x_amz_credential',
+            full_name='mlflow.PresignedPOSTField.x_amz_credential',
+            index=2,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            json_name='x-amz-credential',
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='x_amz_date',
+            full_name='mlflow.PresignedPOSTField.x_amz_date',
+            index=3,
+            number=4,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            json_name='x-amz-date',
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='policy',
+            full_name='mlflow.PresignedPOSTField.policy',
+            index=4,
+            number=5,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='x_amz_signature',
+            full_name='mlflow.PresignedPOSTField.x_amz_signature',
+            index=5,
+            number=6,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            json_name='x-amz-signature',
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=3533,
+    serialized_end=3742,
 )
 
-
 _SETEXPERIMENTTAG_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.SetExperimentTag.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.SetExperimentTag.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _SETEXPERIMENTTAG = _descriptor.Descriptor(
-  name='SetExperimentTag',
-  full_name='mlflow.SetExperimentTag',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.SetExperimentTag.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.SetExperimentTag.experiment_id', index=1,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.SetExperimentTag.key', index=2,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='mlflow.SetExperimentTag.value', index=3,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_SETEXPERIMENTTAG_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3745,
-  serialized_end=3904,
+    name='SetExperimentTag',
+    full_name='mlflow.SetExperimentTag',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.SetExperimentTag.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.SetExperimentTag.experiment_id',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.SetExperimentTag.key',
+            index=2,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='value',
+            full_name='mlflow.SetExperimentTag.value',
+            index=3,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _SETEXPERIMENTTAG_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=3745,
+    serialized_end=3904,
 )
 
-
 _SETTAG_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.SetTag.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.SetTag.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _SETTAG = _descriptor.Descriptor(
-  name='SetTag',
-  full_name='mlflow.SetTag',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.SetTag.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.SetTag.experiment_id', index=1,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.SetTag.run_id', index=2,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_uuid', full_name='mlflow.SetTag.run_uuid', index=3,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.SetTag.key', index=4,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='mlflow.SetTag.value', index=5,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_SETTAG_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3907,
-  serialized_end=4084,
+    name='SetTag',
+    full_name='mlflow.SetTag',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.SetTag.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.SetTag.experiment_id',
+            index=1,
+            number=5,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.SetTag.run_id',
+            index=2,
+            number=4,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_uuid',
+            full_name='mlflow.SetTag.run_uuid',
+            index=3,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.SetTag.key',
+            index=4,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='value',
+            full_name='mlflow.SetTag.value',
+            index=5,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _SETTAG_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=3907,
+    serialized_end=4084,
 )
 
-
 _DELETETAG_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.DeleteTag.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.DeleteTag.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _DELETETAG = _descriptor.Descriptor(
-  name='DeleteTag',
-  full_name='mlflow.DeleteTag',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.DeleteTag.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.DeleteTag.experiment_id', index=1,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.DeleteTag.run_id', index=2,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='key', full_name='mlflow.DeleteTag.key', index=3,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_DELETETAG_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4087,
-  serialized_end=4234,
+    name='DeleteTag',
+    full_name='mlflow.DeleteTag',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.DeleteTag.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.DeleteTag.experiment_id',
+            index=1,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.DeleteTag.run_id',
+            index=2,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='key',
+            full_name='mlflow.DeleteTag.key',
+            index=3,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _DELETETAG_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=4087,
+    serialized_end=4234,
 )
 
-
 _GETRUN_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.GetRun.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='run', full_name='mlflow.GetRun.Response.run', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2174,
-  serialized_end=2210,
+    name='Response',
+    full_name='mlflow.GetRun.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='run',
+            full_name='mlflow.GetRun.Response.run',
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=2174,
+    serialized_end=2210,
 )
 
 _GETRUN = _descriptor.Descriptor(
-  name='GetRun',
-  full_name='mlflow.GetRun',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.GetRun.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.GetRun.experiment_id', index=1,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.GetRun.run_id', index=2,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_uuid', full_name='mlflow.GetRun.run_uuid', index=3,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETRUN_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4237,
-  serialized_end=4400,
+    name='GetRun',
+    full_name='mlflow.GetRun',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.GetRun.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.GetRun.experiment_id',
+            index=1,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.GetRun.run_id',
+            index=2,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_uuid',
+            full_name='mlflow.GetRun.run_uuid',
+            index=3,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _GETRUN_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=4237,
+    serialized_end=4400,
 )
 
-
 _SEARCHRUNS_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.SearchRuns.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='runs', full_name='mlflow.SearchRuns.Response.runs', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='next_page_token', full_name='mlflow.SearchRuns.Response.next_page_token', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4591,
-  serialized_end=4653,
+    name='Response',
+    full_name='mlflow.SearchRuns.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='runs',
+            full_name='mlflow.SearchRuns.Response.runs',
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='next_page_token',
+            full_name='mlflow.SearchRuns.Response.next_page_token',
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=4591,
+    serialized_end=4653,
 )
 
 _SEARCHRUNS = _descriptor.Descriptor(
-  name='SearchRuns',
-  full_name='mlflow.SearchRuns',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.SearchRuns.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_ids', full_name='mlflow.SearchRuns.experiment_ids', index=1,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='filter', full_name='mlflow.SearchRuns.filter', index=2,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_view_type', full_name='mlflow.SearchRuns.run_view_type', index=3,
-      number=3, type=14, cpp_type=8, label=1,
-      has_default_value=True, default_value=1,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='max_results', full_name='mlflow.SearchRuns.max_results', index=4,
-      number=5, type=5, cpp_type=1, label=1,
-      has_default_value=True, default_value=1000,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='order_by', full_name='mlflow.SearchRuns.order_by', index=5,
-      number=6, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='page_token', full_name='mlflow.SearchRuns.page_token', index=6,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_SEARCHRUNS_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4403,
-  serialized_end=4698,
+    name='SearchRuns',
+    full_name='mlflow.SearchRuns',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.SearchRuns.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_ids',
+            full_name='mlflow.SearchRuns.experiment_ids',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='filter',
+            full_name='mlflow.SearchRuns.filter',
+            index=2,
+            number=4,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_view_type',
+            full_name='mlflow.SearchRuns.run_view_type',
+            index=3,
+            number=3,
+            type=14,
+            cpp_type=8,
+            label=1,
+            has_default_value=True,
+            default_value=1,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='max_results',
+            full_name='mlflow.SearchRuns.max_results',
+            index=4,
+            number=5,
+            type=5,
+            cpp_type=1,
+            label=1,
+            has_default_value=True,
+            default_value=1000,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='order_by',
+            full_name='mlflow.SearchRuns.order_by',
+            index=5,
+            number=6,
+            type=9,
+            cpp_type=9,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='page_token',
+            full_name='mlflow.SearchRuns.page_token',
+            index=6,
+            number=7,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _SEARCHRUNS_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=4403,
+    serialized_end=4698,
 )
 
-
 _LISTARTIFACTS_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.ListArtifacts.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='root_uri', full_name='mlflow.ListArtifacts.Response.root_uri', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='files', full_name='mlflow.ListArtifacts.Response.files', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4781,
-  serialized_end=4842,
+    name='Response',
+    full_name='mlflow.ListArtifacts.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='root_uri',
+            full_name='mlflow.ListArtifacts.Response.root_uri',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='files',
+            full_name='mlflow.ListArtifacts.Response.files',
+            index=1,
+            number=2,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=4781,
+    serialized_end=4842,
 )
 
 _LISTARTIFACTS = _descriptor.Descriptor(
-  name='ListArtifacts',
-  full_name='mlflow.ListArtifacts',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.ListArtifacts.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.ListArtifacts.run_id', index=1,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_uuid', full_name='mlflow.ListArtifacts.run_uuid', index=2,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='path', full_name='mlflow.ListArtifacts.path', index=3,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_LISTARTIFACTS_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4701,
-  serialized_end=4887,
+    name='ListArtifacts',
+    full_name='mlflow.ListArtifacts',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.ListArtifacts.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.ListArtifacts.run_id',
+            index=1,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_uuid',
+            full_name='mlflow.ListArtifacts.run_uuid',
+            index=2,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='path',
+            full_name='mlflow.ListArtifacts.path',
+            index=3,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _LISTARTIFACTS_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=4701,
+    serialized_end=4887,
 )
-
 
 _FILEINFO = _descriptor.Descriptor(
-  name='FileInfo',
-  full_name='mlflow.FileInfo',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='path', full_name='mlflow.FileInfo.path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='is_dir', full_name='mlflow.FileInfo.is_dir', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='file_size', full_name='mlflow.FileInfo.file_size', index=2,
-      number=3, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4889,
-  serialized_end=4948,
+    name='FileInfo',
+    full_name='mlflow.FileInfo',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='path',
+            full_name='mlflow.FileInfo.path',
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='is_dir',
+            full_name='mlflow.FileInfo.is_dir',
+            index=1,
+            number=2,
+            type=8,
+            cpp_type=7,
+            label=1,
+            has_default_value=False,
+            default_value=False,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='file_size',
+            full_name='mlflow.FileInfo.file_size',
+            index=2,
+            number=3,
+            type=3,
+            cpp_type=2,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=4889,
+    serialized_end=4948,
 )
 
-
 _GETMETRICHISTORY_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.GetMetricHistory.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='metrics', full_name='mlflow.GetMetricHistory.Response.metrics', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5046,
-  serialized_end=5089,
+    name='Response',
+    full_name='mlflow.GetMetricHistory.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='metrics',
+            full_name='mlflow.GetMetricHistory.Response.metrics',
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=5046,
+    serialized_end=5089,
 )
 
 _GETMETRICHISTORY = _descriptor.Descriptor(
-  name='GetMetricHistory',
-  full_name='mlflow.GetMetricHistory',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.GetMetricHistory.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.GetMetricHistory.run_id', index=1,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_uuid', full_name='mlflow.GetMetricHistory.run_uuid', index=2,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='metric_key', full_name='mlflow.GetMetricHistory.metric_key', index=3,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETMETRICHISTORY_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4951,
-  serialized_end=5134,
+    name='GetMetricHistory',
+    full_name='mlflow.GetMetricHistory',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.GetMetricHistory.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.GetMetricHistory.run_id',
+            index=1,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_uuid',
+            full_name='mlflow.GetMetricHistory.run_uuid',
+            index=2,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='metric_key',
+            full_name='mlflow.GetMetricHistory.metric_key',
+            index=3,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _GETMETRICHISTORY_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=4951,
+    serialized_end=5134,
 )
 
-
 _LOGBATCH_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.LogBatch.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.LogBatch.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _LOGBATCH = _descriptor.Descriptor(
-  name='LogBatch',
-  full_name='mlflow.LogBatch',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.LogBatch.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_id', full_name='mlflow.LogBatch.experiment_id', index=1,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.LogBatch.run_id', index=2,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='metrics', full_name='mlflow.LogBatch.metrics', index=3,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='params', full_name='mlflow.LogBatch.params', index=4,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tags', full_name='mlflow.LogBatch.tags', index=5,
-      number=4, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_LOGBATCH_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5137,
-  serialized_end=5352,
+    name='LogBatch',
+    full_name='mlflow.LogBatch',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.LogBatch.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_id',
+            full_name='mlflow.LogBatch.experiment_id',
+            index=1,
+            number=5,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.LogBatch.run_id',
+            index=2,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='metrics',
+            full_name='mlflow.LogBatch.metrics',
+            index=3,
+            number=2,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='params',
+            full_name='mlflow.LogBatch.params',
+            index=4,
+            number=3,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='tags',
+            full_name='mlflow.LogBatch.tags',
+            index=5,
+            number=4,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _LOGBATCH_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=5137,
+    serialized_end=5352,
 )
 
-
 _LOGMODEL_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.LogModel.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1228,
-  serialized_end=1238,
+    name='Response',
+    full_name='mlflow.LogModel.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1228,
+    serialized_end=1238,
 )
 
 _LOGMODEL = _descriptor.Descriptor(
-  name='LogModel',
-  full_name='mlflow.LogModel',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.LogModel.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='mlflow.LogModel.run_id', index=1,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='model_json', full_name='mlflow.LogModel.model_json', index=2,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_LOGMODEL_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5354,
-  serialized_end=5472,
+    name='LogModel',
+    full_name='mlflow.LogModel',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.LogModel.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='run_id',
+            full_name='mlflow.LogModel.run_id',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='model_json',
+            full_name='mlflow.LogModel.model_json',
+            index=2,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _LOGMODEL_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=5354,
+    serialized_end=5472,
 )
 
-
 _GETEXPERIMENTBYNAME_RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='mlflow.GetExperimentByName.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='experiment', full_name='mlflow.GetExperimentByName.Response.experiment', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1540,
-  serialized_end=1590,
+    name='Response',
+    full_name='mlflow.GetExperimentByName.Response',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='experiment',
+            full_name='mlflow.GetExperimentByName.Response.experiment',
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=1540,
+    serialized_end=1590,
 )
 
 _GETEXPERIMENTBYNAME = _descriptor.Descriptor(
-  name='GetExperimentByName',
-  full_name='mlflow.GetExperimentByName',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='token', full_name='mlflow.GetExperimentByName.token', index=0,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='experiment_name', full_name='mlflow.GetExperimentByName.experiment_name', index=1,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=_b('\370\206\031\001'), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETEXPERIMENTBYNAME_RESPONSE, ],
-  enum_types=[
-  ],
-  serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5475,
-  serialized_end=5639,
+    name='GetExperimentByName',
+    full_name='mlflow.GetExperimentByName',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='token',
+            full_name='mlflow.GetExperimentByName.token',
+            index=0,
+            number=12,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='experiment_name',
+            full_name='mlflow.GetExperimentByName.experiment_name',
+            index=1,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b('').decode('utf-8'),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=_b('\370\206\031\001'),
+            file=DESCRIPTOR),
+    ],
+    extensions=[],
+    nested_types=[
+        _GETEXPERIMENTBYNAME_RESPONSE,
+    ],
+    enum_types=[],
+    serialized_options=_b('\342?(\n&com.databricks.rpc.RPC[$this.Response]'),
+    is_extendable=False,
+    syntax='proto2',
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=5475,
+    serialized_end=5639,
 )
 
-_ARTIFACT.fields_by_name['prediction'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
-_ARTIFACT.fields_by_name['ground_truth'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
+_ARTIFACT.fields_by_name[
+    'prediction'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
+_ARTIFACT.fields_by_name[
+    'ground_truth'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _ARTIFACT.fields_by_name['tags'].message_type = _ARTIFACTTAG
 _RUN.fields_by_name['info'].message_type = _RUNINFO
 _RUN.fields_by_name['data'].message_type = _RUNDATA
@@ -2683,7 +4197,8 @@ _RUNDATA.fields_by_name['tags'].message_type = _RUNTAG
 _RUNINFO.fields_by_name['status'].enum_type = _RUNSTATUS
 _EXPERIMENT.fields_by_name['tags'].message_type = _EXPERIMENTTAG
 _CREATEEXPERIMENT_RESPONSE.containing_type = _CREATEEXPERIMENT
-_LISTEXPERIMENTS_RESPONSE.fields_by_name['experiments'].message_type = _EXPERIMENT
+_LISTEXPERIMENTS_RESPONSE.fields_by_name[
+    'experiments'].message_type = _EXPERIMENT
 _LISTEXPERIMENTS_RESPONSE.containing_type = _LISTEXPERIMENTS
 _LISTEXPERIMENTS.fields_by_name['view_type'].enum_type = _VIEWTYPE
 _GETEXPERIMENT_RESPONSE.fields_by_name['experiment'].message_type = _EXPERIMENT
@@ -2702,10 +4217,13 @@ _DELETERUN_RESPONSE.containing_type = _DELETERUN
 _RESTORERUN_RESPONSE.containing_type = _RESTORERUN
 _LOGMETRIC_RESPONSE.containing_type = _LOGMETRIC
 _LOGPARAM_RESPONSE.containing_type = _LOGPARAM
-_LOGARTIFACT_RESPONSE.fields_by_name['fields'].message_type = _PRESIGNEDPOSTFIELD
+_LOGARTIFACT_RESPONSE.fields_by_name[
+    'fields'].message_type = _PRESIGNEDPOSTFIELD
 _LOGARTIFACT_RESPONSE.containing_type = _LOGARTIFACT
-_LOGARTIFACT.fields_by_name['prediction'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
-_LOGARTIFACT.fields_by_name['ground_truth'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
+_LOGARTIFACT.fields_by_name[
+    'prediction'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
+_LOGARTIFACT.fields_by_name[
+    'ground_truth'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _SETEXPERIMENTTAG_RESPONSE.containing_type = _SETEXPERIMENTTAG
 _SETTAG_RESPONSE.containing_type = _SETTAG
 _DELETETAG_RESPONSE.containing_type = _DELETETAG
@@ -2723,7 +4241,8 @@ _LOGBATCH.fields_by_name['metrics'].message_type = _METRIC
 _LOGBATCH.fields_by_name['params'].message_type = _PARAM
 _LOGBATCH.fields_by_name['tags'].message_type = _RUNTAG
 _LOGMODEL_RESPONSE.containing_type = _LOGMODEL
-_GETEXPERIMENTBYNAME_RESPONSE.fields_by_name['experiment'].message_type = _EXPERIMENT
+_GETEXPERIMENTBYNAME_RESPONSE.fields_by_name[
+    'experiment'].message_type = _EXPERIMENT
 _GETEXPERIMENTBYNAME_RESPONSE.containing_type = _GETEXPERIMENTBYNAME
 DESCRIPTOR.message_types_by_name['Metric'] = _METRIC
 DESCRIPTOR.message_types_by_name['Param'] = _PARAM
@@ -2765,435 +4284,562 @@ DESCRIPTOR.enum_types_by_name['SourceType'] = _SOURCETYPE
 DESCRIPTOR.enum_types_by_name['RunStatus'] = _RUNSTATUS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-Metric = _reflection.GeneratedProtocolMessageType('Metric', (_message.Message,), dict(
-  DESCRIPTOR = _METRIC,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.Metric)
-  ))
+Metric = _reflection.GeneratedProtocolMessageType(
+    'Metric',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_METRIC,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.Metric)
+    ))
 _sym_db.RegisterMessage(Metric)
 
-Param = _reflection.GeneratedProtocolMessageType('Param', (_message.Message,), dict(
-  DESCRIPTOR = _PARAM,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.Param)
-  ))
+Param = _reflection.GeneratedProtocolMessageType(
+    'Param',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_PARAM,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.Param)
+    ))
 _sym_db.RegisterMessage(Param)
 
-Artifact = _reflection.GeneratedProtocolMessageType('Artifact', (_message.Message,), dict(
-  DESCRIPTOR = _ARTIFACT,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.Artifact)
-  ))
+Artifact = _reflection.GeneratedProtocolMessageType(
+    'Artifact',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_ARTIFACT,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.Artifact)
+    ))
 _sym_db.RegisterMessage(Artifact)
 
-ArtifactTag = _reflection.GeneratedProtocolMessageType('ArtifactTag', (_message.Message,), dict(
-  DESCRIPTOR = _ARTIFACTTAG,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.ArtifactTag)
-  ))
+ArtifactTag = _reflection.GeneratedProtocolMessageType(
+    'ArtifactTag',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_ARTIFACTTAG,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.ArtifactTag)
+    ))
 _sym_db.RegisterMessage(ArtifactTag)
 
-Run = _reflection.GeneratedProtocolMessageType('Run', (_message.Message,), dict(
-  DESCRIPTOR = _RUN,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.Run)
-  ))
+Run = _reflection.GeneratedProtocolMessageType(
+    'Run',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_RUN,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.Run)
+    ))
 _sym_db.RegisterMessage(Run)
 
-RunData = _reflection.GeneratedProtocolMessageType('RunData', (_message.Message,), dict(
-  DESCRIPTOR = _RUNDATA,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.RunData)
-  ))
+RunData = _reflection.GeneratedProtocolMessageType(
+    'RunData',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_RUNDATA,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.RunData)
+    ))
 _sym_db.RegisterMessage(RunData)
 
-RunTag = _reflection.GeneratedProtocolMessageType('RunTag', (_message.Message,), dict(
-  DESCRIPTOR = _RUNTAG,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.RunTag)
-  ))
+RunTag = _reflection.GeneratedProtocolMessageType(
+    'RunTag',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_RUNTAG,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.RunTag)
+    ))
 _sym_db.RegisterMessage(RunTag)
 
-ExperimentTag = _reflection.GeneratedProtocolMessageType('ExperimentTag', (_message.Message,), dict(
-  DESCRIPTOR = _EXPERIMENTTAG,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.ExperimentTag)
-  ))
+ExperimentTag = _reflection.GeneratedProtocolMessageType(
+    'ExperimentTag',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_EXPERIMENTTAG,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.ExperimentTag)
+    ))
 _sym_db.RegisterMessage(ExperimentTag)
 
-RunInfo = _reflection.GeneratedProtocolMessageType('RunInfo', (_message.Message,), dict(
-  DESCRIPTOR = _RUNINFO,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.RunInfo)
-  ))
+RunInfo = _reflection.GeneratedProtocolMessageType(
+    'RunInfo',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_RUNINFO,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.RunInfo)
+    ))
 _sym_db.RegisterMessage(RunInfo)
 
-Experiment = _reflection.GeneratedProtocolMessageType('Experiment', (_message.Message,), dict(
-  DESCRIPTOR = _EXPERIMENT,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.Experiment)
-  ))
+Experiment = _reflection.GeneratedProtocolMessageType(
+    'Experiment',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_EXPERIMENT,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.Experiment)
+    ))
 _sym_db.RegisterMessage(Experiment)
 
-CreateExperiment = _reflection.GeneratedProtocolMessageType('CreateExperiment', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _CREATEEXPERIMENT_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.CreateExperiment.Response)
+CreateExperiment = _reflection.GeneratedProtocolMessageType(
+    'CreateExperiment',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_CREATEEXPERIMENT_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.CreateExperiment.Response)
+            )),
+        DESCRIPTOR=_CREATEEXPERIMENT,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.CreateExperiment)
     ))
-  ,
-  DESCRIPTOR = _CREATEEXPERIMENT,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.CreateExperiment)
-  ))
 _sym_db.RegisterMessage(CreateExperiment)
 _sym_db.RegisterMessage(CreateExperiment.Response)
 
-ListExperiments = _reflection.GeneratedProtocolMessageType('ListExperiments', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _LISTEXPERIMENTS_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.ListExperiments.Response)
+ListExperiments = _reflection.GeneratedProtocolMessageType(
+    'ListExperiments',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_LISTEXPERIMENTS_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.ListExperiments.Response)
+            )),
+        DESCRIPTOR=_LISTEXPERIMENTS,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.ListExperiments)
     ))
-  ,
-  DESCRIPTOR = _LISTEXPERIMENTS,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.ListExperiments)
-  ))
 _sym_db.RegisterMessage(ListExperiments)
 _sym_db.RegisterMessage(ListExperiments.Response)
 
-GetExperiment = _reflection.GeneratedProtocolMessageType('GetExperiment', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _GETEXPERIMENT_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.GetExperiment.Response)
+GetExperiment = _reflection.GeneratedProtocolMessageType(
+    'GetExperiment',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_GETEXPERIMENT_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.GetExperiment.Response)
+            )),
+        DESCRIPTOR=_GETEXPERIMENT,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.GetExperiment)
     ))
-  ,
-  DESCRIPTOR = _GETEXPERIMENT,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.GetExperiment)
-  ))
 _sym_db.RegisterMessage(GetExperiment)
 _sym_db.RegisterMessage(GetExperiment.Response)
 
-DeleteExperiment = _reflection.GeneratedProtocolMessageType('DeleteExperiment', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _DELETEEXPERIMENT_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.DeleteExperiment.Response)
+DeleteExperiment = _reflection.GeneratedProtocolMessageType(
+    'DeleteExperiment',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_DELETEEXPERIMENT_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.DeleteExperiment.Response)
+            )),
+        DESCRIPTOR=_DELETEEXPERIMENT,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.DeleteExperiment)
     ))
-  ,
-  DESCRIPTOR = _DELETEEXPERIMENT,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.DeleteExperiment)
-  ))
 _sym_db.RegisterMessage(DeleteExperiment)
 _sym_db.RegisterMessage(DeleteExperiment.Response)
 
-RestoreExperiment = _reflection.GeneratedProtocolMessageType('RestoreExperiment', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _RESTOREEXPERIMENT_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.RestoreExperiment.Response)
+RestoreExperiment = _reflection.GeneratedProtocolMessageType(
+    'RestoreExperiment',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_RESTOREEXPERIMENT_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.RestoreExperiment.Response)
+            )),
+        DESCRIPTOR=_RESTOREEXPERIMENT,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.RestoreExperiment)
     ))
-  ,
-  DESCRIPTOR = _RESTOREEXPERIMENT,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.RestoreExperiment)
-  ))
 _sym_db.RegisterMessage(RestoreExperiment)
 _sym_db.RegisterMessage(RestoreExperiment.Response)
 
-UpdateExperiment = _reflection.GeneratedProtocolMessageType('UpdateExperiment', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _UPDATEEXPERIMENT_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.UpdateExperiment.Response)
+UpdateExperiment = _reflection.GeneratedProtocolMessageType(
+    'UpdateExperiment',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_UPDATEEXPERIMENT_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.UpdateExperiment.Response)
+            )),
+        DESCRIPTOR=_UPDATEEXPERIMENT,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.UpdateExperiment)
     ))
-  ,
-  DESCRIPTOR = _UPDATEEXPERIMENT,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.UpdateExperiment)
-  ))
 _sym_db.RegisterMessage(UpdateExperiment)
 _sym_db.RegisterMessage(UpdateExperiment.Response)
 
-CreateRun = _reflection.GeneratedProtocolMessageType('CreateRun', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _CREATERUN_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.CreateRun.Response)
+CreateRun = _reflection.GeneratedProtocolMessageType(
+    'CreateRun',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_CREATERUN_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.CreateRun.Response)
+            )),
+        DESCRIPTOR=_CREATERUN,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.CreateRun)
     ))
-  ,
-  DESCRIPTOR = _CREATERUN,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.CreateRun)
-  ))
 _sym_db.RegisterMessage(CreateRun)
 _sym_db.RegisterMessage(CreateRun.Response)
 
-UpdateRun = _reflection.GeneratedProtocolMessageType('UpdateRun', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _UPDATERUN_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.UpdateRun.Response)
+UpdateRun = _reflection.GeneratedProtocolMessageType(
+    'UpdateRun',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_UPDATERUN_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.UpdateRun.Response)
+            )),
+        DESCRIPTOR=_UPDATERUN,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.UpdateRun)
     ))
-  ,
-  DESCRIPTOR = _UPDATERUN,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.UpdateRun)
-  ))
 _sym_db.RegisterMessage(UpdateRun)
 _sym_db.RegisterMessage(UpdateRun.Response)
 
-DeleteRun = _reflection.GeneratedProtocolMessageType('DeleteRun', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _DELETERUN_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.DeleteRun.Response)
+DeleteRun = _reflection.GeneratedProtocolMessageType(
+    'DeleteRun',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_DELETERUN_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.DeleteRun.Response)
+            )),
+        DESCRIPTOR=_DELETERUN,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.DeleteRun)
     ))
-  ,
-  DESCRIPTOR = _DELETERUN,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.DeleteRun)
-  ))
 _sym_db.RegisterMessage(DeleteRun)
 _sym_db.RegisterMessage(DeleteRun.Response)
 
-RestoreRun = _reflection.GeneratedProtocolMessageType('RestoreRun', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _RESTORERUN_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.RestoreRun.Response)
+RestoreRun = _reflection.GeneratedProtocolMessageType(
+    'RestoreRun',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_RESTORERUN_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.RestoreRun.Response)
+            )),
+        DESCRIPTOR=_RESTORERUN,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.RestoreRun)
     ))
-  ,
-  DESCRIPTOR = _RESTORERUN,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.RestoreRun)
-  ))
 _sym_db.RegisterMessage(RestoreRun)
 _sym_db.RegisterMessage(RestoreRun.Response)
 
-LogMetric = _reflection.GeneratedProtocolMessageType('LogMetric', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _LOGMETRIC_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.LogMetric.Response)
+LogMetric = _reflection.GeneratedProtocolMessageType(
+    'LogMetric',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_LOGMETRIC_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.LogMetric.Response)
+            )),
+        DESCRIPTOR=_LOGMETRIC,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.LogMetric)
     ))
-  ,
-  DESCRIPTOR = _LOGMETRIC,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.LogMetric)
-  ))
 _sym_db.RegisterMessage(LogMetric)
 _sym_db.RegisterMessage(LogMetric.Response)
 
-LogParam = _reflection.GeneratedProtocolMessageType('LogParam', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _LOGPARAM_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.LogParam.Response)
+LogParam = _reflection.GeneratedProtocolMessageType(
+    'LogParam',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_LOGPARAM_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.LogParam.Response)
+            )),
+        DESCRIPTOR=_LOGPARAM,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.LogParam)
     ))
-  ,
-  DESCRIPTOR = _LOGPARAM,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.LogParam)
-  ))
 _sym_db.RegisterMessage(LogParam)
 _sym_db.RegisterMessage(LogParam.Response)
 
-LogArtifact = _reflection.GeneratedProtocolMessageType('LogArtifact', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _LOGARTIFACT_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.LogArtifact.Response)
+LogArtifact = _reflection.GeneratedProtocolMessageType(
+    'LogArtifact',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_LOGARTIFACT_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.LogArtifact.Response)
+            )),
+        DESCRIPTOR=_LOGARTIFACT,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.LogArtifact)
     ))
-  ,
-  DESCRIPTOR = _LOGARTIFACT,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.LogArtifact)
-  ))
 _sym_db.RegisterMessage(LogArtifact)
 _sym_db.RegisterMessage(LogArtifact.Response)
 
-PresignedPOSTField = _reflection.GeneratedProtocolMessageType('PresignedPOSTField', (_message.Message,), dict(
-  DESCRIPTOR = _PRESIGNEDPOSTFIELD,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.PresignedPOSTField)
-  ))
+PresignedPOSTField = _reflection.GeneratedProtocolMessageType(
+    'PresignedPOSTField',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_PRESIGNEDPOSTFIELD,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.PresignedPOSTField)
+    ))
 _sym_db.RegisterMessage(PresignedPOSTField)
 
-SetExperimentTag = _reflection.GeneratedProtocolMessageType('SetExperimentTag', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _SETEXPERIMENTTAG_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.SetExperimentTag.Response)
+SetExperimentTag = _reflection.GeneratedProtocolMessageType(
+    'SetExperimentTag',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_SETEXPERIMENTTAG_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.SetExperimentTag.Response)
+            )),
+        DESCRIPTOR=_SETEXPERIMENTTAG,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.SetExperimentTag)
     ))
-  ,
-  DESCRIPTOR = _SETEXPERIMENTTAG,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.SetExperimentTag)
-  ))
 _sym_db.RegisterMessage(SetExperimentTag)
 _sym_db.RegisterMessage(SetExperimentTag.Response)
 
-SetTag = _reflection.GeneratedProtocolMessageType('SetTag', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _SETTAG_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.SetTag.Response)
+SetTag = _reflection.GeneratedProtocolMessageType(
+    'SetTag',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_SETTAG_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.SetTag.Response)
+            )),
+        DESCRIPTOR=_SETTAG,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.SetTag)
     ))
-  ,
-  DESCRIPTOR = _SETTAG,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.SetTag)
-  ))
 _sym_db.RegisterMessage(SetTag)
 _sym_db.RegisterMessage(SetTag.Response)
 
-DeleteTag = _reflection.GeneratedProtocolMessageType('DeleteTag', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _DELETETAG_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.DeleteTag.Response)
+DeleteTag = _reflection.GeneratedProtocolMessageType(
+    'DeleteTag',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_DELETETAG_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.DeleteTag.Response)
+            )),
+        DESCRIPTOR=_DELETETAG,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.DeleteTag)
     ))
-  ,
-  DESCRIPTOR = _DELETETAG,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.DeleteTag)
-  ))
 _sym_db.RegisterMessage(DeleteTag)
 _sym_db.RegisterMessage(DeleteTag.Response)
 
-GetRun = _reflection.GeneratedProtocolMessageType('GetRun', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _GETRUN_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.GetRun.Response)
+GetRun = _reflection.GeneratedProtocolMessageType(
+    'GetRun',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_GETRUN_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.GetRun.Response)
+            )),
+        DESCRIPTOR=_GETRUN,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.GetRun)
     ))
-  ,
-  DESCRIPTOR = _GETRUN,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.GetRun)
-  ))
 _sym_db.RegisterMessage(GetRun)
 _sym_db.RegisterMessage(GetRun.Response)
 
-SearchRuns = _reflection.GeneratedProtocolMessageType('SearchRuns', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _SEARCHRUNS_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.SearchRuns.Response)
+SearchRuns = _reflection.GeneratedProtocolMessageType(
+    'SearchRuns',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_SEARCHRUNS_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.SearchRuns.Response)
+            )),
+        DESCRIPTOR=_SEARCHRUNS,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.SearchRuns)
     ))
-  ,
-  DESCRIPTOR = _SEARCHRUNS,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.SearchRuns)
-  ))
 _sym_db.RegisterMessage(SearchRuns)
 _sym_db.RegisterMessage(SearchRuns.Response)
 
-ListArtifacts = _reflection.GeneratedProtocolMessageType('ListArtifacts', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _LISTARTIFACTS_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.ListArtifacts.Response)
+ListArtifacts = _reflection.GeneratedProtocolMessageType(
+    'ListArtifacts',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_LISTARTIFACTS_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.ListArtifacts.Response)
+            )),
+        DESCRIPTOR=_LISTARTIFACTS,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.ListArtifacts)
     ))
-  ,
-  DESCRIPTOR = _LISTARTIFACTS,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.ListArtifacts)
-  ))
 _sym_db.RegisterMessage(ListArtifacts)
 _sym_db.RegisterMessage(ListArtifacts.Response)
 
-FileInfo = _reflection.GeneratedProtocolMessageType('FileInfo', (_message.Message,), dict(
-  DESCRIPTOR = _FILEINFO,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.FileInfo)
-  ))
+FileInfo = _reflection.GeneratedProtocolMessageType(
+    'FileInfo',
+    (_message.Message, ),
+    dict(
+        DESCRIPTOR=_FILEINFO,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.FileInfo)
+    ))
 _sym_db.RegisterMessage(FileInfo)
 
-GetMetricHistory = _reflection.GeneratedProtocolMessageType('GetMetricHistory', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _GETMETRICHISTORY_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.GetMetricHistory.Response)
+GetMetricHistory = _reflection.GeneratedProtocolMessageType(
+    'GetMetricHistory',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_GETMETRICHISTORY_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.GetMetricHistory.Response)
+            )),
+        DESCRIPTOR=_GETMETRICHISTORY,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.GetMetricHistory)
     ))
-  ,
-  DESCRIPTOR = _GETMETRICHISTORY,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.GetMetricHistory)
-  ))
 _sym_db.RegisterMessage(GetMetricHistory)
 _sym_db.RegisterMessage(GetMetricHistory.Response)
 
-LogBatch = _reflection.GeneratedProtocolMessageType('LogBatch', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _LOGBATCH_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.LogBatch.Response)
+LogBatch = _reflection.GeneratedProtocolMessageType(
+    'LogBatch',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_LOGBATCH_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.LogBatch.Response)
+            )),
+        DESCRIPTOR=_LOGBATCH,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.LogBatch)
     ))
-  ,
-  DESCRIPTOR = _LOGBATCH,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.LogBatch)
-  ))
 _sym_db.RegisterMessage(LogBatch)
 _sym_db.RegisterMessage(LogBatch.Response)
 
-LogModel = _reflection.GeneratedProtocolMessageType('LogModel', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _LOGMODEL_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.LogModel.Response)
+LogModel = _reflection.GeneratedProtocolMessageType(
+    'LogModel',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_LOGMODEL_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.LogModel.Response)
+            )),
+        DESCRIPTOR=_LOGMODEL,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.LogModel)
     ))
-  ,
-  DESCRIPTOR = _LOGMODEL,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.LogModel)
-  ))
 _sym_db.RegisterMessage(LogModel)
 _sym_db.RegisterMessage(LogModel.Response)
 
-GetExperimentByName = _reflection.GeneratedProtocolMessageType('GetExperimentByName', (_message.Message,), dict(
-
-  Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
-    DESCRIPTOR = _GETEXPERIMENTBYNAME_RESPONSE,
-    __module__ = 'service_lite_pb2'
-    # @@protoc_insertion_point(class_scope:mlflow.GetExperimentByName.Response)
+GetExperimentByName = _reflection.GeneratedProtocolMessageType(
+    'GetExperimentByName',
+    (_message.Message, ),
+    dict(
+        Response=_reflection.GeneratedProtocolMessageType(
+            'Response',
+            (_message.Message, ),
+            dict(
+                DESCRIPTOR=_GETEXPERIMENTBYNAME_RESPONSE,
+                __module__='service_lite_pb2'
+                # @@protoc_insertion_point(class_scope:mlflow.GetExperimentByName.Response)
+            )),
+        DESCRIPTOR=_GETEXPERIMENTBYNAME,
+        __module__='service_lite_pb2'
+        # @@protoc_insertion_point(class_scope:mlflow.GetExperimentByName)
     ))
-  ,
-  DESCRIPTOR = _GETEXPERIMENTBYNAME,
-  __module__ = 'service_lite_pb2'
-  # @@protoc_insertion_point(class_scope:mlflow.GetExperimentByName)
-  ))
 _sym_db.RegisterMessage(GetExperimentByName)
 _sym_db.RegisterMessage(GetExperimentByName.Response)
-
 
 DESCRIPTOR._options = None
 _CREATEEXPERIMENT.fields_by_name['name']._options = None
@@ -3244,235 +4890,278 @@ _GETEXPERIMENTBYNAME.fields_by_name['experiment_name']._options = None
 _GETEXPERIMENTBYNAME._options = None
 
 _MLFLOWSERVICE = _descriptor.ServiceDescriptor(
-  name='MlflowService',
-  full_name='mlflow.MlflowService',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  serialized_start=5852,
-  serialized_end=9968,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='getExperimentByName',
-    full_name='mlflow.MlflowService.getExperimentByName',
+    name='MlflowService',
+    full_name='mlflow.MlflowService',
+    file=DESCRIPTOR,
     index=0,
-    containing_service=None,
-    input_type=_GETEXPERIMENTBYNAME,
-    output_type=_GETEXPERIMENTBYNAME_RESPONSE,
-    serialized_options=_b('\362\206\031H\n,\n\003GET\022\037/mlflow/experiments/get-by-name\032\004\010\002\020\000\020\001*\026Get Experiment By Name'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='createExperiment',
-    full_name='mlflow.MlflowService.createExperiment',
-    index=1,
-    containing_service=None,
-    input_type=_CREATEEXPERIMENT,
-    output_type=_CREATEEXPERIMENT_RESPONSE,
-    serialized_options=_b('\362\206\031q\n(\n\004POST\022\032/mlflow/experiments/create\032\004\010\002\020\000\n0\n\004POST\022\"/preview/mlflow/experiments/create\032\004\010\002\020\000\020\001*\021Create Experiment'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='listExperiments',
-    full_name='mlflow.MlflowService.listExperiments',
-    index=2,
-    containing_service=None,
-    input_type=_LISTEXPERIMENTS,
-    output_type=_LISTEXPERIMENTS_RESPONSE,
-    serialized_options=_b('\362\206\031j\n%\n\003GET\022\030/mlflow/experiments/list\032\004\010\002\020\000\n-\n\003GET\022 /preview/mlflow/experiments/list\032\004\010\002\020\000\020\001*\020List Experiments'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='getExperiment',
-    full_name='mlflow.MlflowService.getExperiment',
-    index=3,
-    containing_service=None,
-    input_type=_GETEXPERIMENT,
-    output_type=_GETEXPERIMENT_RESPONSE,
-    serialized_options=_b('\362\206\031f\n$\n\003GET\022\027/mlflow/experiments/get\032\004\010\002\020\000\n,\n\003GET\022\037/preview/mlflow/experiments/get\032\004\010\002\020\000\020\001*\016Get Experiment'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='deleteExperiment',
-    full_name='mlflow.MlflowService.deleteExperiment',
-    index=4,
-    containing_service=None,
-    input_type=_DELETEEXPERIMENT,
-    output_type=_DELETEEXPERIMENT_RESPONSE,
-    serialized_options=_b('\362\206\031q\n(\n\004POST\022\032/mlflow/experiments/delete\032\004\010\002\020\000\n0\n\004POST\022\"/preview/mlflow/experiments/delete\032\004\010\002\020\000\020\001*\021Delete Experiment'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='restoreExperiment',
-    full_name='mlflow.MlflowService.restoreExperiment',
-    index=5,
-    containing_service=None,
-    input_type=_RESTOREEXPERIMENT,
-    output_type=_RESTOREEXPERIMENT_RESPONSE,
-    serialized_options=_b('\362\206\031t\n)\n\004POST\022\033/mlflow/experiments/restore\032\004\010\002\020\000\n1\n\004POST\022#/preview/mlflow/experiments/restore\032\004\010\002\020\000\020\001*\022Restore Experiment'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='updateExperiment',
-    full_name='mlflow.MlflowService.updateExperiment',
-    index=6,
-    containing_service=None,
-    input_type=_UPDATEEXPERIMENT,
-    output_type=_UPDATEEXPERIMENT_RESPONSE,
-    serialized_options=_b('\362\206\031q\n(\n\004POST\022\032/mlflow/experiments/update\032\004\010\002\020\000\n0\n\004POST\022\"/preview/mlflow/experiments/update\032\004\010\002\020\000\020\001*\021Update Experiment'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='createRun',
-    full_name='mlflow.MlflowService.createRun',
-    index=7,
-    containing_service=None,
-    input_type=_CREATERUN,
-    output_type=_CREATERUN_RESPONSE,
-    serialized_options=_b('\362\206\031\\\n!\n\004POST\022\023/mlflow/runs/create\032\004\010\002\020\000\n)\n\004POST\022\033/preview/mlflow/runs/create\032\004\010\002\020\000\020\001*\nCreate Run'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='updateRun',
-    full_name='mlflow.MlflowService.updateRun',
-    index=8,
-    containing_service=None,
-    input_type=_UPDATERUN,
-    output_type=_UPDATERUN_RESPONSE,
-    serialized_options=_b('\362\206\031\\\n!\n\004POST\022\023/mlflow/runs/update\032\004\010\002\020\000\n)\n\004POST\022\033/preview/mlflow/runs/update\032\004\010\002\020\000\020\001*\nUpdate Run'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='deleteRun',
-    full_name='mlflow.MlflowService.deleteRun',
-    index=9,
-    containing_service=None,
-    input_type=_DELETERUN,
-    output_type=_DELETERUN_RESPONSE,
-    serialized_options=_b('\362\206\031\\\n!\n\004POST\022\023/mlflow/runs/delete\032\004\010\002\020\000\n)\n\004POST\022\033/preview/mlflow/runs/delete\032\004\010\002\020\000\020\001*\nDelete Run'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='restoreRun',
-    full_name='mlflow.MlflowService.restoreRun',
-    index=10,
-    containing_service=None,
-    input_type=_RESTORERUN,
-    output_type=_RESTORERUN_RESPONSE,
-    serialized_options=_b('\362\206\031_\n\"\n\004POST\022\024/mlflow/runs/restore\032\004\010\002\020\000\n*\n\004POST\022\034/preview/mlflow/runs/restore\032\004\010\002\020\000\020\001*\013Restore Run'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='logMetric',
-    full_name='mlflow.MlflowService.logMetric',
-    index=11,
-    containing_service=None,
-    input_type=_LOGMETRIC,
-    output_type=_LOGMETRIC_RESPONSE,
-    serialized_options=_b('\362\206\031d\n%\n\004POST\022\027/mlflow/runs/log-metric\032\004\010\002\020\000\n-\n\004POST\022\037/preview/mlflow/runs/log-metric\032\004\010\002\020\000\020\001*\nLog Metric'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='logParam',
-    full_name='mlflow.MlflowService.logParam',
-    index=12,
-    containing_service=None,
-    input_type=_LOGPARAM,
-    output_type=_LOGPARAM_RESPONSE,
-    serialized_options=_b('\362\206\031i\n(\n\004POST\022\032/mlflow/runs/log-parameter\032\004\010\002\020\000\n0\n\004POST\022\"/preview/mlflow/runs/log-parameter\032\004\010\002\020\000\020\001*\tLog Param'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='logArtifact',
-    full_name='mlflow.MlflowService.logArtifact',
-    index=13,
-    containing_service=None,
-    input_type=_LOGARTIFACT,
-    output_type=_LOGARTIFACT_RESPONSE,
-    serialized_options=_b('\362\206\031j\n\'\n\004POST\022\031/mlflow/runs/log-artifact\032\004\010\002\020\000\n/\n\004POST\022!/preview/mlflow/runs/log-artifact\032\004\010\002\020\000\020\001*\014Log Artifact'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='setExperimentTag',
-    full_name='mlflow.MlflowService.setExperimentTag',
-    index=14,
-    containing_service=None,
-    input_type=_SETEXPERIMENTTAG,
-    output_type=_SETEXPERIMENTTAG_RESPONSE,
-    serialized_options=_b('\362\206\031\212\001\n4\n\004POST\022&/mlflow/experiments/set-experiment-tag\032\004\010\002\020\000\n<\n\004POST\022./preview/mlflow/experiments/set-experiment-tag\032\004\010\002\020\000\020\001*\022Set Experiment Tag'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='setTag',
-    full_name='mlflow.MlflowService.setTag',
-    index=15,
-    containing_service=None,
-    input_type=_SETTAG,
-    output_type=_SETTAG_RESPONSE,
-    serialized_options=_b('\362\206\031[\n\"\n\004POST\022\024/mlflow/runs/set-tag\032\004\010\002\020\000\n*\n\004POST\022\034/preview/mlflow/runs/set-tag\032\004\010\002\020\000\020\001*\007Set Tag'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='deleteTag',
-    full_name='mlflow.MlflowService.deleteTag',
-    index=16,
-    containing_service=None,
-    input_type=_DELETETAG,
-    output_type=_DELETETAG_RESPONSE,
-    serialized_options=_b('\362\206\031d\n%\n\004POST\022\027/mlflow/runs/delete-tag\032\004\010\002\020\000\n-\n\004POST\022\037/preview/mlflow/runs/delete-tag\032\004\010\002\020\000\020\001*\nDelete Tag'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='getRun',
-    full_name='mlflow.MlflowService.getRun',
-    index=17,
-    containing_service=None,
-    input_type=_GETRUN,
-    output_type=_GETRUN_RESPONSE,
-    serialized_options=_b('\362\206\031Q\n\035\n\003GET\022\020/mlflow/runs/get\032\004\010\002\020\000\n%\n\003GET\022\030/preview/mlflow/runs/get\032\004\010\002\020\000\020\001*\007Get Run'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='searchRuns',
-    full_name='mlflow.MlflowService.searchRuns',
-    index=18,
-    containing_service=None,
-    input_type=_SEARCHRUNS,
-    output_type=_SEARCHRUNS_RESPONSE,
-    serialized_options=_b('\362\206\031\207\001\n!\n\004POST\022\023/mlflow/runs/search\032\004\010\002\020\000\n)\n\004POST\022\033/preview/mlflow/runs/search\032\004\010\002\020\000\n(\n\003GET\022\033/preview/mlflow/runs/search\032\004\010\002\020\000\020\001*\013Search Runs'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='listArtifacts',
-    full_name='mlflow.MlflowService.listArtifacts',
-    index=19,
-    containing_service=None,
-    input_type=_LISTARTIFACTS,
-    output_type=_LISTARTIFACTS_RESPONSE,
-    serialized_options=_b('\362\206\031d\n#\n\003GET\022\026/mlflow/artifacts/list\032\004\010\002\020\000\n+\n\003GET\022\036/preview/mlflow/artifacts/list\032\004\010\002\020\000\020\001*\016List Artifacts'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='getMetricHistory',
-    full_name='mlflow.MlflowService.getMetricHistory',
-    index=20,
-    containing_service=None,
-    input_type=_GETMETRICHISTORY,
-    output_type=_GETMETRICHISTORY_RESPONSE,
-    serialized_options=_b('\362\206\031r\n(\n\003GET\022\033/mlflow/metrics/get-history\032\004\010\002\020\000\n0\n\003GET\022#/preview/mlflow/metrics/get-history\032\004\010\002\020\000\020\001*\022Get Metric History'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='logBatch',
-    full_name='mlflow.MlflowService.logBatch',
-    index=21,
-    containing_service=None,
-    input_type=_LOGBATCH,
-    output_type=_LOGBATCH_RESPONSE,
-    serialized_options=_b('\362\206\031a\n$\n\004POST\022\026/mlflow/runs/log-batch\032\004\010\002\020\000\n,\n\004POST\022\036/preview/mlflow/runs/log-batch\032\004\010\002\020\000\020\001*\tLog Batch'),
-  ),
-  _descriptor.MethodDescriptor(
-    name='logModel',
-    full_name='mlflow.MlflowService.logModel',
-    index=22,
-    containing_service=None,
-    input_type=_LOGMODEL,
-    output_type=_LOGMODEL_RESPONSE,
-    serialized_options=_b('\362\206\031a\n$\n\004POST\022\026/mlflow/runs/log-model\032\004\010\002\020\000\n,\n\004POST\022\036/preview/mlflow/runs/log-model\032\004\010\002\020\000\020\001*\tLog Model'),
-  ),
-])
+    serialized_options=None,
+    serialized_start=5852,
+    serialized_end=9968,
+    methods=[
+        _descriptor.MethodDescriptor(
+            name='getExperimentByName',
+            full_name='mlflow.MlflowService.getExperimentByName',
+            index=0,
+            containing_service=None,
+            input_type=_GETEXPERIMENTBYNAME,
+            output_type=_GETEXPERIMENTBYNAME_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031H\n,\n\003GET\022\037/mlflow/experiments/get-by-name\032\004\010\002\020\000\020\001*\026Get Experiment By Name'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='createExperiment',
+            full_name='mlflow.MlflowService.createExperiment',
+            index=1,
+            containing_service=None,
+            input_type=_CREATEEXPERIMENT,
+            output_type=_CREATEEXPERIMENT_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031q\n(\n\004POST\022\032/mlflow/experiments/create\032\004\010\002\020\000\n0\n\004POST\022\"/preview/mlflow/experiments/create\032\004\010\002\020\000\020\001*\021Create Experiment'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='listExperiments',
+            full_name='mlflow.MlflowService.listExperiments',
+            index=2,
+            containing_service=None,
+            input_type=_LISTEXPERIMENTS,
+            output_type=_LISTEXPERIMENTS_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031j\n%\n\003GET\022\030/mlflow/experiments/list\032\004\010\002\020\000\n-\n\003GET\022 /preview/mlflow/experiments/list\032\004\010\002\020\000\020\001*\020List Experiments'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='getExperiment',
+            full_name='mlflow.MlflowService.getExperiment',
+            index=3,
+            containing_service=None,
+            input_type=_GETEXPERIMENT,
+            output_type=_GETEXPERIMENT_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031f\n$\n\003GET\022\027/mlflow/experiments/get\032\004\010\002\020\000\n,\n\003GET\022\037/preview/mlflow/experiments/get\032\004\010\002\020\000\020\001*\016Get Experiment'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='deleteExperiment',
+            full_name='mlflow.MlflowService.deleteExperiment',
+            index=4,
+            containing_service=None,
+            input_type=_DELETEEXPERIMENT,
+            output_type=_DELETEEXPERIMENT_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031q\n(\n\004POST\022\032/mlflow/experiments/delete\032\004\010\002\020\000\n0\n\004POST\022\"/preview/mlflow/experiments/delete\032\004\010\002\020\000\020\001*\021Delete Experiment'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='restoreExperiment',
+            full_name='mlflow.MlflowService.restoreExperiment',
+            index=5,
+            containing_service=None,
+            input_type=_RESTOREEXPERIMENT,
+            output_type=_RESTOREEXPERIMENT_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031t\n)\n\004POST\022\033/mlflow/experiments/restore\032\004\010\002\020\000\n1\n\004POST\022#/preview/mlflow/experiments/restore\032\004\010\002\020\000\020\001*\022Restore Experiment'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='updateExperiment',
+            full_name='mlflow.MlflowService.updateExperiment',
+            index=6,
+            containing_service=None,
+            input_type=_UPDATEEXPERIMENT,
+            output_type=_UPDATEEXPERIMENT_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031q\n(\n\004POST\022\032/mlflow/experiments/update\032\004\010\002\020\000\n0\n\004POST\022\"/preview/mlflow/experiments/update\032\004\010\002\020\000\020\001*\021Update Experiment'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='createRun',
+            full_name='mlflow.MlflowService.createRun',
+            index=7,
+            containing_service=None,
+            input_type=_CREATERUN,
+            output_type=_CREATERUN_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031\\\n!\n\004POST\022\023/mlflow/runs/create\032\004\010\002\020\000\n)\n\004POST\022\033/preview/mlflow/runs/create\032\004\010\002\020\000\020\001*\nCreate Run'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='updateRun',
+            full_name='mlflow.MlflowService.updateRun',
+            index=8,
+            containing_service=None,
+            input_type=_UPDATERUN,
+            output_type=_UPDATERUN_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031\\\n!\n\004POST\022\023/mlflow/runs/update\032\004\010\002\020\000\n)\n\004POST\022\033/preview/mlflow/runs/update\032\004\010\002\020\000\020\001*\nUpdate Run'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='deleteRun',
+            full_name='mlflow.MlflowService.deleteRun',
+            index=9,
+            containing_service=None,
+            input_type=_DELETERUN,
+            output_type=_DELETERUN_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031\\\n!\n\004POST\022\023/mlflow/runs/delete\032\004\010\002\020\000\n)\n\004POST\022\033/preview/mlflow/runs/delete\032\004\010\002\020\000\020\001*\nDelete Run'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='restoreRun',
+            full_name='mlflow.MlflowService.restoreRun',
+            index=10,
+            containing_service=None,
+            input_type=_RESTORERUN,
+            output_type=_RESTORERUN_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031_\n\"\n\004POST\022\024/mlflow/runs/restore\032\004\010\002\020\000\n*\n\004POST\022\034/preview/mlflow/runs/restore\032\004\010\002\020\000\020\001*\013Restore Run'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='logMetric',
+            full_name='mlflow.MlflowService.logMetric',
+            index=11,
+            containing_service=None,
+            input_type=_LOGMETRIC,
+            output_type=_LOGMETRIC_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031d\n%\n\004POST\022\027/mlflow/runs/log-metric\032\004\010\002\020\000\n-\n\004POST\022\037/preview/mlflow/runs/log-metric\032\004\010\002\020\000\020\001*\nLog Metric'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='logParam',
+            full_name='mlflow.MlflowService.logParam',
+            index=12,
+            containing_service=None,
+            input_type=_LOGPARAM,
+            output_type=_LOGPARAM_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031i\n(\n\004POST\022\032/mlflow/runs/log-parameter\032\004\010\002\020\000\n0\n\004POST\022\"/preview/mlflow/runs/log-parameter\032\004\010\002\020\000\020\001*\tLog Param'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='logArtifact',
+            full_name='mlflow.MlflowService.logArtifact',
+            index=13,
+            containing_service=None,
+            input_type=_LOGARTIFACT,
+            output_type=_LOGARTIFACT_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031j\n\'\n\004POST\022\031/mlflow/runs/log-artifact\032\004\010\002\020\000\n/\n\004POST\022!/preview/mlflow/runs/log-artifact\032\004\010\002\020\000\020\001*\014Log Artifact'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='setExperimentTag',
+            full_name='mlflow.MlflowService.setExperimentTag',
+            index=14,
+            containing_service=None,
+            input_type=_SETEXPERIMENTTAG,
+            output_type=_SETEXPERIMENTTAG_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031\212\001\n4\n\004POST\022&/mlflow/experiments/set-experiment-tag\032\004\010\002\020\000\n<\n\004POST\022./preview/mlflow/experiments/set-experiment-tag\032\004\010\002\020\000\020\001*\022Set Experiment Tag'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='setTag',
+            full_name='mlflow.MlflowService.setTag',
+            index=15,
+            containing_service=None,
+            input_type=_SETTAG,
+            output_type=_SETTAG_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031[\n\"\n\004POST\022\024/mlflow/runs/set-tag\032\004\010\002\020\000\n*\n\004POST\022\034/preview/mlflow/runs/set-tag\032\004\010\002\020\000\020\001*\007Set Tag'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='deleteTag',
+            full_name='mlflow.MlflowService.deleteTag',
+            index=16,
+            containing_service=None,
+            input_type=_DELETETAG,
+            output_type=_DELETETAG_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031d\n%\n\004POST\022\027/mlflow/runs/delete-tag\032\004\010\002\020\000\n-\n\004POST\022\037/preview/mlflow/runs/delete-tag\032\004\010\002\020\000\020\001*\nDelete Tag'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='getRun',
+            full_name='mlflow.MlflowService.getRun',
+            index=17,
+            containing_service=None,
+            input_type=_GETRUN,
+            output_type=_GETRUN_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031Q\n\035\n\003GET\022\020/mlflow/runs/get\032\004\010\002\020\000\n%\n\003GET\022\030/preview/mlflow/runs/get\032\004\010\002\020\000\020\001*\007Get Run'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='searchRuns',
+            full_name='mlflow.MlflowService.searchRuns',
+            index=18,
+            containing_service=None,
+            input_type=_SEARCHRUNS,
+            output_type=_SEARCHRUNS_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031\207\001\n!\n\004POST\022\023/mlflow/runs/search\032\004\010\002\020\000\n)\n\004POST\022\033/preview/mlflow/runs/search\032\004\010\002\020\000\n(\n\003GET\022\033/preview/mlflow/runs/search\032\004\010\002\020\000\020\001*\013Search Runs'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='listArtifacts',
+            full_name='mlflow.MlflowService.listArtifacts',
+            index=19,
+            containing_service=None,
+            input_type=_LISTARTIFACTS,
+            output_type=_LISTARTIFACTS_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031d\n#\n\003GET\022\026/mlflow/artifacts/list\032\004\010\002\020\000\n+\n\003GET\022\036/preview/mlflow/artifacts/list\032\004\010\002\020\000\020\001*\016List Artifacts'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='getMetricHistory',
+            full_name='mlflow.MlflowService.getMetricHistory',
+            index=20,
+            containing_service=None,
+            input_type=_GETMETRICHISTORY,
+            output_type=_GETMETRICHISTORY_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031r\n(\n\003GET\022\033/mlflow/metrics/get-history\032\004\010\002\020\000\n0\n\003GET\022#/preview/mlflow/metrics/get-history\032\004\010\002\020\000\020\001*\022Get Metric History'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='logBatch',
+            full_name='mlflow.MlflowService.logBatch',
+            index=21,
+            containing_service=None,
+            input_type=_LOGBATCH,
+            output_type=_LOGBATCH_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031a\n$\n\004POST\022\026/mlflow/runs/log-batch\032\004\010\002\020\000\n,\n\004POST\022\036/preview/mlflow/runs/log-batch\032\004\010\002\020\000\020\001*\tLog Batch'
+            ),
+        ),
+        _descriptor.MethodDescriptor(
+            name='logModel',
+            full_name='mlflow.MlflowService.logModel',
+            index=22,
+            containing_service=None,
+            input_type=_LOGMODEL,
+            output_type=_LOGMODEL_RESPONSE,
+            serialized_options=_b(
+                '\362\206\031a\n$\n\004POST\022\026/mlflow/runs/log-model\032\004\010\002\020\000\n,\n\004POST\022\036/preview/mlflow/runs/log-model\032\004\010\002\020\000\020\001*\tLog Model'
+            ),
+        ),
+    ])
 _sym_db.RegisterServiceDescriptor(_MLFLOWSERVICE)
 
 DESCRIPTOR.services_by_name['MlflowService'] = _MLFLOWSERVICE
 
-MlflowService = service_reflection.GeneratedServiceType('MlflowService', (_service.Service,), dict(
-  DESCRIPTOR = _MLFLOWSERVICE,
-  __module__ = 'service_lite_pb2'
-  ))
+MlflowService = service_reflection.GeneratedServiceType(
+    'MlflowService', (_service.Service, ),
+    dict(DESCRIPTOR=_MLFLOWSERVICE, __module__='service_lite_pb2'))
 
-MlflowService_Stub = service_reflection.GeneratedServiceStubType('MlflowService_Stub', (MlflowService,), dict(
-  DESCRIPTOR = _MLFLOWSERVICE,
-  __module__ = 'service_lite_pb2'
-  ))
-
+MlflowService_Stub = service_reflection.GeneratedServiceStubType(
+    'MlflowService_Stub', (MlflowService, ),
+    dict(DESCRIPTOR=_MLFLOWSERVICE, __module__='service_lite_pb2'))
 
 # @@protoc_insertion_point(module_scope)
