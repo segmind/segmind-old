@@ -12,6 +12,8 @@ from .utils import cyan_print
 
 _EXPERIMENT_ID_ENV_VAR = 'TRACK_EXPERIMENT_ID'
 _RUN_ID_ENV_VAR = 'TRACK_RUN_ID'
+_ACCESS_TOKEN = 'TRACK_ACCESS_TOKEN'
+_REFRESH_TOKEN = 'TRACK_REFRESH_TOKEN'
 
 HOME = Path.home()
 
@@ -23,6 +25,12 @@ def create_secret_file_guide():
 
     message = "couldn't locate your credentials, please configure by typing \
     `cral config` in a terminal"
+    cyan_print(message)
+
+
+def set_token_guide():
+    message = f'set your access-token as env variable by \
+    ${_ACCESS_TOKEN} = `your-access-token`'
     cyan_print(message)
 
 
@@ -38,6 +46,8 @@ def get_secret_config():
     config = configparser.ConfigParser()
     if not os.path.isfile(SECRET_FILE):
         create_secret_file_guide()
+        print('Alternatively ..')
+        set_token_guide()
         sys.exit()
     config.read(SECRET_FILE)
     return config
@@ -53,21 +63,23 @@ def fetch_token(email, password):
     if query.status_code != 200:
         raise LoginError(query.json()['message'])
 
-    ftoken = configparser.ConfigParser()
-    ftoken['TOKENS'] = {
-        'access_token': query.json()['access_token'],
-        'refresh_token': query.json()['refresh_token'],
-    }
-    with open(TOKENS_FILE, 'w') as config:
-        ftoken.write(config)
+    # ftoken = configparser.ConfigParser()
+    # ftoken['TOKENS'] = {
+    #     'access_token': query.json()['access_token'],
+    #     'refresh_token': query.json()['refresh_token'],
+    # }
+    # with open(TOKENS_FILE, 'w') as config:
+    #     ftoken.write(config)
+    os.environ[_ACCESS_TOKEN] = query.json()['access_token']
+    os.environ[_REFRESH_TOKEN] = query.json()['refresh_token']
 
-    return ftoken['TOKENS']['access_token']
+    return os.environ.get(_ACCESS_TOKEN)
 
 
 def expired_token():
-    ftoken = configparser.ConfigParser()
-    ftoken.read(TOKENS_FILE)
-    headers = {'authorization': f"Bearer {ftoken['TOKENS']['access_token']}"}
+    # ftoken = configparser.ConfigParser()
+    # ftoken.read(TOKENS_FILE)
+    headers = {'authorization': f'Bearer {os.environ.get(_ACCESS_TOKEN)}'}
     query = requests.get(
         f'{SEGMIND_API_URL}/auth/authenticate', headers=headers)
     if query.status_code != 200:
@@ -76,16 +88,14 @@ def expired_token():
 
 
 def get_token():
+    access_token = os.environ.get(_ACCESS_TOKEN)
+    if access_token is not None and not expired_token():
+        return access_token
+
     config = get_secret_config()
     email = config['secret']['email']
     password = config['secret']['password']
-
-    if not os.path.exists(TOKENS_FILE) or expired_token():
-        return fetch_token(email, password)
-
-    ftoken = configparser.ConfigParser()
-    ftoken.read(TOKENS_FILE)
-    return ftoken['TOKENS']['access_token']
+    return fetch_token(email, password)
 
 
 def catch_mlflowlite_exception(func):
