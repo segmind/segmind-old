@@ -16,11 +16,13 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      #- uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       # Generate *pb2.py files from *.proto
       - name: make .sh executable
-        run: chmod +x ./generate-protos.sh
+        run: |
+          ls -l,
+          chmod +x ./generate-protos.sh
           
       - name: Generate protos
         run: ./generate-protos.sh
