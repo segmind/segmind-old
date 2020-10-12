@@ -23,8 +23,8 @@ jobs:
       # Generate *pb2.py files from *.proto
       - name: Generate protos
         run: |
-          chmod +x generate-protos.sh,
-          generate-protos.sh
+          chmod +x ./generate-protos.sh,
+          ./generate-protos.sh
 
       # Runs a set of commands using the runners shell
       - name: build
