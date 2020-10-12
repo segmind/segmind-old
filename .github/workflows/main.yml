@@ -12,24 +12,21 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    container:
-      image: segmind/cral:tf2.2-jupyter
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      #- uses: actions/checkout@v2
 
       # Generate *pb2.py files from *.proto
+      - name: make .sh executable
+        run: chmod +x ./generate-protos.sh
+          
       - name: Generate protos
-        run: |
-          ls,
-          pwd,
-          chmod +x ./generate-protos.sh,
-          ./generate-protos.sh
+        run: ./generate-protos.sh
 
       # Runs a set of commands using the runners shell
-      - name: build
+      - name: build wheel
         run: python3 setup.py bdist_wheel
       
       - name: Upload a Build Artifact
