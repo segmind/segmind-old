@@ -21,7 +21,7 @@ jobs:
       # Generate *pb2.py files from *.proto
       - name: make .sh executable
         run: |
-          ls -l,
+          ls -l
           chmod +x ./generate-protos.sh
           
       - name: Generate protos
