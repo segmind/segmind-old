@@ -44,7 +44,7 @@ jobs:
           # Artifact name
           name: segmind_track-build
           # A file, directory or wildcard pattern that describes what to upload
-          path: dist/*.whl
+          path: dist
           # The desired behavior if no files are found using the provided path.
           if-no-files-found: error
           
@@ -66,9 +66,9 @@ jobs:
       
       - name: Download wheel Build Artifact
         uses: actions/download-artifact@v2.0.4
-        with:
-          # Artifact name
-          name: segmind_track-build
+      
+      - name: display
+        run: ls -l
           
       - name: Install build
         run: pip3 install dist/*.whl
