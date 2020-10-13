@@ -1,4 +1,4 @@
-pytorch
 pytorch-lightning
 tensorflow>=2.2.1
-torchvision
+torchvision==0.6.1
+torch==1.5.1
