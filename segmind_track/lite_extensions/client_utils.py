@@ -33,14 +33,12 @@ def create_secret_file(email, password):
 
 def create_secret_file_guide():
 
-    message = "couldn't locate your credentials, please configure by typing \
-    `cral config` in a terminal"
+    message = "couldn't locate your credentials, please configure by typing `cral config` in a terminal"  # noqa
     cyan_print(message)
 
 
 def set_access_token_guide():
-    message = f'set your access-token as env variable by \
-    ${_ACCESS_TOKEN} = your-access-token'
+    message = f'set your access-token as env variable by `export {_ACCESS_TOKEN}=your-access-token` in terminal'  # noqa
     cyan_print(message)
 
 
@@ -56,7 +54,7 @@ def get_secret_config():
     config = configparser.ConfigParser()
     if not os.path.isfile(SECRET_FILE):
         create_secret_file_guide()
-        print('Alternatively ..')
+        cyan_print('Alternatively ..')
         set_access_token_guide()
         sys.exit()
     config.read(SECRET_FILE)
