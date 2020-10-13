@@ -58,8 +58,8 @@ jobs:
 
       - uses: actions/download-artifact@v2
 
-      - name: Display structure of downloaded files
-        run: ls -R
+      #- name: Display structure of downloaded files
+      #  run: ls -R
         
       - name: install build requirements
         run: |
@@ -70,4 +70,4 @@ jobs:
         run: pip3 install -r requirements.txt
              
       - name: Install build
-        run: pip3 install dist/*.whl
+        run: pip3 install ./segmind_track-build/segmind_track*.whl
