@@ -56,6 +56,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: actions/download-artifact@v2
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        
       - name: install build requirements
         run: |
           pip3 install -U pip
@@ -63,12 +68,6 @@ jobs:
 
       - name: 'Install requirements'
         run: pip3 install -r requirements.txt
-      
-      - name: Download wheel Build Artifact
-        uses: actions/download-artifact@v2.0.4
-      
-      - name: display
-        run: ls -l
-          
+             
       - name: Install build
         run: pip3 install dist/*.whl
