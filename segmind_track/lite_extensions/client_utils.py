@@ -17,8 +17,18 @@ _REFRESH_TOKEN = 'TRACK_REFRESH_TOKEN'
 
 HOME = Path.home()
 
+SEGMIND_FOLDER = os.path.join(HOME, Path('.segmind'))
 SECRET_FILE = os.path.join(HOME, Path('.segmind/secret.file'))
 TOKENS_FILE = os.path.join(HOME, Path('.segmind/tokens.file'))
+
+os.makedirs(SEGMIND_FOLDER, exist_ok=True)
+
+
+def create_secret_file(email, password):
+    with open(SECRET_FILE, 'w') as file:
+        file.write('[secret]\n')
+        file.write('email={}\n'.format(email))
+        file.write('password={}\n'.format(password))
 
 
 def create_secret_file_guide():
@@ -28,9 +38,9 @@ def create_secret_file_guide():
     cyan_print(message)
 
 
-def set_token_guide():
+def set_access_token_guide():
     message = f'set your access-token as env variable by \
-    ${_ACCESS_TOKEN} = `your-access-token`'
+    ${_ACCESS_TOKEN} = your-access-token'
     cyan_print(message)
 
 
@@ -47,7 +57,7 @@ def get_secret_config():
     if not os.path.isfile(SECRET_FILE):
         create_secret_file_guide()
         print('Alternatively ..')
-        set_token_guide()
+        set_access_token_guide()
         sys.exit()
     config.read(SECRET_FILE)
     return config
@@ -63,20 +73,13 @@ def fetch_token(email, password):
     if query.status_code != 200:
         raise LoginError(query.json()['message'])
 
-    # ftoken = configparser.ConfigParser()
-    # ftoken['TOKENS'] = {
-    #     'access_token': query.json()['access_token'],
-    #     'refresh_token': query.json()['refresh_token'],
-    # }
-    # with open(TOKENS_FILE, 'w') as config:
-    #     ftoken.write(config)
     os.environ[_ACCESS_TOKEN] = query.json()['access_token']
     os.environ[_REFRESH_TOKEN] = query.json()['refresh_token']
 
     return os.environ.get(_ACCESS_TOKEN)
 
 
-def expired_token():
+def token_has_expired():
     # ftoken = configparser.ConfigParser()
     # ftoken.read(TOKENS_FILE)
     headers = {'authorization': f'Bearer {os.environ.get(_ACCESS_TOKEN)}'}
@@ -87,9 +90,22 @@ def expired_token():
     return False
 
 
+def refresh_token():
+    headers = {'authorization': f'Bearer {os.environ.get(_REFRESH_TOKEN)}'}
+    query = requests.post(
+        f'{SEGMIND_API_URL}/auth/refresh-token', headers=headers)
+    if query.status_code != 200:
+        raise MlflowException(query.json()['message'])
+    else:
+        os.environ[_ACCESS_TOKEN] = query.json()['access_token']
+
+
 def get_token():
     access_token = os.environ.get(_ACCESS_TOKEN)
-    if access_token is not None and not expired_token():
+    if access_token is not None:
+        if token_has_expired():
+            refresh_token()
+            access_token = os.environ.get(_ACCESS_TOKEN)
         return access_token
 
     config = get_secret_config()
