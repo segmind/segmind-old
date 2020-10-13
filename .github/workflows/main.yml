@@ -8,7 +8,7 @@ on: [ push]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -38,7 +38,7 @@ jobs:
       - name: build wheel
         run: python3 setup.py bdist_wheel
       
-      - name: Upload a Build Artifact
+      - name: Upload wheel Build Artifact
         uses: actions/upload-artifact@v2.1.4
         with:
           # Artifact name
@@ -47,3 +47,23 @@ jobs:
           path: dist/*.whl
           # The desired behavior if no files are found using the provided path.
           if-no-files-found: error
+          
+  test:
+    needs: build
+    
+    runs-on: ubuntu-latest
+   
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: 'Install requirements'
+        run: pip3 install -r requirements.txt
+      
+      - name: Download wheel Build Artifact
+        uses: actions/download-artifact@v2.0.4
+        with:
+          # Artifact name
+          name: segmind_track-build
+          
+      - name: Install build
+        run: pip3 install dist/*.whl
