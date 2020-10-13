@@ -55,7 +55,10 @@ jobs:
    
     steps:
       - uses: actions/checkout@v2
-      
+
+      - name: install build requirements
+        run: pip3 install setuptools wheel
+
       - name: 'Install requirements'
         run: pip3 install -r requirements.txt
       
