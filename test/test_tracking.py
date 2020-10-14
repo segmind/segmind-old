@@ -67,6 +67,7 @@ class TestKerasCallback(unittest.TestCase):
         from segmind_track import set_experiment
         set_experiment('487f0813-c080-4d8b-8a9d-792b0acf8ad9')
 
+
     def test_callback(self):
         from segmind_track import KerasCallback
 

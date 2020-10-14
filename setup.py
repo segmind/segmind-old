@@ -21,7 +21,8 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'pycocotools', 'click', 'protobuf==3.13.0', 'lxml',
-        'pascal_voc_writer', 'GPUtil', 'PYyaml', 'pandas'
+        'pascal_voc_writer', 'GPUtil', 'PYyaml', 'pandas',
+        'entrypoints', 'psutil'
     ],
     entry_points={'console_scripts': ['segmind=segmind_track.cli:cli']},
     include_package_data=True,

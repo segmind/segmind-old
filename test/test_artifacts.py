@@ -7,8 +7,9 @@ class LogSpecialArtifacts(unittest.TestCase):
     """docstring for log_images."""
 
     def setUp(self):
-        from segmind_track import set_experiment
-        set_experiment('f5082153-3ed2-40b6-a4c6-f4cd96b6cedc')
+        pass
+        # from segmind_track import set_experiment
+        # set_experiment('f5082153-3ed2-40b6-a4c6-f4cd96b6cedc')
 
     def test_LogImage(self):
         from segmind_track import log_image
@@ -67,9 +68,13 @@ class LogTables(unittest.TestCase):
 
     def setUp(self):
 
-        from segmind_track import set_experiment
+class LogTables(unittest.TestCase):
+    """docstring for log_tables."""
 
-        set_experiment('f5082153-3ed2-40b6-a4c6-f4cd96b6cedc')
+    def setUp(self):
+        pass
+        # from segmind_track import set_experiment
+        # set_experiment('f5082153-3ed2-40b6-a4c6-f4cd96b6cedc')
 
     def test_Pandas(self):
 
