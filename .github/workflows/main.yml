@@ -31,14 +31,14 @@ jobs:
           chmod +x ./generate-protos.sh
           ./generate-protos.sh
           
-      - name: install build requirements
+      - name: installing build requirements
         run: pip3 install setuptools wheel
 
       # Runs a set of commands using the runners shell
-      - name: build wheel
+      - name: building wheel
         run: python3 setup.py bdist_wheel
       
-      - name: Upload wheel Build Artifact
+      - name: Uploading wheel Build Artifact
         uses: actions/upload-artifact@v2.1.4
         with:
           # Artifact name
@@ -61,7 +61,7 @@ jobs:
       #- name: Display structure of downloaded files
       #  run: ls -R
         
-      - name: install build requirements
+      - name: installing build requirements
         run: |
           pip3 install -U pip
           pip3 install setuptools wheel
@@ -69,5 +69,18 @@ jobs:
       - name: 'Install requirements'
         run: pip3 install -r requirements.txt
              
-      - name: Install build
+      - name: Installing build
         run: pip3 install ./segmind_track-build/segmind_track*.whl
+      
+      - name: Configure segmind-track
+        env:
+          USERNAME: ${{ secrets.TRACK_USERNAME }}
+          PASSWORD: ${{ secrets.TRACK_PASSWORD }}
+        run: |
+          sudo mkdir ~/.segmind
+          echo -e "[secret]\nemail=$USERNAME\npassword=$PASSWORD" > ~/.segmind/segmind.secret
+          
+      - name: Run unittests
+        env:
+          TRACK_EXPERIMENT_ID: ${{ secrets.TRACK_EXPERIMENT_ID}}          
+        run: python3 -m unittest discover test
