@@ -78,7 +78,7 @@ jobs:
           PASSWORD: ${{ secrets.TRACK_PASSWORD }}
         run: |
           mkdir ~/.segmind
-          echo -e "[secret]\nemail=$USERNAME\npassword=$PASSWORD" > ~/.segmind/segmind.secret
+          echo -e "[secret]\nemail=$USERNAME\npassword=$PASSWORD" > ~/.segmind/secret.file
 
       - name: Run unittests
         env:
