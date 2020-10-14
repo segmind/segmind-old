@@ -3,7 +3,10 @@ import getpass
 import os
 import sys
 
-from segmind_track.lite_extensions.client_utils import LoginError, fetch_token
+from segmind_track.lite_extensions.client_utils import (SECRET_FILE,
+                                                        SEGMIND_FOLDER,
+                                                        LoginError,
+                                                        fetch_token)
 from segmind_track.utils import cyan_print, green_print, red_print
 
 # import jsonpickle
@@ -28,10 +31,10 @@ def config():
         red_print('Log-In failed !!! Invalid credentials')
         sys.exit()
 
-    folder_path = os.path.join(os.path.expanduser('~'), '.segmind')
-    os.makedirs(folder_path, exist_ok=True)
+    # folder_path = os.path.join(os.path.expanduser('~'), '.segmind')
+    os.makedirs(SEGMIND_FOLDER, exist_ok=True)
 
-    file_path = os.path.join(folder_path, 'secret.file')
+    file_path = SECRET_FILE
 
     with open(file_path, 'w') as file:
         file.write('[secret]\n')

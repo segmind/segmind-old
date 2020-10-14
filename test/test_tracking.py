@@ -27,10 +27,8 @@ class TestTracking(unittest.TestCase):
     """docstring for TestTracking."""
 
     def setUp(self):
-        pass
-        # mocked_experiment_id = '521e7ebc-36c9-4ae8-8507-f7b31a5bd963_20'
-        # from segmind_track import set_experiment, set_runid
-        # set_experiment('487f0813-c080-4d8b-8a9d-792b0acf8ad9')
+        from segmind_track import set_experiment, set_runid  # noqa: F401
+        set_experiment('487f0813-c080-4d8b-8a9d-792b0acf8ad9')
 
     def test_log_param(self):
         from segmind_track import log_param  # noqa: F401
@@ -66,10 +64,9 @@ class TestKerasCallback(unittest.TestCase):
     """docstring for TestKerasCallback."""
 
     def setUp(self):
-        pass
-        # mocked_experiment_id = '521e7ebc-36c9-4ae8-8507-f7b31a5bd963_20'
-        # from segmind_track import set_experiment
-        # set_experiment('487f0813-c080-4d8b-8a9d-792b0acf8ad9')
+        from segmind_track import set_experiment
+        set_experiment('487f0813-c080-4d8b-8a9d-792b0acf8ad9')
+
 
     def test_callback(self):
         from segmind_track import KerasCallback
