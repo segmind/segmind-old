@@ -10,6 +10,7 @@ import warnings
 from segmind_track import projects  # noqa
 from segmind_track import tracking  # noqa
 from .callbacks import CheckpointCallback, KerasCallback  # noqa: F401
+from .callbacks import PytorchCheckpointCallback, LightningCallback  # noqa: F401
 from .tracking import fluent
 from .utils.logging_utils import log_params_decorator  # noqa: F401
 from .utils.logging_utils import _configure_mlflow_loggers
