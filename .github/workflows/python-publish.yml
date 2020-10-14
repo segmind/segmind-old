@@ -18,14 +18,25 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
+    - name: Install Protocol Buffer Compiler(Protoc)
+      run: |
+          PROTOC_ZIP=protoc-3.7.1-linux-x86_64.zip
+          sudo curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/$PROTOC_ZIP
+          sudo unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
+          sudo unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
+    # Generate *pb2.py files from *.proto
+    - name: Generate protos
+      run: |
+          chmod +x ./generate-protos.sh
+          ./generate-protos.sh
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install setuptools wheel twine
+        python3 -m pip install --upgrade pip
+        pip3 install setuptools wheel twine
     - name: Build and publish
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        python setup.py sdist bdist_wheel
+        python3 setup.py sdist bdist_wheel
         twine upload dist/*
