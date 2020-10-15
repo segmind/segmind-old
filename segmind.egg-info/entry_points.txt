@@ -1,0 +1,2 @@
+[console_scripts]
+segmind = segmind_track.cli:cli

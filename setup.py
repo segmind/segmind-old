@@ -3,14 +3,14 @@ import setuptools
 import os
 from importlib.machinery import SourceFileLoader
 
-version = SourceFileLoader('segmind_track.version',
-                           os.path.join('segmind_track',
+version = SourceFileLoader('segmind.version',
+                           os.path.join('segmind',
                                         'version.py')).load_module().VERSION
 with open('README.md', 'r') as f:
     long_description = f.read()
 
 setuptools.setup(
-    name='segmind_track',
+    name='segmind',
     version=version,
     author='T Pratik',
     author_email='pratik@segmind.com',

@@ -8,11 +8,11 @@ class LogSpecialArtifacts(unittest.TestCase):
 
     def setUp(self):
         pass
-        # from segmind_track import set_experiment
+        # from segmind import set_experiment
         # set_experiment('f5082153-3ed2-40b6-a4c6-f4cd96b6cedc')
 
     def test_LogImage(self):
-        from segmind_track import log_image
+        from segmind import log_image
 
         log_image(
             key='panda.jpg',
@@ -20,7 +20,7 @@ class LogSpecialArtifacts(unittest.TestCase):
             step=0)
 
     def test_LogObjectdetection(self):
-        from segmind_track import log_bbox_prediction
+        from segmind import log_bbox_prediction
 
         bboxes = [[
             1358.99999999904, 573.00000000021, 1570.9999999996799,
@@ -60,7 +60,7 @@ class LogSpecialArtifacts(unittest.TestCase):
             step=None)
 
     def test_LogSemanticMask(self):
-        from segmind_track import log_mask_prediction  # noqa: F401
+        from segmind import log_mask_prediction  # noqa: F401
 
 
 class LogTables(unittest.TestCase):
@@ -68,12 +68,12 @@ class LogTables(unittest.TestCase):
 
     def setUp(self):
         pass
-        # from segmind_track import set_experiment
+        # from segmind import set_experiment
         # set_experiment('f5082153-3ed2-40b6-a4c6-f4cd96b6cedc')
 
     def test_Pandas(self):
 
-        from segmind_track import log_table
+        from segmind import log_table
 
         data = {
             'Int-Col': np.random.randint(low=2, size=10),

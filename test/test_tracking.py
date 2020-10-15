@@ -1,19 +1,17 @@
 import os
+import pytorch_lightning as pl
 import tempfile
 import time
-import unittest
-
-from tensorflow import keras
-
-from segmind_track import log_params_decorator
-
 import torch
-from torch.utils.data import DataLoader, random_split
+import unittest
+from tensorflow import keras
 from torch.nn import functional as F
-from torchvision.datasets import MNIST
+from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
+from torchvision.datasets import MNIST
 
-import pytorch_lightning as pl
+from segmind import log_params_decorator
+
 
 @log_params_decorator
 def define_mnist_model(input_shape, hidden_neurons, num_classes=10):
@@ -92,14 +90,12 @@ class LightningMNISTClassifier(pl.core.LightningModule):
 
     def prepare_data(self):
         # transforms for images
-        transform=transforms.Compose([transforms.ToTensor(),
-                                      transforms.Normalize((0.1307,),
-                                      (0.3081,))])
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])  # noqa: E501
 
         # prepare transforms standard to MNIST
         mnist_train = MNIST(os.getcwd(), train=True, download=True,
                             transform=transform)
-        mnist_test = MNIST(os.getcwd(), train=False, download=True,
+        mnist_test = MNIST(os.getcwd(), train=False, download=True,  # noqa: F841, E501
                            transform=transform)
 
         self.mnist_train, self.mnist_val = random_split(mnist_train,
@@ -123,18 +119,18 @@ class TestTracking(unittest.TestCase):
     """docstring for TestTracking."""
 
     def setUp(self):
-        mocked_experiment_id = '521e7ebc-36c9-4ae8-8507-f7b31a5bd963_20'
-        from segmind_track import set_experiment, set_runid
-        set_experiment('a0583ec5-bdf3-4526-a985-05be15e62f16')
+        pass
+        # from segmind import set_experiment, set_runid
+        # set_experiment('a0583ec5-bdf3-4526-a985-05be15e62f16')
 
     def test_log_param(self):
-        from segmind_track import log_param
+        from segmind import log_param  # noqa: F401
 
     def test_log_metric(self):
-        from segmind_track import log_metric
+        from segmind import log_metric  # noqa: F401
 
     def test_log_batch(self):
-        from segmind_track import log_batch
+        from segmind import log_batch
 
         for i in range(1, 3):
             log_batch(
@@ -145,7 +141,7 @@ class TestTracking(unittest.TestCase):
             time.sleep(0.5)
 
     def test_log_artifact(self):
-        from segmind_track import log_artifact
+        from segmind import log_artifact
 
         tempdir = tempfile.mkdtemp()
 
@@ -161,12 +157,12 @@ class TestKerasCallback(unittest.TestCase):
     """docstring for TestKerasCallback."""
 
     def setUp(self):
-        mocked_experiment_id = '521e7ebc-36c9-4ae8-8507-f7b31a5bd963_20'
-        from segmind_track import set_experiment
-        set_experiment('a0583ec5-bdf3-4526-a985-05be15e62f16')
+        pass
+        # from segmind import set_experiment
+        # set_experiment('a0583ec5-bdf3-4526-a985-05be15e62f16')
 
     def test_callback(self):
-        from segmind_track import KerasCallback
+        from segmind import KerasCallback
 
         fashion_mnist = keras.datasets.fashion_mnist
         (train_images,
@@ -190,12 +186,12 @@ class TestLightningCallback(unittest.TestCase):
     """docstring for TestLightningCallback."""
 
     def setUp(self):
-        mocked_experiment_id = '521e7ebc-36c9-4ae8-8507-f7b31a5bd963_20'
-        from segmind_track import set_experiment
-        set_experiment('a0583ec5-bdf3-4526-a985-05be15e62f16')
+        pass
+        # from segmind import set_experiment
+        # set_experiment('a0583ec5-bdf3-4526-a985-05be15e62f16')
 
     def test_callback(self):
-        from segmind_track import LightningCallback
+        from segmind import LightningCallback
 
         model = LightningMNISTClassifier()
 
