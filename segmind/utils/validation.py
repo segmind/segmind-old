@@ -280,9 +280,9 @@ def _validate_experiment_artifact_location(artifact_location):
             error_code=INVALID_PARAMETER_VALUE)
 
 
-# def _validate_db_type_string(db_type):
-#     """validates db_type parsed from DB URI is supported."""
-#     if db_type not in DATABASE_ENGINES:
-#         error_msg = "Invalid database engine: '%s'. '%s'" % (
-#             db_type, _UNSUPPORTED_DB_TYPE_MSG)
-#         raise MlflowException(error_msg, INVALID_PARAMETER_VALUE)
+def _validate_db_type_string(db_type):
+    # """validates db_type parsed from DB URI is supported."""
+    if db_type not in DATABASE_ENGINES:  # noqa: F821
+        error_msg = "Invalid database engine: '%s'. '%s'" % (
+            db_type, _UNSUPPORTED_DB_TYPE_MSG)
+        raise MlflowException(error_msg, INVALID_PARAMETER_VALUE)
