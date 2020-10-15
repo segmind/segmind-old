@@ -93,9 +93,10 @@ class LightningMNISTClassifier(pl.core.LightningModule):
         transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])  # noqa: E501
 
         # prepare transforms standard to MNIST
-        mnist_train = MNIST(os.getcwd(), train=True, download=True,
+        tempdir = tempfile.mkdtemp()
+        mnist_train = MNIST(tempdir, train=True, download=True,
                             transform=transform)
-        mnist_test = MNIST(os.getcwd(), train=False, download=True,  # noqa: F841, E501
+        mnist_test = MNIST(tempdir, train=False, download=True,  # noqa: F841, E501
                            transform=transform)
 
         self.mnist_train, self.mnist_val = random_split(mnist_train,
