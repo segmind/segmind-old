@@ -6,5 +6,3 @@ dist/
 segmind.egg-info/
 
 Dockerfile.staging
-
-*pb2.py
