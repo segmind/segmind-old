@@ -7,7 +7,7 @@ if [ "$PROTOC_VERSION" != "libprotoc 3.6.0" || "$PROTOC_VERSION" != "libprotoc 3
 	echo "We found: $PROTOC_VERSION"
 	exit 1
 fi
-PROTOS="segmind_track/protos"
+PROTOS="segmind/protos"
 protoc -I="$PROTOS" \
 	-I=/usr/include \
     --python_out="$PROTOS" \
