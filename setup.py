@@ -24,7 +24,7 @@ setuptools.setup(
         'pascal_voc_writer', 'GPUtil', 'PYyaml', 'pandas',
         'entrypoints', 'psutil'
     ],
-    entry_points={'console_scripts': ['segmind=segmind_track.cli:cli']},
+    entry_points={'console_scripts': ['segmind=segmind.cli:cli']},
     include_package_data=True,
     classifiers=[
         'Programming Language :: Python :: 3',
