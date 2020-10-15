@@ -233,7 +233,7 @@ class RestStore(AbstractStore):
         upload_thread.start()
         # print('thread started ...')
 
-    def set_experiment_tag(self, experiment_id, tag):
+    def set_project_tag(self, experiment_id, tag):
         """Set a tag for the specified experiment.
 
         :param experiment_id: String ID of the experiment

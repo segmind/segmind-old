@@ -202,7 +202,7 @@ def start_run(*args, **kwargs):
                    current run (applicable only when ``run_id`` is not
                    specified). If ``experiment_id`` argument is unspecified,
                    will look for valid experiment in the following order:
-                   activated using ``set_experiment``,
+                   activated using ``set_project``,
                    ``MLFLOW_EXPERIMENT_NAME`` environment variable,
                    ``MLFLOW_EXPERIMENT_ID`` environment variable, or the
                    default experiment as defined by the tracking server.
@@ -258,7 +258,7 @@ def search_runs(*args, **kwargs):
     return fluent.search_runs(*args, **kwargs)
 
 
-def set_experiment(*args, **kwargs):
+def set_project(project_id):
     """Set given experiment as active experiment. If experiment does not exist,
     create an experiment with provided name.
 
@@ -271,7 +271,7 @@ def set_experiment(*args, **kwargs):
     Returns:
         TYPE: Description
     """
-    return fluent.set_experiment(*args, **kwargs)
+    return fluent.set_project(project_id)
 
 
 def set_runid(*args, **kwargs):
@@ -328,6 +328,6 @@ __all__ = [
     'ActiveRun', 'log_param', 'log_params', 'log_metric', 'log_metrics',
     'set_tag', 'set_tags', 'delete_tag', 'log_artifacts', 'log_artifact',
     'active_run', 'start_run', 'end_run', 'search_runs', 'get_artifact_uri',
-    'set_tracking_uri', 'create_experiment', 'set_experiment',
+    'set_tracking_uri', 'create_experiment', 'set_project',
     'delete_experiment', 'delete_run', 'run', 'register_model'
 ]

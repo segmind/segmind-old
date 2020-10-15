@@ -8,8 +8,8 @@ class LogSpecialArtifacts(unittest.TestCase):
 
     def setUp(self):
         pass
-        # from segmind import set_experiment
-        # set_experiment('f5082153-3ed2-40b6-a4c6-f4cd96b6cedc')
+        # from segmind import set_project
+        # set_project('f5082153-3ed2-40b6-a4c6-f4cd96b6cedc')
 
     def test_LogImage(self):
         from segmind import log_image
@@ -68,8 +68,8 @@ class LogTables(unittest.TestCase):
 
     def setUp(self):
         pass
-        # from segmind import set_experiment
-        # set_experiment('f5082153-3ed2-40b6-a4c6-f4cd96b6cedc')
+        # from segmind import set_project
+        # set_project('f5082153-3ed2-40b6-a4c6-f4cd96b6cedc')
 
     def test_Pandas(self):
 

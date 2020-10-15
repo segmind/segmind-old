@@ -1,6 +1,9 @@
 *.pyc
 lightning_logs/
 segmind_track.egg-info/
+build/
+dist/
+segmind.egg-info/
 
 Dockerfile.staging
 

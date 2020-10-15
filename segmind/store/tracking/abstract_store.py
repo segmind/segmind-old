@@ -167,7 +167,7 @@ class AbstractStore:
         artifact: :py:class:`segmind_track.entities.Artifact` instance to log
         """
 
-    def set_experiment_tag(self, experiment_id, tag):
+    def set_project_tag(self, experiment_id, tag):
         """Set a tag for the specified experiment.
 
         experiment_id: String id for the experiment

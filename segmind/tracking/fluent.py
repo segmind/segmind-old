@@ -64,7 +64,7 @@ def convert_to_imagefile(image):
     return path
 
 
-def set_experiment(experiment_id):
+def set_project(experiment_id):
     """Set given experiment as active experiment. If experiment does not exist,
     create an experiment with provided name.
 
@@ -160,7 +160,7 @@ def start_run(run_name=None, nested=False):
             run (applicable only when ``run_id`` is not specified). If
             ``experiment_id`` argument is unspecified, will look for valid
             experiment in the following order: activated using
-            ``set_experiment``, ``MLFLOW_EXPERIMENT_NAME`` environment
+            ``set_project``, ``MLFLOW_EXPERIMENT_NAME`` environment
             variable, ``MLFLOW_EXPERIMENT_ID`` environment variable,
             or the default experiment as defined by the tracking server.
         run_name: Name of new run (stored as a ``segmind_track.runName`` tag).
@@ -197,14 +197,14 @@ def start_run(run_name=None, nested=False):
         _validate_run_id(existing_run_id)
         active_run_obj = MlflowClient().get_run(existing_run_id)
         # Check to see if experiment_id from environment matches experiment_id
-        # from set_experiment()
+        # from set_project()
         if (_active_experiment_id is not None and
                 _active_experiment_id != active_run_obj.info.experiment_id):
             raise MlflowException(
                 'Cannot start run with ID {} because active run ID '
                 'does not match environment run ID. Make sure '
                 '--experiment-name or --experiment-id matches experiment '
-                'set with set_experiment(), or just use command-line '
+                'set with set_project(), or just use command-line '
                 'arguments'.format(existing_run_id))
         # Check to see if current run isn't deleted
         if active_run_obj.info.lifecycle_stage == LifecycleStage.DELETED:

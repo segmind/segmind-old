@@ -226,7 +226,7 @@ class MlflowClient(object):
             step=step)
         self._tracking_client.log_artifact(run_id, experiment_id, artifact)
 
-    def set_experiment_tag(self, experiment_id, key, value):
+    def set_project_tag(self, experiment_id, key, value):
         """Set a tag on the experiment with the specified ID. Value is
         converted to a string.
 
@@ -235,7 +235,7 @@ class MlflowClient(object):
         :param value: Tag value (converted to a string).
         """
 
-        self._tracking_client.set_experiment_tag(experiment_id, key, value)
+        self._tracking_client.set_project_tag(experiment_id, key, value)
 
     def set_tag(self, run_id, key, value):
         """Set a tag on the run with the specified ID. Value is converted to a

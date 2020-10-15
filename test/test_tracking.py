@@ -121,8 +121,8 @@ class TestTracking(unittest.TestCase):
 
     def setUp(self):
         pass
-        # from segmind import set_experiment, set_runid
-        # set_experiment('a0583ec5-bdf3-4526-a985-05be15e62f16')
+        # from segmind import set_project, set_runid
+        # set_project('a0583ec5-bdf3-4526-a985-05be15e62f16')
 
     def test_log_param(self):
         from segmind import log_param  # noqa: F401
@@ -159,8 +159,8 @@ class TestKerasCallback(unittest.TestCase):
 
     def setUp(self):
         pass
-        # from segmind import set_experiment
-        # set_experiment('a0583ec5-bdf3-4526-a985-05be15e62f16')
+        # from segmind import set_project
+        # set_project('a0583ec5-bdf3-4526-a985-05be15e62f16')
 
     def test_callback(self):
         from segmind import KerasCallback
@@ -188,8 +188,8 @@ class TestLightningCallback(unittest.TestCase):
 
     def setUp(self):
         pass
-        # from segmind import set_experiment
-        # set_experiment('a0583ec5-bdf3-4526-a985-05be15e62f16')
+        # from segmind import set_project
+        # set_project('a0583ec5-bdf3-4526-a985-05be15e62f16')
 
     def test_callback(self):
         from segmind import LightningCallback
