@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v2.1.4
         with:
           # Artifact name
-          name: segmind_track-build
+          name: segmind-build
           # A file, directory or wildcard pattern that describes what to upload
           path: dist
           # The desired behavior if no files are found using the provided path.
@@ -70,7 +70,7 @@ jobs:
         run: pip3 install -r requirements.txt
 
       - name: Installing build
-        run: pip3 install ./segmind_track-build/segmind_track*.whl
+        run: pip3 install ./segmind-build/segmind*.whl
 
       - name: Configure segmind-track
         env:
