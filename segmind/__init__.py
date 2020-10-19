@@ -47,6 +47,15 @@ def log_param(key, value):
     Args:
         key: Parameter name (string)
         value: Parameter value (string, but will be string-ified if not)
+
+    Examples:
+        Logging a simple parameter.
+
+        ```
+        from segmind import set_project, log_param
+        set_project('xxx-xxx-xxx-xxx');
+        log_param('param1', 100);
+        ```
     """
     return fluent.log_param(key, value)
 
@@ -68,11 +77,11 @@ def log_metric(key, value, step=None):
 
     Args:
         key: Metric name (string).
-        param value: Metric value (float). Note that some special values such
-                     as +/- Infinity may be replaced by other values
-                     depending on the store. For example, sFor example, the
-                     SQLAlchemy store replaces +/- Inf with max / min float
-                     values.
+        value: Metric value (float). Note that some special values such
+             as +/- Infinity may be replaced by other values
+             depending on the store. For example, sFor example, the
+             SQLAlchemy store replaces +/- Inf with max / min float
+             values.
         step: Metric step (int). Defaults to zero if unspecified.
     """
     return fluent.log_metric(key, value, step)
@@ -262,14 +271,8 @@ def set_project(project_id):
     """Set given experiment as active experiment. If experiment does not exist,
     create an experiment with provided name.
 
-    :param experiment_name: Name of experiment to be activated.
-
     Args:
-        *args: Description
-        **kwargs: Description
-
-    Returns:
-        TYPE: Description
+        project_id: uuid of experiment to be activated.
     """
     return fluent.set_project(project_id)
 

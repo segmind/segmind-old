@@ -60,7 +60,14 @@ class LogSpecialArtifacts(unittest.TestCase):
             step=None)
 
     def test_LogSemanticMask(self):
-        from segmind import log_mask_prediction  # noqa: F401
+        from segmind import log_mask_prediction
+
+        log_mask_prediction(
+          key='doggy',
+          image='test_data/semantic_segmentation/dog2.jpg',
+          pred_mask='test_data/semantic_segmentation/dog2.png',
+          bbox_type='pascal_voc',
+          step=100)
 
 
 class LogTables(unittest.TestCase):

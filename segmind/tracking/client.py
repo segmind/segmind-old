@@ -12,7 +12,8 @@ from segmind.entities import ViewType
 # from segmind.exceptions import MlflowException
 from segmind.lite_extensions.client_utils import get_host_uri
 # from segmind.protos.errorcodes_pb2 import FEATURE_DISABLED
-from segmind.protos.service_lite_pb2 import Artifact, LogMetric, LogParam
+from segmind.protos.service_lite_pb2 import (Artifact, ArtifactTag, LogMetric,
+                                             LogParam)
 from segmind.store.tracking import SEARCH_MAX_RESULTS_DEFAULT
 from segmind.store.tracking.rest_store import RestStore
 
@@ -203,7 +204,8 @@ class MlflowClient(object):
                           size=None,
                           prediction=None,
                           ground_truth=None,
-                          step=None):
+                          step=None,
+                          tags={}):
         """Log an artifact against the run ID.
 
         :Args
@@ -215,6 +217,11 @@ class MlflowClient(object):
         """
         timestamp = timestamp or int(time.time() * 1000)
         size = os.path.getsize(path)
+
+        tags_list = []
+        for key, value in tags.items():
+            tag = ArtifactTag(key=str(key), value=str(value))
+            tags_list.append(tag)
         artifact = Artifact(
             key=key,
             path=path,
@@ -223,7 +230,8 @@ class MlflowClient(object):
             size=size,
             prediction=prediction,
             ground_truth=ground_truth,
-            step=step)
+            step=step,
+            tags=tags_list)
         self._tracking_client.log_artifact(run_id, experiment_id, artifact)
 
     def set_project_tag(self, experiment_id, key, value):

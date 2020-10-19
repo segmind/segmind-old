@@ -37,7 +37,7 @@ from segmind.utils.mlflow_tags import MLFLOW_PARENT_RUN_ID, MLFLOW_RUN_NAME
 from segmind.utils.validation import _validate_run_id
 
 # _EXPERIMENT_ID_ENV_VAR = "MLFLOW_EXPERIMENT_ID"
-_EXPERIMENT_NAME_ENV_VAR = 'MLFLOW_EXPERIMENT_NAME'
+# _EXPERIMENT_NAME_ENV_VAR = 'MLFLOW_EXPERIMENT_NAME'
 # _RUN_ID_ENV_VAR = "MLFLOW_RUN_ID"
 _active_run_stack = []
 _active_experiment_id = None
@@ -55,7 +55,7 @@ def convert_to_imagefile(image):
         image.save(image_name)
         path = image_name
     elif isinstance(image, np.ndarray):
-        image = PIL.Image.fromarray(image)
+        image = PIL.Image.fromarray(image.astype(np.uint8))
         image.save(image_name)
         path = image_name
     else:
@@ -401,7 +401,7 @@ def log_artifact(key, path, step=None):
         run_id, experiment_id, key, path, step=step)
 
 
-def log_image(key, image, step=None):
+def log_image(key, image, tags={}, step=None):
     """logs an image artifact.
 
     Args:
@@ -418,7 +418,13 @@ def log_image(key, image, step=None):
     run_id = run.info.run_id
     experiment_id = run.info.experiment_id
     MlflowClient().log_artifact_lite(
-        run_id, experiment_id, key, path, artifact_type='image', step=step)
+        run_id,
+        experiment_id,
+        key,
+        path,
+        artifact_type='image',
+        step=step,
+        tags=tags)
 
 
 def log_table(key, table, step=None):
@@ -508,7 +514,6 @@ def log_bbox_prediction(key,
     prediction_struct.update({'bbox': bbox_pred.tolist()})
 
     ground_truth_struct = Struct()
-
     ground_truth_struct.update({'bbox': bbox_gt.tolist()})
 
     MlflowClient().log_artifact_lite(
@@ -525,7 +530,7 @@ def log_bbox_prediction(key,
 def log_mask_prediction(key,
                         image,
                         pred_mask,
-                        bbox_pred=None,
+                        bbox_pred=[],
                         mask_gt=None,
                         bbox_gt=None,
                         bbox_type='pascal_voc',
@@ -553,43 +558,55 @@ def log_mask_prediction(key,
             {bbox_type}')
 
     path = convert_to_imagefile(image)
+    pred_mask_path = convert_to_imagefile(pred_mask)
 
     bbox_pred = np.array(bbox_pred)
-    assert isinstance(
-        bbox_pred, np.ndarray) and bbox_pred.ndim == 2 and bbox_pred.shape[
-            1] == 4, f'bbox_pred should be numpy of dimension (Nx4), got \
-        {bbox_pred.shape}'
+    if bbox_pred.size > 0:
+        print(bbox_pred.size)
+        assert isinstance(
+            bbox_pred, np.ndarray) and bbox_pred.ndim == 2 and bbox_pred.shape[
+                1] == 4, f'bbox_pred should be numpy of dimension (Nx4), got \
+            {bbox_pred.shape}'
 
     if bbox_type == 'coco':
-        bbox_pred = coco_to_voc_bbox(bbox_pred)
+        if bbox_pred.size > 0:
+            bbox_pred = coco_to_voc_bbox(bbox_pred)
         if bbox_gt:
             bbox_gt = coco_to_voc_bbox(bbox_gt)
         else:
-            bbox_gt = []
+            bbox_gt = np.array([])
     else:
-        bbox_pred = yolo_to_voc_bbox(image, bbox_pred)
+        if bbox_pred.size > 0:
+            bbox_pred = yolo_to_voc_bbox(image, bbox_pred)
         if bbox_gt:
             bbox_gt = yolo_to_voc_bbox(image, bbox_gt)
         else:
-            bbox_gt = []
+            bbox_gt = np.array([])
 
     run = _get_or_start_run()
     run_id = run.info.run_id
     experiment_id = run.info.experiment_id
+
+    prediction_struct = Struct()
+    prediction_struct.update({'bbox': bbox_pred.tolist()})
+
+    ground_truth_struct = Struct()
+    ground_truth_struct.update({'bbox': bbox_gt.tolist()})
+
     MlflowClient().log_artifact_lite(
         run_id,
         experiment_id,
         key,
         path,
-        prediction={
-            'mask': pred_mask,
-            'bbox': bbox_pred
-        },
-        ground_truth={
-            'mask': mask_gt,
-            'bbox': bbox_gt
-        },
+        prediction=prediction_struct,
+        ground_truth=ground_truth_struct,
         artifact_type='segmentation_mask',
+        step=step)
+
+    log_image(
+        key=key+'_mask',
+        image=pred_mask_path,
+        tags={'mask_parent': key},
         step=step)
 
 
@@ -857,8 +874,8 @@ def _get_experiment_id_from_env():
     Returns:
         TYPE: Description
     """
-    experiment_name = env.get_env(_EXPERIMENT_NAME_ENV_VAR)
-    if experiment_name is not None:
-        exp = MlflowClient().get_experiment_by_name(experiment_name)
-        return exp.experiment_id if exp else None
+    # experiment_name = env.get_env(_EXPERIMENT_NAME_ENV_VAR)
+    # if experiment_name is not None:
+    #     exp = MlflowClient().get_experiment_by_name(experiment_name)
+    #     return exp.experiment_id if exp else None
     return env.get_env(_EXPERIMENT_ID_ENV_VAR)
