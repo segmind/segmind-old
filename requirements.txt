@@ -3,3 +3,4 @@ pytorch-lightning
 tensorflow>=2.2.1
 torch==1.5.1
 torchvision==0.6.1
+xgboost

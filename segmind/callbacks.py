@@ -436,3 +436,32 @@ class LightningCallback(pl.callbacks.base.Callback):
 
         try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
         print('end of epoch')
+
+
+def XGBoost_callback(period=1):
+    """Create a callback that print evaluation result.
+    We print the evaluation results every **period** iterations
+    and on the first and the last iterations.
+    Parameters
+    ----------
+    period : int
+        The period to log the evaluation results
+    show_stdv : bool, optional
+         Whether show stdv if provided
+    Returns
+    -------
+    callback : function
+        A callback that print evaluation every period iterations.
+    """
+    def callback(env):
+        """internal function."""
+        if env.rank != 0 or (not env.evaluation_result_list) or period is False or period == 0:  # noqa: E501
+            return
+        step = env.iteration
+        results = {}
+        if step % period == 0 or step + 1 == env.begin_iteration or step + 1 == env.end_iteration:  # noqa: E501
+            for x in env.evaluation_result_list:
+                results[x[0]] = x[1]
+            try_mlflow_log(log_metrics, results, step=step)
+
+    return callback

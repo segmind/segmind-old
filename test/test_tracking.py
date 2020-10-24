@@ -202,5 +202,37 @@ class TestLightningCallback(unittest.TestCase):
         trainer.fit(model)
 
 
+class TestXGBoostCallback(unittest.TestCase):
+    """docstring for TestXGBoostCallback."""
+    def setUp(self):
+        pass
+
+    def test_callback(self):
+        import xgboost as xgb
+        from sklearn.datasets import load_breast_cancer
+        from sklearn.model_selection import train_test_split
+
+        from segmind import XGBoost_callback
+
+        X, y = load_breast_cancer(return_X_y=True)
+        X_train, X_valid, y_train, y_valid = train_test_split(X, y, random_state=0)
+        D_train = xgb.DMatrix(X_train, y_train)
+        D_valid = xgb.DMatrix(X_valid, y_valid)
+
+        num_boost_round = 100
+
+        # Pass it to the `callbacks` parameter as a list.
+        xgb.train(
+            {
+                'objective': 'binary:logistic',
+                'eval_metric': ['error', 'rmse'],
+                'tree_method': 'hist'
+            },
+            D_train,
+            evals=[(D_train, 'Train'), (D_valid, 'Valid')],
+            num_boost_round=num_boost_round,
+            callbacks=[XGBoost_callback(period=25)])
+
+
 if __name__ == '__main__':
     unittest.main()
