@@ -523,8 +523,9 @@ def log_bbox_prediction(key,
         path,
         prediction=prediction_struct,
         ground_truth=ground_truth_struct,
-        artifact_type='object_detection_image',
-        step=step)
+        artifact_type='image',
+        step=step,
+        tags={'image_type': 'bbox_prediction'})
 
 
 def log_mask_prediction(key,
@@ -600,8 +601,9 @@ def log_mask_prediction(key,
         path,
         prediction=prediction_struct,
         ground_truth=ground_truth_struct,
-        artifact_type='segmentation_mask',
-        step=step)
+        artifact_type='image',
+        step=step,
+        tags={'image_type': 'segmentation_mask'})
 
     log_image(
         key=key+'_mask',

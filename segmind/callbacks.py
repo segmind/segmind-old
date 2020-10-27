@@ -458,7 +458,13 @@ def XGBoost_callback(period=1):
         if env.rank != 0 or (not env.evaluation_result_list) or period is False or period == 0:  # noqa: E501
             return
         step = env.iteration
+
         results = {}
+        gpu_data = gpu_metrics()
+        results.update(gpu_data)
+
+        cpu_data = system_metrics()
+        results.update(cpu_data)
         if step % period == 0 or step + 1 == env.begin_iteration or step + 1 == env.end_iteration:  # noqa: E501
             for x in env.evaluation_result_list:
                 results[x[0]] = x[1]
