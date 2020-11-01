@@ -1,8 +1,6 @@
 import psutil
 from psutil._common import bytes2human
 
-# print(psutil.cpu_count())
-
 
 def fan_stats():
     data = {}
@@ -34,12 +32,14 @@ def system_memory_stats():
 def system_temp_stats():
     data = {}
     temps = psutil.sensors_temperatures()
+    avg_temp = 0
+    N = 1
     for name, entries in temps.items():
-        # print(name)
-        for entry in entries:
-
-            data[f'{name}_{entry.label}_temperature'] = entry.current
-
+        if name.startswith('coretemp'):
+            for entry in entries:
+                avg_temp += entry.current
+                N += 1
+    data['avg_CPU_temp'] = avg_temp/N
     return data
 
 
@@ -60,10 +60,11 @@ def battery_stats():
 
 def cpu_usage_stats():
     data = {}
-    usage_list = psutil.cpu_percent(interval=1.0, percpu=True)
+    # usage_list = psutil.cpu_percent(interval=1.0, percpu=True)
 
-    for index, value in enumerate(usage_list):
-        data[f'CPU{index}_usage'] = value
+    # for index, value in enumerate(usage_list):
+    #     data[f'CPU{index}_usage'] = value
+    data['avg_CPU_usage'] = psutil.cpu_percent(interval=1.0)
 
     return data
 
