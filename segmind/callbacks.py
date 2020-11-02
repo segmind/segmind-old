@@ -1,7 +1,6 @@
 """Summary."""
 from __future__ import absolute_import, print_function
 
-import copy
 import os
 import pytorch_lightning as pl
 import shutil
@@ -110,7 +109,8 @@ class KerasCallback(keras.callbacks.Callback):
         Args:
             logs (None, optional): Description
         """
-        try_mlflow_log(log_param, 'num_layers', len(self.model.layers))
+        # try_mlflow_log(log_param, 'num_layers', len(self.model.layers))
+        log_param('num_layers', len(self.model.layers))
         try_mlflow_log(log_param, 'optimizer_name',
                        type(self.model.optimizer).__name__)
         if hasattr(self.model.optimizer, 'lr'):
@@ -153,14 +153,14 @@ class KerasCallback(keras.callbacks.Callback):
         if not logs:
             return
         if self.step_logging and self.num_step % self.log_evry_n_step == 0:
-            gpu_data = gpu_metrics()
-            logs_copy = copy.deepcopy(logs)
-            logs_copy.update(gpu_data)
-
-            cpu_data = system_metrics()
-            logs_copy.update(cpu_data)
-
-            try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
+            sys_data = gpu_metrics()
+            sys_data.update(system_metrics())
+            try_mlflow_log(
+                log_metrics,
+                sys_data,
+                step=self.num_step,
+                tags={'sys_metric': 'yes'})
+            try_mlflow_log(log_metrics, logs, step=self.num_step)
 
     def on_test_batch_end(self, batch, logs=None):
         """Summary.
@@ -176,12 +176,14 @@ class KerasCallback(keras.callbacks.Callback):
         if not logs:
             return
         if self.step_logging and self.num_test_step % self.log_evry_n_step == 0:  # noqa: E501
-            gpu_data = gpu_metrics()
-            logs_copy = copy.deepcopy(logs)
-            logs_copy.update(gpu_data)
-            cpu_data = system_metrics()
-            logs_copy.update(cpu_data)
-            try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
+            sys_data = gpu_metrics()
+            sys_data.update(system_metrics())
+            try_mlflow_log(
+                log_metrics,
+                sys_data,
+                step=self.num_step,
+                tags={'sys_metric': 'yes'})
+            try_mlflow_log(log_metrics, logs, step=self.num_step)
 
     def on_test_end(self, logs=None):
         if not logs:
@@ -205,14 +207,14 @@ class KerasCallback(keras.callbacks.Callback):
         self.current_epoch = epoch
         if not logs:
             return
-        gpu_data = gpu_metrics()
-        logs_copy = copy.deepcopy(logs)
-        logs_copy.update(gpu_data)
-
-        cpu_data = system_metrics()
-        logs_copy.update(cpu_data)
-
-        try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
+        sys_data = gpu_metrics()
+        sys_data.update(system_metrics())
+        try_mlflow_log(
+            log_metrics,
+            sys_data,
+            step=self.num_step,
+            tags={'sys_metric': 'yes'})
+        try_mlflow_log(log_metrics, logs, step=self.num_step)
 
 
 class PytorchModelCheckpointAndUpload(pl.callbacks.ModelCheckpoint):
@@ -361,15 +363,15 @@ class LightningCallback(pl.callbacks.base.Callback):
         self.num_step += 1
         logs = trainer.logger_connector.callback_metrics
 
+        sys_data = gpu_metrics()
+        sys_data.update(system_metrics())
         if self.step_logging and self.num_step % self.log_evry_n_step == 0:
-            gpu_data = gpu_metrics()
-            logs_copy = copy.deepcopy(logs)
-            logs_copy.update(gpu_data)
-
-            cpu_data = system_metrics()
-            logs_copy.update(cpu_data)
-
-            try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
+            try_mlflow_log(
+                log_metrics,
+                sys_data,
+                step=self.num_step,
+                tags={'sys_metric': 'yes'})
+            try_mlflow_log(log_metrics, logs, step=self.num_step)
 
     def on_test_batch_end(self, trainer, pl_module, outputs, batch, batch_idx,
                           dataloader_idx):
@@ -388,12 +390,14 @@ class LightningCallback(pl.callbacks.base.Callback):
         logs = trainer.logger_connector.callback_metrics
 
         if self.step_logging and self.num_test_step % self.log_evry_n_step == 0:  # noqa: E501
-            gpu_data = gpu_metrics()
-            logs_copy = copy.deepcopy(logs)
-            logs_copy.update(gpu_data)
-            cpu_data = system_metrics()
-            logs_copy.update(cpu_data)
-            try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
+            sys_data = gpu_metrics()
+            sys_data.update(system_metrics())
+            try_mlflow_log(
+                log_metrics,
+                sys_data,
+                step=self.num_step,
+                tags={'sys_metric': 'yes'})
+            try_mlflow_log(log_metrics, logs, step=self.num_step)
 
     def on_test_end(self, trainer, pl_module):
         """Summary.
@@ -427,15 +431,15 @@ class LightningCallback(pl.callbacks.base.Callback):
         # self.current_epoch = epoch
         logs = trainer.logger_connector.callback_metrics
 
-        gpu_data = gpu_metrics()
-        logs_copy = copy.deepcopy(logs)
-        logs_copy.update(gpu_data)
-
-        cpu_data = system_metrics()
-        logs_copy.update(cpu_data)
-
-        try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
-        print('end of epoch')
+        sys_data = gpu_metrics()
+        sys_data.update(system_metrics())
+        try_mlflow_log(
+            log_metrics,
+            sys_data,
+            step=self.num_step,
+            tags={'sys_metric': 'yes'})
+        try_mlflow_log(log_metrics, logs, step=self.num_step)
+        # print('end of epoch')
 
 
 def XGBoost_callback(period=1):
@@ -459,12 +463,15 @@ def XGBoost_callback(period=1):
             return
         step = env.iteration
 
-        results = {}
-        gpu_data = gpu_metrics()
-        results.update(gpu_data)
+        sys_data = gpu_metrics()
+        sys_data.update(system_metrics())
+        try_mlflow_log(
+            log_metrics,
+            sys_data,
+            step=step,
+            tags={'sys_metric': 'yes'})
 
-        cpu_data = system_metrics()
-        results.update(cpu_data)
+        results = {}
         if step % period == 0 or step + 1 == env.begin_iteration or step + 1 == env.end_iteration:  # noqa: E501
             for x in env.evaluation_result_list:
                 results[x[0]] = x[1]

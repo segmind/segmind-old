@@ -9,9 +9,7 @@ import os
 import time
 
 from segmind.entities import ViewType
-# from segmind.exceptions import MlflowException
 from segmind.lite_extensions.client_utils import get_host_uri
-# from segmind.protos.errorcodes_pb2 import FEATURE_DISABLED
 from segmind.protos.service_lite_pb2 import (Artifact, ArtifactTag, LogMetric,
                                              LogParam)
 from segmind.store.tracking import SEARCH_MAX_RESULTS_DEFAULT
@@ -165,7 +163,15 @@ class MlflowClient(object):
         """
         self._tracking_client.rename_experiment(experiment_id, new_name)
 
-    def log_metric(self, run_id, key, value, timestamp=None, step=None):
+    def log_metric(
+            self,
+            run_id,
+            key,
+            value,
+            timestamp=None,
+            step=None,
+            epoch=None,
+            tags=()):
         """Log a metric against the run ID.
 
         :Args
@@ -180,18 +186,24 @@ class MlflowClient(object):
         step: Training step (iteration) at which was the metric calculated.
             Defaults to 0.
         """
-        # FIXME: Should be of type Metric
         metric = LogMetric(
-            key=str(key), value=value, timestamp=timestamp, step=step)
+            key=str(key),
+            value=value,
+            timestamp=timestamp,
+            step=step,
+            epoch=epoch,
+            tags=tags)
         self._tracking_client.log_metric(run_id, metric)
 
-    def log_param(self, run_id, key, value):
+    def log_param(self, run_id, key, value, tags=()):
         """Log a parameter against the run ID.
 
         Value is converted to a string.
         """
-        # FIXME: Should be of type Param
-        param = LogParam(key=str(key), value=str(value))
+        param = LogParam(
+            key=str(key),
+            value=str(value),
+            tags=tags)
         self._tracking_client.log_param(run_id, param)
 
     def log_artifact_lite(self,

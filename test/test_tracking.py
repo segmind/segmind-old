@@ -102,6 +102,13 @@ class LightningMNISTClassifier(pl.core.LightningModule):
         self.mnist_train, self.mnist_val = random_split(mnist_train,
                                                         [55000, 5000])
 
+        def train_len(self):
+            return 1000
+
+        self.mnist_train.__len__ = train_len
+        self.mnist_val.__len__ = train_len
+
+
     def train_dataloader(self):
         return DataLoader(self.mnist_train, batch_size=64)
 
@@ -125,10 +132,43 @@ class TestTracking(unittest.TestCase):
         # set_project('a0583ec5-bdf3-4526-a985-05be15e62f16')
 
     def test_log_param(self):
-        from segmind import log_param  # noqa: F401
+        from segmind import log_param
+        log_param(
+            key='test_param',
+            value='A')
+
+    def test_log_params(self):
+        from segmind import log_params
+        log_params(
+            params={
+                'test_params1': 100,
+                'test_params2': 56
+            })
 
     def test_log_metric(self):
-        from segmind import log_metric  # noqa: F401
+        from segmind import log_metric
+
+        log_metric(key='test_step_metric', value=100, step=1)
+        log_metric(key='test_step_metric', value=200, step=5)
+        log_metric(key='test_step_metric', value=300, step=10)
+
+        log_metric(key='test_epoch_metric', value=100, epoch=1)
+        log_metric(key='test_epoch_metric', value=150, epoch=2)
+        log_metric(key='test_epoch_metric', value=200, epoch=3)
+
+    def test_log_metrics(self):
+        from segmind import log_metrics
+
+        log_metrics(metrics={
+                'test_batch_metric1': 50,
+                'test_batch_metric2': 1
+            },
+            step=10)
+        log_metrics(metrics={
+                'test_batch_metric1': 100,
+                'test_batch_metric2': 50
+            },
+            step=20)
 
     def test_log_batch(self):
         from segmind import log_batch
@@ -219,7 +259,7 @@ class TestXGBoostCallback(unittest.TestCase):
         D_train = xgb.DMatrix(X_train, y_train)
         D_valid = xgb.DMatrix(X_valid, y_valid)
 
-        num_boost_round = 100
+        num_boost_round = 10
 
         # Pass it to the `callbacks` parameter as a list.
         xgb.train(
@@ -231,7 +271,7 @@ class TestXGBoostCallback(unittest.TestCase):
             D_train,
             evals=[(D_train, 'Train'), (D_valid, 'Valid')],
             num_boost_round=num_boost_round,
-            callbacks=[XGBoost_callback(period=25)])
+            callbacks=[XGBoost_callback(period=5)])
 
 
 if __name__ == '__main__':

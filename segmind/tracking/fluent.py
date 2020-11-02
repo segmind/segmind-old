@@ -29,7 +29,7 @@ from segmind.lite_extensions.client_utils import (_EXPERIMENT_ID_ENV_VAR,
                                                   _RUN_ID_ENV_VAR,
                                                   _get_experiment_id,
                                                   _runid_exists)
-# from segmind.tracking import artifact_utils
+from segmind.protos.service_lite_pb2 import RunTag as RunTagProto
 from segmind.tracking.client import MlflowClient
 from segmind.tracking.context import registry as context_registry
 from segmind.utils import env
@@ -293,18 +293,6 @@ def get_run(run_id):
     return MlflowClient().get_run(run_id)
 
 
-def log_param(key, value):
-    """Log a parameter under the current run. If no run is active, this method
-    will create a new active run.
-
-    Args:
-        key (str: Parameter name (string)
-        value (str): Parameter value (string, but will be string-ified if not)
-    """
-    run_id = _get_or_start_run().info.run_id
-    MlflowClient().log_param(run_id, key, value)
-
-
 def set_tag(key, value):
     """Set a tag under the current run. If no run is active, this method will
     create a new active run.
@@ -328,7 +316,7 @@ def delete_tag(key):
     MlflowClient().delete_tag(run_id, key)
 
 
-def log_metric(key, value, step=None):
+def log_metric(key, value, step=None, epoch=None, tags={'sys_metric': 'no'}):
     """Log a metric under the current run. If no run is active, this method
     will create a new active run.
 
@@ -341,12 +329,50 @@ def log_metric(key, value, step=None):
         step (int, optional): Metric step (int). Defaults to zero if
                             unspecified.
     """
+    tags_arr = [RunTagProto(
+        key=key,
+        value=str(value)) for key, value in tags.items()]
     run_id = _get_or_start_run().info.run_id
     MlflowClient().log_metric(run_id, key, value, int(time.time() * 1000), step
-                              or 0)
+                              or 0, epoch=epoch or 0, tags=tags_arr)
 
 
-def log_metrics(metrics, step=None):
+def log_param(key, value, tags={'sys_param': 'no'}):
+    """Log a parameter under the current run. If no run is active, this method
+    will create a new active run.
+
+    Args:
+        key (str: Parameter name (string)
+        value (str): Parameter value (string, but will be string-ified if not)
+    """
+    tags_arr = [RunTagProto(
+        key=key,
+        value=str(value)) for key, value in tags.items()]
+    run_id = _get_or_start_run().info.run_id
+    MlflowClient().log_param(run_id, key, value, tags=tags_arr)
+
+
+def log_params(params, tags={'sys_param': 'no'}):
+    """Log a batch of params for the current run. If no run is active, this
+    method will create a new active run.
+
+    Args:
+        params (dict): Dictionary of param_name: String -> value: (String, but
+                    will be string-ified if not)
+    """
+    run_id = _get_or_start_run().info.run_id
+    tags_arr = [RunTagProto(
+        key=key,
+        value=str(value)) for key, value in tags.items()]
+    params_arr = [Param(
+        key,
+        str(value),
+        tags=tags_arr) for key, value in params.items()]
+    MlflowClient().log_batch(
+        run_id=run_id, metrics=[], params=params_arr, tags=tags_arr)
+
+
+def log_metrics(metrics, step=None, epoch=0, tags={'sys_metric': 'no'}):
     """Log multiple metrics for the current run. If no run is active, this
     method will create a new active run.
 
@@ -362,26 +388,46 @@ def log_metrics(metrics, step=None):
     """
     run_id = _get_or_start_run().info.run_id
     timestamp = int(time.time() * 1000)
+    tags_arr = [RunTagProto(
+        key=key,
+        value=str(value)) for key, value in tags.items()]
     metrics_arr = [
-        Metric(key, value, timestamp, step or 0)
+        Metric(
+            key,
+            value,
+            timestamp,
+            step or 0,
+            epoch=epoch or 0,
+            tags=tags_arr)
         for key, value in metrics.items()
     ]
     MlflowClient().log_batch(
-        run_id=run_id, metrics=metrics_arr, params=[], tags=[])
+        run_id=run_id, metrics=metrics_arr, params=[], tags=tags_arr)
 
 
-def log_params(params):
-    """Log a batch of params for the current run. If no run is active, this
-    method will create a new active run.
+def log_batch(metrics={}, params={}, tags={}, step=None, epoch=None):
+    """Summary.
 
     Args:
-        params (dict): Dictionary of param_name: String -> value: (String, but
-                    will be string-ified if not)
+        metrics (dict, optional): Description
+        params (dict, optional): Description
+        tags (dict, optional): Description
+        step (None, optional): Description
     """
     run_id = _get_or_start_run().info.run_id
+    tags_arr = [RunTagProto(
+        key=key,
+        value=str(value)) for key, value in tags.items()]
     params_arr = [Param(key, str(value)) for key, value in params.items()]
+
+    timestamp = int(time.time() * 1000)
+    metrics_arr = [
+        Metric(key, value, timestamp, step or 0, epoch or 0)
+        for key, value in metrics.items()
+    ]
+
     MlflowClient().log_batch(
-        run_id=run_id, metrics=[], params=params_arr, tags=[])
+        run_id=run_id, metrics=metrics_arr, params=params_arr, tags=tags_arr)
 
 
 def log_artifact(key, path, step=None):
@@ -624,29 +670,6 @@ def set_tags(tags):
     tags_arr = [RunTag(key, str(value)) for key, value in tags.items()]
     MlflowClient().log_batch(
         run_id=run_id, metrics=[], params=[], tags=tags_arr)
-
-
-def log_batch(metrics={}, params={}, tags={}, step=None):
-    """Summary.
-
-    Args:
-        metrics (dict, optional): Description
-        params (dict, optional): Description
-        tags (dict, optional): Description
-        step (None, optional): Description
-    """
-    run_id = _get_or_start_run().info.run_id
-    tags_arr = [RunTag(key, str(value)) for key, value in tags.items()]
-    params_arr = [Param(key, str(value)) for key, value in params.items()]
-
-    timestamp = int(time.time() * 1000)
-    metrics_arr = [
-        Metric(key, value, timestamp, step or 0)
-        for key, value in metrics.items()
-    ]
-
-    MlflowClient().log_batch(
-        run_id=run_id, metrics=metrics_arr, params=params_arr, tags=tags_arr)
 
 
 def _record_logged_model(mlflow_model):
