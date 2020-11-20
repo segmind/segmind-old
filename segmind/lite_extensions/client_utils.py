@@ -69,7 +69,11 @@ def fetch_token(email, password):
     query = requests.post(f'{SEGMIND_API_URL}/auth/login', data=payload)
 
     if query.status_code != 200:
-        raise LoginError(query.json()['message'])
+        try:
+            error_msg = query.json()['message']
+        except KeyError:
+            error_msg = "couldn't login, please check email-id"
+        raise LoginError(error_msg)
 
     os.environ[_ACCESS_TOKEN] = query.json()['access_token']
     os.environ[_REFRESH_TOKEN] = query.json()['refresh_token']
