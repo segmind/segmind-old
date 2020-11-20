@@ -574,6 +574,12 @@ message Metric {
 
   // Step at which to log the metric.
   optional int64 step = 4 [default = 0];
+
+  // Epoch at which to log the metric.
+  optional int64 epoch = 5 [default = 0];
+
+  // Additional metadata key-value pairs.
+  repeated RunTag tags = 6;
 }
 
 // Param associated with a run.
@@ -583,6 +589,9 @@ message Param {
 
   // Value associated with this param.
   optional string value = 2;
+
+  // Additional metadata key-value pairs.
+  repeated RunTag tags = 3;
 }
 
 // Artifact associated with a run.
@@ -947,6 +956,12 @@ message LogMetric {
   // Step at which to log the metric
   optional int64 step = 5 [default = 0];
 
+  // Step at which to log the metric
+  optional int64 epoch = 8 [default = 0];
+
+  // Additional metadata key-value pairs.
+  repeated RunTag tags = 9;
+
   message Response {}
 }
 
@@ -971,6 +986,9 @@ message LogParam {
 
   // String value of the param being logged. Maximum size is 500 bytes.
   optional string value = 3 [(validate_required) = true];
+
+  // Additional metadata key-value pairs.
+  repeated RunTag tags = 6;
 
   message Response {
   }

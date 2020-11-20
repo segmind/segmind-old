@@ -41,104 +41,6 @@ def ActiveRun(*args, **kwargs):
     return fluent.ActiveRun(*args, **kwargs)
 
 
-def log_param(key, value):
-    """Log a parameter under the current run. If no run is active, this method
-    will create a new active run.
-
-    Args:
-        key: Parameter name (string)
-        value: Parameter value (string, but will be string-ified if not)
-
-    Examples:
-        Logging a simple parameter.
-
-        ```
-        from segmind import set_project, log_param
-        set_project('xxx-xxx-xxx-xxx');
-        log_param('param1', 100);
-        ```
-    """
-    return fluent.log_param(key, value)
-
-
-def log_params(params):
-    """Log a batch of params for the current run. If no run is active, this
-    method will create a new active run.
-
-    Args:
-        params: Dictionary of param_name: String -> value: (String, but will
-                be string-ified if not)
-    """
-    return fluent.log_params(params)
-
-
-def log_metric(key, value, step=None):
-    """Log a metric under the current run. If no run is active, this method
-    will create a new active run.
-
-    Args:
-        key: Metric name (string).
-        value: Metric value (float). Note that some special values such
-             as +/- Infinity may be replaced by other values
-             depending on the store. For example, sFor example, the
-             SQLAlchemy store replaces +/- Inf with max / min float
-             values.
-        step: Metric step (int). Defaults to zero if unspecified.
-    """
-    return fluent.log_metric(key, value, step)
-
-
-def log_metrics(metrics, step=None):
-    """Log multiple metrics for the current run. If no run is active, this
-    method will create a new active run.
-
-    Args:
-        metrics: Dictionary of metric_name: String -> value: Float. Note that
-                 some special values such as +/- Infinity may be replaced by
-                 other values depending on the store. For example, sql based
-                 store may replace +/- Inf with max / min float values.
-        step: A single integer step at which to log the specified
-                 Metrics. If unspecified, each metric is logged at step zero.
-    """
-    return fluent.log_metrics(metrics, step)
-
-
-# def set_tag(key, value):
-#     """Set a tag under the current run. If no run is active, this method will
-#     create a new active run.
-
-#     Args:
-#         key: Tag name (string)
-#         value: Tag value (string, but will be string-ified if not)
-#     """
-#     return fluent.set_tag(key, value)
-
-# def set_tags(*args, **kwargs):
-#     """Log a batch of tags for the current run. If no run is active, this
-#     method will create a new active run.
-
-#     Args:
-#         tags: Dictionary of tag_name: String -> value: (String, but will
-#               be string-ified if not)
-#     """
-#     return fluent.set_tags(*args, **kwargs)
-
-# def delete_tag(*args, **kwargs):
-#     """Delete a tag from a run. This is irreversible. If no run is active,
-#        this method will create a new active run.
-
-#     :param key: Name of the tag
-
-#     Args:
-#         *args: Description
-#         **kwargs: Description
-
-#     Returns:
-#         TYPE: Description
-#     """
-#     return fluent.delete_tag(*args, **kwargs)
-
-
 def active_run(*args, **kwargs):
     """Get the currently active ``Run``, or None if no such run exists.
 
@@ -291,35 +193,15 @@ def set_runid(*args, **kwargs):
     return fluent.set_runid(*args, **kwargs)
 
 
-def log_batch(*args, **kwargs):
-    """Summary.
-
-    Args:
-        *args: Description
-        **kwargs: Description
-
-    Returns:
-        TYPE: Description
-    """
-    return fluent.log_batch(*args, **kwargs)
-
-
 get_experiment = fluent.get_experiment
 # get_experiment_by_name = fluent.get_experiment_by_name
-
-# TO DO: @pk00095
-# Enable only for server
-# create_experiment = fluent.create_experiment
-# delete_experiment = fluent.delete_experiment
-# delete_run = fluent.delete_run
-
-# TO DO: @pk00095
-# remove:
-# get_artifact_uri = fluent.get_artifact_uri
-# set_tracking_uri = tracking.set_tracking_uri
 get_tracking_uri = tracking.get_tracking_uri
-# register_model = _model_registry.fluent.register_model
-# log_artifacts = fluent.log_artifacts
+
+log_param = fluent.log_param
+log_params = fluent.log_params
+log_metric = fluent.log_metric
+log_metrics = fluent.log_metrics
+log_batch = fluent.log_batch
 log_artifact = fluent.log_artifact
 log_table = fluent.log_table
 log_image = fluent.log_image

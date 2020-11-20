@@ -1,6 +1,5 @@
 from __future__ import absolute_import, print_function
 
-import copy
 import os
 import pytorch_lightning as pl
 import shutil
@@ -157,15 +156,15 @@ class LightningCallback(pl.callbacks.base.Callback):
         self.num_step += 1
         logs = trainer.logger_connector.callback_metrics
 
+        sys_data = gpu_metrics()
+        sys_data.update(system_metrics())
         if self.step_logging and self.num_step % self.log_evry_n_step == 0:
-            gpu_data = gpu_metrics()
-            logs_copy = copy.deepcopy(logs)
-            logs_copy.update(gpu_data)
-
-            cpu_data = system_metrics()
-            logs_copy.update(cpu_data)
-
-            try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
+            try_mlflow_log(
+                log_metrics,
+                sys_data,
+                step=self.num_step,
+                tags={'sys_metric': 'yes'})
+            try_mlflow_log(log_metrics, logs, step=self.num_step)
 
     def on_test_batch_end(self, trainer, pl_module, outputs, batch, batch_idx,
                           dataloader_idx):
@@ -184,12 +183,14 @@ class LightningCallback(pl.callbacks.base.Callback):
         logs = trainer.logger_connector.callback_metrics
 
         if self.step_logging and self.num_test_step % self.log_evry_n_step == 0:  # noqa: E501
-            gpu_data = gpu_metrics()
-            logs_copy = copy.deepcopy(logs)
-            logs_copy.update(gpu_data)
-            cpu_data = system_metrics()
-            logs_copy.update(cpu_data)
-            try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
+            sys_data = gpu_metrics()
+            sys_data.update(system_metrics())
+            try_mlflow_log(
+                log_metrics,
+                sys_data,
+                step=self.num_step,
+                tags={'sys_metric': 'yes'})
+            try_mlflow_log(log_metrics, logs, step=self.num_step)
 
     def on_test_end(self, trainer, pl_module):
         """Summary.
@@ -223,12 +224,12 @@ class LightningCallback(pl.callbacks.base.Callback):
         # self.current_epoch = epoch
         logs = trainer.logger_connector.callback_metrics
 
-        gpu_data = gpu_metrics()
-        logs_copy = copy.deepcopy(logs)
-        logs_copy.update(gpu_data)
-
-        cpu_data = system_metrics()
-        logs_copy.update(cpu_data)
-
-        try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
-        print('end of epoch')
+        sys_data = gpu_metrics()
+        sys_data.update(system_metrics())
+        try_mlflow_log(
+            log_metrics,
+            sys_data,
+            step=self.num_step,
+            tags={'sys_metric': 'yes'})
+        try_mlflow_log(log_metrics, logs, step=self.num_step)
+        # print('end of epoch')

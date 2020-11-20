@@ -166,7 +166,9 @@ class RestStore(AbstractStore):
                 key=metric.key,
                 value=metric.value,
                 timestamp=metric.timestamp,
-                step=metric.step))
+                step=metric.step,
+                epoch=metric.epoch,
+                tags=metric.tags))
         self._call_endpoint(LogMetric, req_body)
 
     def log_param(self, run_id, param):
@@ -180,7 +182,8 @@ class RestStore(AbstractStore):
                 run_uuid=run_id,
                 run_id=run_id,
                 key=param.key,
-                value=param.value))
+                value=param.value,
+                tags=param.tags))
         self._call_endpoint(LogParam, req_body)
 
     def log_artifact(self, run_id, experiment_id, artifact):
@@ -330,7 +333,8 @@ class RestStore(AbstractStore):
     def log_batch(self, run_id, metrics, params, tags):
         metric_protos = [metric.to_proto() for metric in metrics]
         param_protos = [param.to_proto() for param in params]
-        tag_protos = [tag.to_proto() for tag in tags]
+        # tag_protos = [tag.to_proto() for tag in tags]
+        tag_protos = tags
         req_body = message_to_json(
             LogBatch(
                 metrics=metric_protos,
