@@ -1,3 +1,7 @@
+## Installation
+
+`pip3 install -r requirements.txt`
+
 ## Code style
 
 ### Python
