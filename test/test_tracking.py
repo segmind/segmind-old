@@ -29,6 +29,15 @@ def define_mnist_model(input_shape, hidden_neurons, num_classes=10):
     return model
 
 
+class MNIST_small(MNIST):
+    """docstring for MNIST_small."""
+    def __init__(self, *args, **kwargs):
+        super(MNIST_small, self).__init__(*args, **kwargs)
+
+    def __len__(self):
+        return 100
+
+
 class LightningMNISTClassifier(pl.core.LightningModule):
 
     def __init__(self):
@@ -94,29 +103,29 @@ class LightningMNISTClassifier(pl.core.LightningModule):
 
         # prepare transforms standard to MNIST
         tempdir = tempfile.mkdtemp()
-        mnist_train = MNIST(tempdir, train=True, download=True,
+        mnist_train = MNIST_small(tempdir, train=True, download=True,
                             transform=transform)
-        mnist_test = MNIST(tempdir, train=False, download=True,  # noqa: F841, E501
+        mnist_test = MNIST_small(tempdir, train=False, download=True,  # noqa: F841, E501
                            transform=transform)
 
         self.mnist_train, self.mnist_val = random_split(mnist_train,
-                                                        [55000, 5000])
+                                                        [80, 20])
 
-        def train_len(self):
-            return 1000
+        # def train_len(self):
+        #     return 100
 
-        self.mnist_train.__len__ = train_len
-        self.mnist_val.__len__ = train_len
+        # self.mnist_train.__len__ = 100
+        # self.mnist_val.__len__ = 100
 
 
     def train_dataloader(self):
-        return DataLoader(self.mnist_train, batch_size=64)
+        return DataLoader(self.mnist_train, batch_size=10)
 
     def val_dataloader(self):
-        return DataLoader(self.mnist_val, batch_size=64)
+        return DataLoader(self.mnist_val, batch_size=10)
 
     def test_dataloader(self):
-        return DataLoader(self.mnist_test, batch_size=64)
+        return DataLoader(self.mnist_test, batch_size=10)
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
@@ -237,7 +246,7 @@ class TestLightningCallback(unittest.TestCase):
         model = LightningMNISTClassifier()
 
         lightning_cb = LightningCallback()
-        trainer = pl.Trainer(callbacks=[lightning_cb], max_epochs=2)
+        trainer = pl.Trainer(callbacks=[lightning_cb], max_epochs=1)
 
         trainer.fit(model)
 
