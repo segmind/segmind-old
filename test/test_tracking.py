@@ -163,7 +163,7 @@ class TestKerasCallback(unittest.TestCase):
         # set_project('a0583ec5-bdf3-4526-a985-05be15e62f16')
 
     def test_callback(self):
-        from segmind import KerasCallback
+        from segmind.keras import KerasCallback
 
         fashion_mnist = keras.datasets.fashion_mnist
         (train_images,
@@ -192,7 +192,7 @@ class TestLightningCallback(unittest.TestCase):
         # set_project('a0583ec5-bdf3-4526-a985-05be15e62f16')
 
     def test_callback(self):
-        from segmind import LightningCallback
+        from segmind.pytorch_lightning import LightningCallback
 
         model = LightningMNISTClassifier()
 
@@ -212,7 +212,7 @@ class TestXGBoostCallback(unittest.TestCase):
         from sklearn.datasets import load_breast_cancer
         from sklearn.model_selection import train_test_split
 
-        from segmind import XGBoost_callback
+        from segmind.xgboost import XGBoost_callback
 
         X, y = load_breast_cancer(return_X_y=True)
         X_train, X_valid, y_train, y_valid = train_test_split(X, y, random_state=0)

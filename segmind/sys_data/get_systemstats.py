@@ -60,10 +60,11 @@ def battery_stats():
 
 def cpu_usage_stats():
     data = {}
-    usage_list = psutil.cpu_percent(interval=1.0, percpu=True)
+    # usage_list = psutil.cpu_percent(interval=1.0, percpu=True)
 
-    for index, value in enumerate(usage_list):
-        data[f'CPU{index}_usage'] = value
+    # for index, value in enumerate(usage_list):
+    #     data[f'CPU{index}_usage'] = value
+    data['CPU_usage'] = psutil.cpu_percent(interval=1.0)
 
     return data
 
