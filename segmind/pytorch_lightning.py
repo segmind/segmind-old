@@ -49,13 +49,9 @@ class PytorchModelCheckpointAndUpload(pl.callbacks.ModelCheckpoint):
 
 def PytorchCheckpointCallback(snapshot_interval,
                               snapshot_path,
-                              checkpoint_prefix,
-                              save_h5=False):
-
-    assert isinstance(save_h5, bool)
+                              checkpoint_prefix):
 
     os.makedirs(snapshot_path, exist_ok=True)
-
     checkpoint_name = os.path.join(snapshot_path,
                                    str(checkpoint_prefix) + '_{epoch:02d}')
 
@@ -163,8 +159,13 @@ class LightningCallback(pl.callbacks.base.Callback):
                 log_metrics,
                 sys_data,
                 step=self.num_step,
+                epoch=self.current_epoch,
                 tags={'sys_metric': 'yes'})
-            try_mlflow_log(log_metrics, logs, step=self.num_step)
+            try_mlflow_log(
+                log_metrics,
+                logs,
+                epoch=self.current_epoch,
+                step=self.num_step)
 
     def on_test_batch_end(self, trainer, pl_module, outputs, batch, batch_idx,
                           dataloader_idx):
@@ -189,8 +190,13 @@ class LightningCallback(pl.callbacks.base.Callback):
                 log_metrics,
                 sys_data,
                 step=self.num_step,
+                epoch=self.current_epoch,
                 tags={'sys_metric': 'yes'})
-            try_mlflow_log(log_metrics, logs, step=self.num_step)
+            try_mlflow_log(
+                log_metrics,
+                logs,
+                step=self.num_step,
+                epoch=self.current_epoch,)
 
     def on_test_end(self, trainer, pl_module):
         """Summary.
@@ -208,8 +214,8 @@ class LightningCallback(pl.callbacks.base.Callback):
     def on_test_start(self, trainer, pl_module):
         self.num_test_step = 0
 
-    # def on_test_batch_end(self, batch, logs=None):
-    #     self.test_step = batch
+    # def on_epoch_start(self, trainer, pl_module):
+    #     pass
 
     def on_epoch_end(self, trainer, pl_module):
         """Summary.
@@ -223,6 +229,7 @@ class LightningCallback(pl.callbacks.base.Callback):
         """
         # self.current_epoch = epoch
         logs = trainer.logger_connector.callback_metrics
+        self.current_epoch += 1
 
         sys_data = gpu_metrics()
         sys_data.update(system_metrics())
@@ -230,6 +237,11 @@ class LightningCallback(pl.callbacks.base.Callback):
             log_metrics,
             sys_data,
             step=self.num_step,
+            epoch=self.current_epoch,
             tags={'sys_metric': 'yes'})
-        try_mlflow_log(log_metrics, logs, step=self.num_step)
+        try_mlflow_log(
+            log_metrics,
+            logs,
+            step=self.num_step,
+            epoch=self.current_epoch)
         # print('end of epoch')

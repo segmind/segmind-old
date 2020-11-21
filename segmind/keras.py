@@ -95,6 +95,7 @@ class KerasCallback(keras.callbacks.Callback):
 
         self.num_step = 0
         self.num_test_step = 0
+        self.num_test_epoch = 0
         self.log_evry_n_step = log_evry_n_step
         self.step_logging = False
 
@@ -125,7 +126,6 @@ class KerasCallback(keras.callbacks.Callback):
         sum_list = []
         self.model.summary(print_fn=sum_list.append)
         summary = '\n'.join(sum_list)
-        # try_mlflow_log(set_tag, 'model_summary', summary)
 
         tempdir = tempfile.mkdtemp()
         try:
@@ -151,14 +151,25 @@ class KerasCallback(keras.callbacks.Callback):
         if not logs:
             return
         if self.step_logging and self.num_step % self.log_evry_n_step == 0:
-            gpu_data = gpu_metrics()
+            sys_data = gpu_metrics()
             logs_copy = copy.deepcopy(logs)
-            logs_copy.update(gpu_data)
+            # logs_copy.update(gpu_data)
 
             cpu_data = system_metrics()
-            logs_copy.update(cpu_data)
+            sys_data.update(cpu_data)
 
-            try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
+            try_mlflow_log(
+                log_metrics,
+                sys_data,
+                step=self.num_step,
+                epoch=self.current_epoch,
+                tags={'sys_metric': 'yes'})
+
+            try_mlflow_log(
+                log_metrics,
+                logs_copy,
+                step=self.num_step,
+                epoch=self.current_epoch)
 
     def on_test_batch_end(self, batch, logs=None):
         """Summary.
@@ -171,24 +182,53 @@ class KerasCallback(keras.callbacks.Callback):
             TYPE: Description
         """
         self.num_test_step += 1
-        if not logs:
-            return
-        if self.step_logging and self.num_test_step % self.log_evry_n_step == 0:  # noqa: E501
-            gpu_data = gpu_metrics()
-            logs_copy = copy.deepcopy(logs)
-            logs_copy.update(gpu_data)
-            cpu_data = system_metrics()
-            logs_copy.update(cpu_data)
-            try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
+        # if not logs:
+        #     return
+        # if self.step_logging and self.num_test_step % self.log_evry_n_step == 0:  # noqa: E501
+        #     sys_data = gpu_metrics()
+        #     logs_copy = copy.deepcopy(logs)
+        #     logs_copy.update(gpu_data)
+        #     cpu_data = system_metrics()
+        #     sys_data.update(cpu_data)
+        #     try_mlflow_log(
+        #         log_metrics,
+        #         logs_copy,
+        #         step=self.num_test_step,
+        #         epoch=self.current_epoch)
+        #     try_mlflow_log(
+        #         log_metrics,
+        #         sys_data,
+        #         step=self.num_test_step,
+        #         epoch=self.current_epoch,
+        #         tags={'sys_metric': 'yes'})
 
     def on_test_end(self, logs=None):
-        if not logs:
-            return
-        else:
-            try_mlflow_log(log_metrics, logs, step=self.num_step)
 
-    def on_test_begin(self, batch, logs=None):
-        self.num_test_step = 0
+        self.num_test_epoch += 1
+
+        sys_data = gpu_metrics()
+        cpu_data = system_metrics()
+        sys_data.update(cpu_data)
+
+        if logs:
+            try_mlflow_log(
+                log_metrics,
+                logs,
+                step=self.num_test_step,
+                epoch=self.num_test_epoch)
+
+        try_mlflow_log(
+            log_metrics,
+            sys_data,
+            step=self.num_test_epoch,
+            epoch=self.num_test_epoch,
+            tags={'sys_metric': 'yes'})
+
+    # def on_test_begin(self, batch, logs=None):
+    #     self.num_test_step = 0
+
+    def on_epoch_begin(self, epoch, logs=None):
+        self.current_epoch = epoch
 
     def on_epoch_end(self, epoch, logs=None):
         """Summary.
@@ -203,11 +243,21 @@ class KerasCallback(keras.callbacks.Callback):
         self.current_epoch = epoch
         if not logs:
             return
-        gpu_data = gpu_metrics()
+        sys_data = gpu_metrics()
         logs_copy = copy.deepcopy(logs)
-        logs_copy.update(gpu_data)
+        # logs_copy.update(gpu_data)
 
         cpu_data = system_metrics()
-        logs_copy.update(cpu_data)
+        sys_data.update(cpu_data)
 
-        try_mlflow_log(log_metrics, logs_copy, step=self.num_step)
+        try_mlflow_log(
+            log_metrics,
+            sys_data,
+            step=self.num_step,
+            epoch=self.current_epoch,
+            tags={'sys_metric': 'yes'})
+        try_mlflow_log(
+            log_metrics,
+            logs_copy,
+            step=self.num_step,
+            epoch=self.current_epoch)

@@ -187,7 +187,8 @@ class TestTracking(unittest.TestCase):
                 metrics={'batch_test_metric': 1 + i},
                 params={'batch_test_param': 10},
                 tags={'batch_test_tag': 100},
-                step=100 + i)
+                step=100 + i,
+                epoch=i)
             time.sleep(0.5)
 
     def test_log_artifact(self):
@@ -212,7 +213,7 @@ class TestKerasCallback(unittest.TestCase):
         # set_project('a0583ec5-bdf3-4526-a985-05be15e62f16')
 
     def test_callback(self):
-        from segmind.keras import KerasCallback
+        from segmind.keras import CheckpointCallback, KerasCallback
 
         fashion_mnist = keras.datasets.fashion_mnist
         (train_images,
@@ -223,13 +224,17 @@ class TestKerasCallback(unittest.TestCase):
         model = define_mnist_model((28, 28), hidden_neurons=28)
 
         keras_cb = KerasCallback()
+        ckpt_cb = CheckpointCallback(
+            snapshot_interval=10,
+            snapshot_path='/tmp',
+            checkpoint_prefix='keras_callback_mnist')
 
         model.fit(
             train_images,
             train_labels,
-            epochs=2,
+            epochs=10,
             steps_per_epoch=10,
-            callbacks=[keras_cb])
+            callbacks=[keras_cb, ckpt_cb])
 
 
 class TestLightningCallback(unittest.TestCase):
@@ -284,4 +289,4 @@ class TestXGBoostCallback(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)
