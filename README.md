@@ -1,3 +1,9 @@
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/segmind?style=plastic)
+![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/segmind/segmind/CI?event=push)
+![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/segmind/segmind/Upload%20Python%20Package?event=publish)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/segmind)
+![PyPI](https://img.shields.io/pypi/v/segmind)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/segmind/segmind)
 ## Installation
 
 `pip3 install -r requirements.txt`
