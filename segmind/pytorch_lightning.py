@@ -184,14 +184,14 @@ class LightningCallback(pl.callbacks.base.Callback):
         logs = trainer.logger_connector.callback_metrics
 
         if self.step_logging and self.num_test_step % self.log_evry_n_step == 0:  # noqa: E501
-            sys_data = gpu_metrics()
-            sys_data.update(system_metrics())
-            try_mlflow_log(
-                log_metrics,
-                sys_data,
-                step=self.num_step,
-                epoch=self.current_epoch,
-                tags={'sys_metric': 'yes'})
+            # sys_data = gpu_metrics()
+            # sys_data.update(system_metrics())
+            # try_mlflow_log(
+            #     log_metrics,
+            #     sys_data,
+            #     step=self.num_step,
+            #     epoch=self.current_epoch,
+            #     tags={'sys_metric': 'yes'})
             try_mlflow_log(
                 log_metrics,
                 logs,
@@ -209,7 +209,10 @@ class LightningCallback(pl.callbacks.base.Callback):
             TYPE: Description
         """
         logs = trainer.logger_connector.callback_metrics
-        try_mlflow_log(log_metrics, logs, step=self.num_step)
+        try_mlflow_log(
+            log_metrics,
+            logs,
+            step=self.num_step)
 
     def on_test_start(self, trainer, pl_module):
         self.num_test_step = 0

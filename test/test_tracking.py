@@ -248,10 +248,18 @@ class TestLightningCallback(unittest.TestCase):
     def test_callback(self):
         from segmind.pytorch_lightning import LightningCallback
 
+        if torch.cuda.is_available():
+            gpus = -1
+        else:
+            gpus = None
+
         model = LightningMNISTClassifier()
 
         lightning_cb = LightningCallback()
-        trainer = pl.Trainer(callbacks=[lightning_cb], max_epochs=1)
+        trainer = pl.Trainer(
+            callbacks=[lightning_cb],
+            gpus=gpus,
+            max_epochs=10)
 
         trainer.fit(model)
 

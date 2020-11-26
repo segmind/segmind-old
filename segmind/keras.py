@@ -182,33 +182,10 @@ class KerasCallback(keras.callbacks.Callback):
             TYPE: Description
         """
         self.num_test_step += 1
-        # if not logs:
-        #     return
-        # if self.step_logging and self.num_test_step % self.log_evry_n_step == 0:  # noqa: E501
-        #     sys_data = gpu_metrics()
-        #     logs_copy = copy.deepcopy(logs)
-        #     logs_copy.update(gpu_data)
-        #     cpu_data = system_metrics()
-        #     sys_data.update(cpu_data)
-        #     try_mlflow_log(
-        #         log_metrics,
-        #         logs_copy,
-        #         step=self.num_test_step,
-        #         epoch=self.current_epoch)
-        #     try_mlflow_log(
-        #         log_metrics,
-        #         sys_data,
-        #         step=self.num_test_step,
-        #         epoch=self.current_epoch,
-        #         tags={'sys_metric': 'yes'})
 
     def on_test_end(self, logs=None):
 
         self.num_test_epoch += 1
-
-        sys_data = gpu_metrics()
-        cpu_data = system_metrics()
-        sys_data.update(cpu_data)
 
         if logs:
             try_mlflow_log(
@@ -216,19 +193,6 @@ class KerasCallback(keras.callbacks.Callback):
                 logs,
                 step=self.num_test_step,
                 epoch=self.num_test_epoch)
-
-        try_mlflow_log(
-            log_metrics,
-            sys_data,
-            step=self.num_test_epoch,
-            epoch=self.num_test_epoch,
-            tags={'sys_metric': 'yes'})
-
-    # def on_test_begin(self, batch, logs=None):
-    #     self.num_test_step = 0
-
-    def on_epoch_begin(self, epoch, logs=None):
-        self.current_epoch = epoch
 
     def on_epoch_end(self, epoch, logs=None):
         """Summary.
