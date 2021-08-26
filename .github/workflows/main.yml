@@ -82,5 +82,7 @@ jobs:
 
       - name: Run unittests
         env:
-          TRACK_EXPERIMENT_ID: ${{ secrets.TRACK_EXPERIMENT_ID}}
+          TRACK_EXPERIMENT_ID: ${{ secrets.TRACK_EXPERIMENT_ID }}
+          SEGMIND_TRACKING_URL: ${{ secrets.SEGMIND_TRACKING_URL }}
+          SEGMIND_API_URL: ${{ secrets.SEGMIND_API_URL }}
         run: python3 -m unittest discover test
