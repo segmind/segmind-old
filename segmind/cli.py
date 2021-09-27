@@ -18,7 +18,7 @@ def cli():
 
 @cli.command()
 def config():
-    cyan_print('Please enter your credentials for https://track.segmind.com')
+    cyan_print('Please enter your credentials for Segmind:')
 
     email = input('Enter Email-id :: ')
     password = getpass.getpass('Enter Password :: ')

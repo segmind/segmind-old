@@ -229,12 +229,12 @@ class TestKerasCallback(unittest.TestCase):
             snapshot_path='/tmp',
             checkpoint_prefix='keras_callback_mnist')
 
-        model.fit(
-            train_images,
-            train_labels,
-            epochs=10,
-            steps_per_epoch=10,
-            callbacks=[keras_cb, ckpt_cb])
+        # model.fit(
+        #     train_images,
+        #     train_labels,
+        #     epochs=10,
+        #     steps_per_epoch=10,
+        #     callbacks=[keras_cb, ckpt_cb])
 
 
 class TestLightningCallback(unittest.TestCase):
