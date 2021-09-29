@@ -8,7 +8,7 @@ import warnings
 
 # pylint: disable=wrong-import-position
 from segmind import projects  # noqa
-from segmind import tracking  # noqa
+from segmind.tracking import get_tracking_uri # noqa
 # from .callbacks import (CheckpointCallback, KerasCallback,  # noqa: F401
 #                         LightningCallback, PytorchCheckpointCallback,
 #                         XGBoost_callback)
@@ -195,7 +195,7 @@ def set_runid(*args, **kwargs):
 
 get_experiment = fluent.get_experiment
 # get_experiment_by_name = fluent.get_experiment_by_name
-get_tracking_uri = tracking.get_tracking_uri
+get_tracking_uri = get_tracking_uri
 
 log_param = fluent.log_param
 log_params = fluent.log_params
@@ -205,15 +205,13 @@ log_batch = fluent.log_batch
 log_artifact = fluent.log_artifact
 log_table = fluent.log_table
 log_image = fluent.log_image
-log_bbox_prediction = fluent.log_bbox_prediction
-log_mask_prediction = fluent.log_mask_prediction
 
 run = projects.run
 
 __all__ = [
-    'ActiveRun', 'log_param', 'log_params', 'log_metric', 'log_metrics',
-    'set_tag', 'set_tags', 'delete_tag', 'log_artifacts', 'log_artifact',
-    'active_run', 'start_run', 'end_run', 'search_runs', 'get_artifact_uri',
-    'set_tracking_uri', 'create_experiment', 'set_project',
+    'ActiveRun',
+    'set_tag', 'set_tags', 'delete_tag',
+    'active_run', 'end_run', 'search_runs', 'get_artifact_uri',
+    'set_tracking_uri',
     'delete_experiment', 'delete_run', 'run', 'register_model'
 ]

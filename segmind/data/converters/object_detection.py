@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import cv2
+# import cv2
 import glob
 import json
 import numpy as np
@@ -36,150 +36,150 @@ def coco_to_voc_bbox(bbox):
     return bbox
 
 
-def yolo_to_voc_bbox(image, bbox):
-
-    image_array = cv2.imread(image)
-    assert isinstance(bbox, np.ndarray) and bbox.ndim == 2 and bbox.shape[
-        1] == 4, 'bbox should be numpy of dimension (Nx4)'
-    height, width, c = image_array.shape
-
-    bbox_widths = bbox[:, 2] * width
-    bbox_heights = bbox[:, 3] * height
-
-    bbox[:, 0] = bbox[:, 0] * width - (bbox_widths / 2)
-    bbox[:, 1] = bbox[:, 1] * height - (bbox_heights / 2)
-    bbox[:, 2] = bbox[:, 0] + bbox_widths
-    bbox[:, 3] = bbox[:, 1] + bbox_heights
-
-    return bbox
-
-
-def yolo_to_voc(ann_dir,
-                imgfolderpath,
-                classfilepath,
-                output_dir=tempfile.gettempdir()):
-    # TODO: @shreeram, make all argument names small
-    """arguments :
-
-    ann_dir : path to the annotations folder
-    imgfolderpath : path to the iamges folder
-    classfilepath : path to the class file (.txt file)
-    output_dir : path where the converted files are to be stored
-    """
-
-    directory = 'ConvertedPascalVOCFiles'
-    dirpath = os.path.join(output_dir, directory)
-    if os.path.exists(dirpath) and os.path.isdir(dirpath):
-        shutil.rmtree(dirpath)
-    os.mkdir(dirpath)
-
-    for file in glob.glob(os.path.join(ann_dir, '*')):
-        if file.endswith('.txt') and file != 'classes.txt':
-
-            split_name = os.path.basename(file)
-            print('Converting', split_name)
-
-            annotation_txt = os.path.splitext(split_name)[0]
-            imgPath = os.path.join(imgfolderpath, annotation_txt + '.jpg')
-
-            image = cv2.imread(imgPath)
-            imageShape = [image.shape[0], image.shape[1], image.shape[2]]
-            imgFolderName = os.path.basename(imgfolderpath)
-            imgFileName = os.path.basename(imgPath)
-
-            writer = PascalVocWriter(
-                imgFolderName, imgFileName, imageShape, localImgPath=imgPath)
-
-            # Read YOLO files
-            txt_path = os.path.join(ann_dir, split_name)
-            Yolo_reader = YoloReader(txt_path, image, classfilepath)
-            shapes = Yolo_reader.getShapes()
-            num_of_box = len(shapes)
-
-            for i in range(num_of_box):
-                label = shapes[i][0]
-                xmin = shapes[i][1][0][0]
-                ymin = shapes[i][1][0][1]
-                x_max = shapes[i][1][2][0]
-                y_max = shapes[i][1][2][1]
-
-                writer.addBndBox(xmin, ymin, x_max, y_max, label, 0)
-
-        # Write the converted PascalVOC xml files into a new Directory
-            writer.save(
-                targetFile=os.path.join(dirpath, annotation_txt + '.xml'))
-    return dirpath
+# def yolo_to_voc_bbox(image, bbox):
+#
+#     image_array = cv2.imread(image)
+#     assert isinstance(bbox, np.ndarray) and bbox.ndim == 2 and bbox.shape[
+#         1] == 4, 'bbox should be numpy of dimension (Nx4)'
+#     height, width, c = image_array.shape
+#
+#     bbox_widths = bbox[:, 2] * width
+#     bbox_heights = bbox[:, 3] * height
+#
+#     bbox[:, 0] = bbox[:, 0] * width - (bbox_widths / 2)
+#     bbox[:, 1] = bbox[:, 1] * height - (bbox_heights / 2)
+#     bbox[:, 2] = bbox[:, 0] + bbox_widths
+#     bbox[:, 3] = bbox[:, 1] + bbox_heights
+#
+#     return bbox
 
 
-def voc_to_yolo(ann_dir,
-                imgfolderpath,
-                debug=False,
-                output_dir=tempfile.gettempdir()):
-    # TODO: @shreeram, make all argument names small
-    """arguments :
+# def yolo_to_voc(ann_dir,
+#                 imgfolderpath,
+#                 classfilepath,
+#                 output_dir=tempfile.gettempdir()):
+#     # TODO: @shreeram, make all argument names small
+#     """arguments :
+#
+#     ann_dir : path to the annotations folder
+#     imgfolderpath : path to the iamges folder
+#     classfilepath : path to the class file (.txt file)
+#     output_dir : path where the converted files are to be stored
+#     """
+#
+#     directory = 'ConvertedPascalVOCFiles'
+#     dirpath = os.path.join(output_dir, directory)
+#     if os.path.exists(dirpath) and os.path.isdir(dirpath):
+#         shutil.rmtree(dirpath)
+#     os.mkdir(dirpath)
+#
+#     for file in glob.glob(os.path.join(ann_dir, '*')):
+#         if file.endswith('.txt') and file != 'classes.txt':
+#
+#             split_name = os.path.basename(file)
+#             print('Converting', split_name)
+#
+#             annotation_txt = os.path.splitext(split_name)[0]
+#             imgPath = os.path.join(imgfolderpath, annotation_txt + '.jpg')
+#
+#             image = cv2.imread(imgPath)
+#             imageShape = [image.shape[0], image.shape[1], image.shape[2]]
+#             imgFolderName = os.path.basename(imgfolderpath)
+#             imgFileName = os.path.basename(imgPath)
+#
+#             writer = PascalVocWriter(
+#                 imgFolderName, imgFileName, imageShape, localImgPath=imgPath)
+#
+#             # Read YOLO files
+#             txt_path = os.path.join(ann_dir, split_name)
+#             Yolo_reader = YoloReader(txt_path, image, classfilepath)
+#             shapes = Yolo_reader.getShapes()
+#             num_of_box = len(shapes)
+#
+#             for i in range(num_of_box):
+#                 label = shapes[i][0]
+#                 xmin = shapes[i][1][0][0]
+#                 ymin = shapes[i][1][0][1]
+#                 x_max = shapes[i][1][2][0]
+#                 y_max = shapes[i][1][2][1]
+#
+#                 writer.addBndBox(xmin, ymin, x_max, y_max, label, 0)
+#
+#         # Write the converted PascalVOC xml files into a new Directory
+#             writer.save(
+#                 targetFile=os.path.join(dirpath, annotation_txt + '.xml'))
+#     return dirpath
 
-    ann_dir : path to the annotations folder
-    imgfolderpath : path to the iamges folder
-    output_dir : path where the converted files are to be stored
-    """
 
-    directory = 'ConverterdYolotxtFiles'
-    dirpath = os.path.join(output_dir, directory)
-    if os.path.exists(dirpath) and os.path.isdir(dirpath):
-        shutil.rmtree(dirpath)
-    os.mkdir(dirpath)
-    classes = []
-
-    # Search all pascal annotation (xml files) in this folder
-    for file in glob.glob(os.path.join(
-            ann_dir, '*')):  # use glob.glob in place of os.listdir
-        if file.endswith('.xml'):
-
-            split_name = os.path.basename(file)
-            if debug:
-                print(f'Converting :: {split_name}')
-            annotation_xml = os.path.splitext(split_name)[0]
-
-            imagePath = os.path.join(imgfolderpath, annotation_xml + '.jpg')
-
-            image = cv2.imread(imagePath)
-            imageShape = [image.shape[0], image.shape[1], image.shape[2]]
-            imgFolderName = os.path.basename(imgfolderpath)
-            imgFileName = os.path.basename(imagePath)
-
-            writer = YOLOWriter(
-                imgFolderName, imgFileName, imageShape, localImgPath=imagePath)
-
-            parser = ET.XMLParser(encoding='utf-8')
-            tree = ET.parse(
-                os.path.join(ann_dir, str(split_name)), parser=parser)
-            root = tree.getroot()
-            for obj in root.findall('object'):
-                if str(obj.find('name').text) not in classes:
-                    classes.append(str(obj.find('name').text))
-
-            # Read VOC file
-            filePath = os.path.join(ann_dir, split_name)
-            Voc_Reader = PascalVocReader(filePath, image)
-            shapes = Voc_Reader.getShapes()
-            num_boxes = len(shapes)
-
-            for i in range(num_boxes):
-                label = classes.index(shapes[i][0])
-                xmin = shapes[i][1][0][0]
-                ymin = shapes[i][1][0][1]
-                x_max = shapes[i][1][2][0]
-                y_max = shapes[i][1][2][1]
-
-                writer.addBndBox(xmin, ymin, x_max, y_max, label, 0)
-
-            writer.save(
-                targetFile=os.path.join(dirpath, annotation_xml + '.txt'))
-
-            classFile = open(os.path.join(output_dir, 'classes.txt'), 'w')
-            for element in classes:
-                classFile.write(element + '\n')
-    return dirpath
+# def voc_to_yolo(ann_dir,
+#                 imgfolderpath,
+#                 debug=False,
+#                 output_dir=tempfile.gettempdir()):
+#     # TODO: @shreeram, make all argument names small
+#     """arguments :
+#
+#     ann_dir : path to the annotations folder
+#     imgfolderpath : path to the iamges folder
+#     output_dir : path where the converted files are to be stored
+#     """
+#
+#     directory = 'ConverterdYolotxtFiles'
+#     dirpath = os.path.join(output_dir, directory)
+#     if os.path.exists(dirpath) and os.path.isdir(dirpath):
+#         shutil.rmtree(dirpath)
+#     os.mkdir(dirpath)
+#     classes = []
+#
+#     # Search all pascal annotation (xml files) in this folder
+#     for file in glob.glob(os.path.join(
+#             ann_dir, '*')):  # use glob.glob in place of os.listdir
+#         if file.endswith('.xml'):
+#
+#             split_name = os.path.basename(file)
+#             if debug:
+#                 print(f'Converting :: {split_name}')
+#             annotation_xml = os.path.splitext(split_name)[0]
+#
+#             imagePath = os.path.join(imgfolderpath, annotation_xml + '.jpg')
+#
+#             image = cv2.imread(imagePath)
+#             imageShape = [image.shape[0], image.shape[1], image.shape[2]]
+#             imgFolderName = os.path.basename(imgfolderpath)
+#             imgFileName = os.path.basename(imagePath)
+#
+#             writer = YOLOWriter(
+#                 imgFolderName, imgFileName, imageShape, localImgPath=imagePath)
+#
+#             parser = ET.XMLParser(encoding='utf-8')
+#             tree = ET.parse(
+#                 os.path.join(ann_dir, str(split_name)), parser=parser)
+#             root = tree.getroot()
+#             for obj in root.findall('object'):
+#                 if str(obj.find('name').text) not in classes:
+#                     classes.append(str(obj.find('name').text))
+#
+#             # Read VOC file
+#             filePath = os.path.join(ann_dir, split_name)
+#             Voc_Reader = PascalVocReader(filePath, image)
+#             shapes = Voc_Reader.getShapes()
+#             num_boxes = len(shapes)
+#
+#             for i in range(num_boxes):
+#                 label = classes.index(shapes[i][0])
+#                 xmin = shapes[i][1][0][0]
+#                 ymin = shapes[i][1][0][1]
+#                 x_max = shapes[i][1][2][0]
+#                 y_max = shapes[i][1][2][1]
+#
+#                 writer.addBndBox(xmin, ymin, x_max, y_max, label, 0)
+#
+#             writer.save(
+#                 targetFile=os.path.join(dirpath, annotation_xml + '.txt'))
+#
+#             classFile = open(os.path.join(output_dir, 'classes.txt'), 'w')
+#             for element in classes:
+#                 classFile.write(element + '\n')
+#     return dirpath
 
 
 def coco_to_voc(ann_file, output_dir=tempfile.gettempdir()):

@@ -13,6 +13,9 @@ from segmind.tracking._tracking_service.utils import (_TRACKING_URI_ENV_VAR,
                                                       set_tracking_uri)
 from segmind.tracking.client import MlflowClient
 from segmind.tracking.fluent import _EXPERIMENT_ID_ENV_VAR, _RUN_ID_ENV_VAR
+from segmind.tracking.fluent import set_project, create_experiment, log_param, log_params, log_metric, log_metrics, \
+    log_artifact, log_image, log_table, set_runid, start_run
+from segmind.utils.logging_utils import log_params_decorator
 
 __all__ = [
     'MlflowClient',
@@ -23,4 +26,18 @@ __all__ = [
     '_EXPERIMENT_ID_ENV_VAR',
     '_RUN_ID_ENV_VAR',
     '_TRACKING_URI_ENV_VAR',
+
+    # tracking endpoints
+    'set_project',
+    'create_experiment',
+    'start_run',
+    'set_runid',
+    'log_param',
+    'log_params',
+    'log_params_decorator',
+    'log_metric',
+    'log_metrics',
+    'log_artifact',
+    'log_image',
+    'log_table',
 ]

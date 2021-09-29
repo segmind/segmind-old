@@ -20,8 +20,6 @@ import time
 from google.protobuf.struct_pb2 import Struct
 from tempfile import gettempdir
 
-from segmind.data.converters.object_detection import (coco_to_voc_bbox,
-                                                      yolo_to_voc_bbox)
 from segmind.entities import Metric, Param, Run, RunStatus, RunTag, ViewType
 from segmind.entities.lifecycle_stage import LifecycleStage
 from segmind.exceptions import MlflowException
@@ -501,161 +499,161 @@ def log_table(key, table, step=None):
         run_id, experiment_id, key, path, artifact_type='table', step=step)
 
 
-def log_bbox_prediction(key,
-                        image,
-                        bbox_pred,
-                        bbox_gt=None,
-                        bbox_type='pascal_voc',
-                        step=None):
-    """logs artifact for object detection.
+# def log_bbox_prediction(key,
+#                         image,
+#                         bbox_pred,
+#                         bbox_gt=None,
+#                         bbox_type='pascal_voc',
+#                         step=None):
+#     """logs artifact for object detection.
+#
+#     Args:
+#         key (str): name of the image
+#         image (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a
+#                                     PIL.Image object
+#         bbox_pred (np.ndarray, list): a list or a np.ndarray of dimension
+#                                     (Nx4). All elemnts will be onverted to
+#                                     int32.
+#         bbox_gt (None, optional): a list or a np.ndarray of dimension (Nx4).
+#                                     All elemnts will be onverted to int32
+#         bbox_type (str, optional): can be one of 'yolo', 'pascal_voc', 'coco'
+#                                 indicating the format of bbox and prediction.
+#         step (None, optional): integer indicating the step at which artifact
+#                             was generated.
+#
+#     Raises:
+#         MlflowException: Description
+#     """
+#
+#     if bbox_type not in ['pascal_voc', 'coco', 'yolo']:
+#         raise MlflowException(
+#             f'bbox_type should be one-of "pascal_voc, coco, yolo" not \
+#             {bbox_type}')
+#
+#     path = convert_to_imagefile(image)
+#
+#     bbox_pred = np.array(bbox_pred)
+#     assert isinstance(
+#         bbox_pred, np.ndarray) and bbox_pred.ndim == 2 and bbox_pred.shape[
+#             1] == 4, f'bbox_pred should be numpy of dimension (Nx4), got \
+#         {bbox_pred.shape}'
+#
+#     if bbox_type == 'coco':
+#         bbox_pred = coco_to_voc_bbox(bbox_pred)
+#         if bbox_gt:
+#             bbox_gt = coco_to_voc_bbox(bbox_gt)
+#     elif bbox_type == 'yolo':
+#         bbox_pred = yolo_to_voc_bbox(path, bbox_pred)
+#         if bbox_gt:
+#             bbox_gt = yolo_to_voc_bbox(path, bbox_gt)
+#
+#     if bbox_gt is None:
+#         bbox_gt = np.array([])
+#
+#     run = _get_or_start_run()
+#     run_id = run.info.run_id
+#     experiment_id = run.info.experiment_id
+#
+#     prediction_struct = Struct()
+#     prediction_struct.update({'bbox': bbox_pred.tolist()})
+#
+#     ground_truth_struct = Struct()
+#     ground_truth_struct.update({'bbox': bbox_gt.tolist()})
+#
+#     MlflowClient().log_artifact_lite(
+#         run_id,
+#         experiment_id,
+#         key,
+#         path,
+#         prediction=prediction_struct,
+#         ground_truth=ground_truth_struct,
+#         artifact_type='image',
+#         step=step,
+#         tags={'image_type': 'bbox_prediction'})
 
-    Args:
-        key (str): name of the image
-        image (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a
-                                    PIL.Image object
-        bbox_pred (np.ndarray, list): a list or a np.ndarray of dimension
-                                    (Nx4). All elemnts will be onverted to
-                                    int32.
-        bbox_gt (None, optional): a list or a np.ndarray of dimension (Nx4).
-                                    All elemnts will be onverted to int32
-        bbox_type (str, optional): can be one of 'yolo', 'pascal_voc', 'coco'
-                                indicating the format of bbox and prediction.
-        step (None, optional): integer indicating the step at which artifact
-                            was generated.
 
-    Raises:
-        MlflowException: Description
-    """
-
-    if bbox_type not in ['pascal_voc', 'coco', 'yolo']:
-        raise MlflowException(
-            f'bbox_type should be one-of "pascal_voc, coco, yolo" not \
-            {bbox_type}')
-
-    path = convert_to_imagefile(image)
-
-    bbox_pred = np.array(bbox_pred)
-    assert isinstance(
-        bbox_pred, np.ndarray) and bbox_pred.ndim == 2 and bbox_pred.shape[
-            1] == 4, f'bbox_pred should be numpy of dimension (Nx4), got \
-        {bbox_pred.shape}'
-
-    if bbox_type == 'coco':
-        bbox_pred = coco_to_voc_bbox(bbox_pred)
-        if bbox_gt:
-            bbox_gt = coco_to_voc_bbox(bbox_gt)
-    elif bbox_type == 'yolo':
-        bbox_pred = yolo_to_voc_bbox(path, bbox_pred)
-        if bbox_gt:
-            bbox_gt = yolo_to_voc_bbox(path, bbox_gt)
-
-    if bbox_gt is None:
-        bbox_gt = np.array([])
-
-    run = _get_or_start_run()
-    run_id = run.info.run_id
-    experiment_id = run.info.experiment_id
-
-    prediction_struct = Struct()
-    prediction_struct.update({'bbox': bbox_pred.tolist()})
-
-    ground_truth_struct = Struct()
-    ground_truth_struct.update({'bbox': bbox_gt.tolist()})
-
-    MlflowClient().log_artifact_lite(
-        run_id,
-        experiment_id,
-        key,
-        path,
-        prediction=prediction_struct,
-        ground_truth=ground_truth_struct,
-        artifact_type='image',
-        step=step,
-        tags={'image_type': 'bbox_prediction'})
-
-
-def log_mask_prediction(key,
-                        image,
-                        pred_mask,
-                        bbox_pred=[],
-                        mask_gt=None,
-                        bbox_gt=None,
-                        bbox_type='pascal_voc',
-                        step=None):
-    """logs artifact for instance/semantic segmentation.
-
-    Args:
-        key (str): name of the image
-        image (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a
-                                    PIL.Image object
-        pred_mask (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or
-                                    a PIL.Image object
-        bbox_pred (None, optional): Description
-        mask_gt (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a
-                                    PIL.Image object
-        bbox_gt (None, optional): a list or a np.ndarray of dimension (Nx4).
-                                    All elemnts will be onverted to int32
-        bbox_type (str, optional): Description
-        step (None, optional): integer indicating the step at which artifact
-                                    was generated
-    """
-    if bbox_type not in ['pascal_voc', 'coco', 'yolo']:
-        raise MlflowException(
-            f'bbox_type should be one-of "pascal_voc, coco, yolo" not \
-            {bbox_type}')
-
-    path = convert_to_imagefile(image)
-    pred_mask_path = convert_to_imagefile(pred_mask)
-
-    bbox_pred = np.array(bbox_pred)
-    if bbox_pred.size > 0:
-        print(bbox_pred.size)
-        assert isinstance(
-            bbox_pred, np.ndarray) and bbox_pred.ndim == 2 and bbox_pred.shape[
-                1] == 4, f'bbox_pred should be numpy of dimension (Nx4), got \
-            {bbox_pred.shape}'
-
-    if bbox_type == 'coco':
-        if bbox_pred.size > 0:
-            bbox_pred = coco_to_voc_bbox(bbox_pred)
-        if bbox_gt:
-            bbox_gt = coco_to_voc_bbox(bbox_gt)
-        else:
-            bbox_gt = np.array([])
-    else:
-        if bbox_pred.size > 0:
-            bbox_pred = yolo_to_voc_bbox(image, bbox_pred)
-        if bbox_gt:
-            bbox_gt = yolo_to_voc_bbox(image, bbox_gt)
-        else:
-            bbox_gt = np.array([])
-
-    run = _get_or_start_run()
-    run_id = run.info.run_id
-    experiment_id = run.info.experiment_id
-
-    prediction_struct = Struct()
-    prediction_struct.update({'bbox': bbox_pred.tolist()})
-
-    ground_truth_struct = Struct()
-    ground_truth_struct.update({'bbox': bbox_gt.tolist()})
-
-    MlflowClient().log_artifact_lite(
-        run_id,
-        experiment_id,
-        key,
-        path,
-        prediction=prediction_struct,
-        ground_truth=ground_truth_struct,
-        artifact_type='image',
-        step=step,
-        tags={'image_type': 'segmentation_mask'})
-
-    log_image(
-        key=key+'_mask',
-        image=pred_mask_path,
-        tags={'mask_parent': key},
-        step=step)
+# def log_mask_prediction(key,
+#                         image,
+#                         pred_mask,
+#                         bbox_pred=[],
+#                         mask_gt=None,
+#                         bbox_gt=None,
+#                         bbox_type='pascal_voc',
+#                         step=None):
+#     """logs artifact for instance/semantic segmentation.
+#
+#     Args:
+#         key (str): name of the image
+#         image (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a
+#                                     PIL.Image object
+#         pred_mask (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or
+#                                     a PIL.Image object
+#         bbox_pred (None, optional): Description
+#         mask_gt (np.ndarray, PIL.Image): a numpy array of np.uint8 dtype or a
+#                                     PIL.Image object
+#         bbox_gt (None, optional): a list or a np.ndarray of dimension (Nx4).
+#                                     All elemnts will be onverted to int32
+#         bbox_type (str, optional): Description
+#         step (None, optional): integer indicating the step at which artifact
+#                                     was generated
+#     """
+#     if bbox_type not in ['pascal_voc', 'coco', 'yolo']:
+#         raise MlflowException(
+#             f'bbox_type should be one-of "pascal_voc, coco, yolo" not \
+#             {bbox_type}')
+#
+#     path = convert_to_imagefile(image)
+#     pred_mask_path = convert_to_imagefile(pred_mask)
+#
+#     bbox_pred = np.array(bbox_pred)
+#     if bbox_pred.size > 0:
+#         print(bbox_pred.size)
+#         assert isinstance(
+#             bbox_pred, np.ndarray) and bbox_pred.ndim == 2 and bbox_pred.shape[
+#                 1] == 4, f'bbox_pred should be numpy of dimension (Nx4), got \
+#             {bbox_pred.shape}'
+#
+#     if bbox_type == 'coco':
+#         if bbox_pred.size > 0:
+#             bbox_pred = coco_to_voc_bbox(bbox_pred)
+#         if bbox_gt:
+#             bbox_gt = coco_to_voc_bbox(bbox_gt)
+#         else:
+#             bbox_gt = np.array([])
+#     else:
+#         if bbox_pred.size > 0:
+#             bbox_pred = yolo_to_voc_bbox(image, bbox_pred)
+#         if bbox_gt:
+#             bbox_gt = yolo_to_voc_bbox(image, bbox_gt)
+#         else:
+#             bbox_gt = np.array([])
+#
+#     run = _get_or_start_run()
+#     run_id = run.info.run_id
+#     experiment_id = run.info.experiment_id
+#
+#     prediction_struct = Struct()
+#     prediction_struct.update({'bbox': bbox_pred.tolist()})
+#
+#     ground_truth_struct = Struct()
+#     ground_truth_struct.update({'bbox': bbox_gt.tolist()})
+#
+#     MlflowClient().log_artifact_lite(
+#         run_id,
+#         experiment_id,
+#         key,
+#         path,
+#         prediction=prediction_struct,
+#         ground_truth=ground_truth_struct,
+#         artifact_type='image',
+#         step=step,
+#         tags={'image_type': 'segmentation_mask'})
+#
+#     log_image(
+#         key=key+'_mask',
+#         image=pred_mask_path,
+#         tags={'mask_parent': key},
+#         step=step)
 
 
 def set_tags(tags):
