@@ -14,7 +14,7 @@ from segmind.tracking._tracking_service.utils import (_TRACKING_URI_ENV_VAR,
 from segmind.tracking.client import MlflowClient
 from segmind.tracking.fluent import _EXPERIMENT_ID_ENV_VAR, _RUN_ID_ENV_VAR
 from segmind.tracking.fluent import set_project, create_experiment, log_param, log_params, log_metric, log_metrics, \
-    log_artifact, log_image, log_table, set_runid, start_run
+    log_artifact, log_image, log_table, set_runid, start_run, active_run, end_run, search_runs, get_run, delete_run
 from segmind.utils.logging_utils import log_params_decorator
 
 __all__ = [
@@ -40,4 +40,9 @@ __all__ = [
     'log_artifact',
     'log_image',
     'log_table',
+    'active_run',
+    'end_run',
+    'search_runs',
+    'get_run',
+    'delete_run',
 ]

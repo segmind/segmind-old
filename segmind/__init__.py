@@ -197,21 +197,17 @@ get_experiment = fluent.get_experiment
 # get_experiment_by_name = fluent.get_experiment_by_name
 get_tracking_uri = get_tracking_uri
 
-log_param = fluent.log_param
-log_params = fluent.log_params
-log_metric = fluent.log_metric
-log_metrics = fluent.log_metrics
-log_batch = fluent.log_batch
-log_artifact = fluent.log_artifact
-log_table = fluent.log_table
-log_image = fluent.log_image
+# log_param = fluent.log_param
+# log_params = fluent.log_params
+# log_metric = fluent.log_metric
+# log_metrics = fluent.log_metrics
+# log_batch = fluent.log_batch
+# log_artifact = fluent.log_artifact
+# log_table = fluent.log_table
+# log_image = fluent.log_image
 
 run = projects.run
 
 __all__ = [
-    'ActiveRun',
-    'set_tag', 'set_tags', 'delete_tag',
-    'active_run', 'end_run', 'search_runs', 'get_artifact_uri',
-    'set_tracking_uri',
-    'delete_experiment', 'delete_run', 'run', 'register_model'
+    'ActiveRun', 'run',
 ]
