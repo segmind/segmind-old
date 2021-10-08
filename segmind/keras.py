@@ -155,8 +155,9 @@ class KerasCallback(keras.callbacks.Callback):
             logs_copy = copy.deepcopy(logs)
             # logs_copy.update(gpu_data)
 
-            cpu_data = system_metrics()
-            sys_data.update(cpu_data)
+            # Removing system_metrics for now, as these are not frequently used
+            # cpu_data = system_metrics()
+            # sys_data.update(cpu_data)
 
             try_mlflow_log(
                 log_metrics,
@@ -211,8 +212,9 @@ class KerasCallback(keras.callbacks.Callback):
         logs_copy = copy.deepcopy(logs)
         # logs_copy.update(gpu_data)
 
-        cpu_data = system_metrics()
-        sys_data.update(cpu_data)
+        # Removing system_metrics for now, as these are not frequently used
+        # cpu_data = system_metrics()
+        # sys_data.update(cpu_data)
 
         try_mlflow_log(
             log_metrics,
