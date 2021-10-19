@@ -151,7 +151,7 @@ class KerasCallback(keras.callbacks.Callback):
         if not logs:
             return
         if self.step_logging and self.num_step % self.log_evry_n_step == 0:
-            sys_data = gpu_metrics()
+            # sys_data = gpu_metrics()
             logs_copy = copy.deepcopy(logs)
             # logs_copy.update(gpu_data)
 
@@ -159,12 +159,12 @@ class KerasCallback(keras.callbacks.Callback):
             # cpu_data = system_metrics()
             # sys_data.update(cpu_data)
 
-            try_mlflow_log(
-                log_metrics,
-                sys_data,
-                step=self.num_step,
-                epoch=self.current_epoch,
-                tags={'sys_metric': 'yes'})
+            # try_mlflow_log(
+            #     log_metrics,
+            #     sys_data,
+            #     step=self.num_step,
+            #     epoch=self.current_epoch,
+            #     tags={'sys_metric': 'yes'})
 
             try_mlflow_log(
                 log_metrics,
@@ -208,7 +208,7 @@ class KerasCallback(keras.callbacks.Callback):
         self.current_epoch = epoch
         if not logs:
             return
-        sys_data = gpu_metrics()
+        # sys_data = gpu_metrics()
         logs_copy = copy.deepcopy(logs)
         # logs_copy.update(gpu_data)
 
@@ -216,12 +216,12 @@ class KerasCallback(keras.callbacks.Callback):
         # cpu_data = system_metrics()
         # sys_data.update(cpu_data)
 
-        try_mlflow_log(
-            log_metrics,
-            sys_data,
-            step=self.num_step,
-            epoch=self.current_epoch,
-            tags={'sys_metric': 'yes'})
+        # try_mlflow_log(
+        #     log_metrics,
+        #     sys_data,
+        #     step=self.num_step,
+        #     epoch=self.current_epoch,
+        #     tags={'sys_metric': 'yes'})
         try_mlflow_log(
             log_metrics,
             logs_copy,

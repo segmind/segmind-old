@@ -152,16 +152,16 @@ class LightningCallback(pl.callbacks.base.Callback):
         self.num_step += 1
         logs = trainer.logger_connector.callback_metrics
 
-        sys_data = gpu_metrics()
+        # sys_data = gpu_metrics()
         # Removing system_metrics for now, as these are not frequently used
         # sys_data.update(system_metrics())
         if self.step_logging and self.num_step % self.log_evry_n_step == 0:
-            try_mlflow_log(
-                log_metrics,
-                sys_data,
-                step=self.num_step,
-                epoch=self.current_epoch,
-                tags={'sys_metric': 'yes'})
+            # try_mlflow_log(
+            #     log_metrics,
+            #     sys_data,
+            #     step=self.num_step,
+            #     epoch=self.current_epoch,
+            #     tags={'sys_metric': 'yes'})
             try_mlflow_log(
                 log_metrics,
                 logs,
@@ -235,15 +235,15 @@ class LightningCallback(pl.callbacks.base.Callback):
         logs = trainer.logger_connector.callback_metrics
         self.current_epoch += 1
 
-        sys_data = gpu_metrics()
+        # sys_data = gpu_metrics()
         # Removing system_metrics for now, as these are not frequently used
         # sys_data.update(system_metrics())
-        try_mlflow_log(
-            log_metrics,
-            sys_data,
-            step=self.num_step,
-            epoch=self.current_epoch,
-            tags={'sys_metric': 'yes'})
+        # try_mlflow_log(
+        #     log_metrics,
+        #     sys_data,
+        #     step=self.num_step,
+        #     epoch=self.current_epoch,
+        #     tags={'sys_metric': 'yes'})
         try_mlflow_log(
             log_metrics,
             logs,

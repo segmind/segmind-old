@@ -25,8 +25,8 @@ def XGBoost_callback(period=1):
         step = env.iteration
 
         results = {}
-        gpu_data = gpu_metrics()
-        results.update(gpu_data)
+        # gpu_data = gpu_metrics()
+        # results.update(gpu_data)
 
         # Removing system_metrics for now, as these are not frequently used
         # cpu_data = system_metrics()
