@@ -10,7 +10,6 @@ import yaml
 from distutils import dir_util
 from six.moves import urllib
 
-from segmind import tracking
 from segmind.entities import RunStatus, SourceType
 from segmind.exceptions import ExecutionException, MlflowException
 from segmind.projects import _project_spec
@@ -20,10 +19,11 @@ from segmind.projects.utils import (_GIT_URI_REGEX, _expand_uri,
                                     _is_file_uri, _is_local_uri,
                                     _is_valid_branch_name, _is_zip_uri,
                                     _parse_subdirectory)
-from segmind.tracking import fluent
+from segmind.tracking import MlflowClient, _tracking_service, _RUN_ID_ENV_VAR, _TRACKING_URI_ENV_VAR, \
+    _EXPERIMENT_ID_ENV_VAR, get_tracking_uri
 from segmind.tracking.context.default_context import _get_user
 from segmind.tracking.context.git_context import _get_git_commit
-from segmind.tracking.fluent import _get_experiment_id
+from segmind.tracking.fluent import _get_experiment_id, active_run
 from segmind.utils.file_utils import (path_to_local_file_uri,
                                       path_to_local_sqlite_uri)
 from segmind.utils.mlflow_tags import (LEGACY_MLFLOW_GIT_BRANCH_NAME,
@@ -67,7 +67,7 @@ def _resolve_experiment_id(experiment_name=None, experiment_id=None):
         return str(experiment_id)
 
     if experiment_name:
-        client = tracking.MlflowClient()
+        client = MlflowClient()
         exp = client.get_experiment_by_name(experiment_name)
         if exp:
             return exp.experiment_id
@@ -103,7 +103,7 @@ def _run(uri,
     _validate_execution_environment(project, backend)  # noqa
     project.get_entry_point(entry_point)._validate_parameters(parameters)
     if run_id:
-        active_run = tracking.MlflowClient().get_run(run_id)
+        active_run = MlflowClient().get_run(run_id)
     else:
         active_run = _create_run(uri, experiment_id, work_dir, entry_point)
 
@@ -115,22 +115,22 @@ def _run(uri,
         parameters, storage_dir=None)
     for key, value in (list(final_params.items()) +
                        list(extra_params.items())):
-        tracking.MlflowClient().log_param(active_run.info.run_id, key, value)
+        MlflowClient().log_param(active_run.info.run_id, key, value)
 
     repo_url = _get_git_repo_url(work_dir)
     if repo_url is not None:
         for tag in [MLFLOW_GIT_REPO_URL, LEGACY_MLFLOW_GIT_REPO_URL]:
-            tracking.MlflowClient().set_tag(active_run.info.run_id, tag,
+            MlflowClient().set_tag(active_run.info.run_id, tag,
                                             repo_url)
 
     # Add branch name tag if a branch is specified through -version
     if _is_valid_branch_name(work_dir, version):
         for tag in [MLFLOW_GIT_BRANCH, LEGACY_MLFLOW_GIT_BRANCH_NAME]:
-            tracking.MlflowClient().set_tag(active_run.info.run_id, tag,
+            MlflowClient().set_tag(active_run.info.run_id, tag,
                                             version)
 
     if backend == 'local' or backend is None:
-        tracking.MlflowClient().set_tag(active_run.info.run_id,
+        MlflowClient().set_tag(active_run.info.run_id,
                                         MLFLOW_PROJECT_BACKEND, 'local')
         command_args = []
         command_separator = ' '
@@ -139,7 +139,7 @@ def _run(uri,
         # executed inside a docker container.
         if project.docker_env:
             pass
-        # tracking.MlflowClient().set_tag(active_run.info.run_id,
+        # MlflowClient().set_tag(active_run.info.run_id,
         #                                 MLFLOW_PROJECT_ENV, 'docker')
         # _validate_docker_env(project)
         # _validate_docker_installation()
@@ -157,7 +157,7 @@ def _run(uri,
         # some time) to avoid failures due to multiple concurrent attempts to
         # create the same conda env.
         # elif use_conda:
-        #     tracking.MlflowClient().set_tag(active_run.info.run_id,
+        #     MlflowClient().set_tag(active_run.info.run_id,
         #                                     MLFLOW_PROJECT_ENV, 'conda')
         #     command_separator = ' && '
         #     conda_env_name = _get_or_create_conda_env(project.conda_env_path)
@@ -186,9 +186,9 @@ def _run(uri,
             run_id=active_run.info.run_id)
     # elif backend == 'kubernetes':
     # from segmind.projects import kubernetes as kb
-    # tracking.MlflowClient().set_tag(active_run.info.run_id,
+    # MlflowClient().set_tag(active_run.info.run_id,
     #                                 MLFLOW_PROJECT_ENV, 'docker')
-    # tracking.MlflowClient().set_tag(active_run.info.run_id,
+    # MlflowClient().set_tag(active_run.info.run_id,
     #                                 MLFLOW_PROJECT_BACKEND, 'kubernetes')
     # _validate_docker_env(project)
     # _validate_docker_installation()
@@ -323,7 +323,7 @@ def _wait_for(submitted_run_obj):
     # tracking server if
     # we're interrupted before we reach the try block below
     try:
-        active_run = tracking.MlflowClient().get_run(
+        active_run = MlflowClient().get_run(
             run_id) if run_id is not None else None
         if submitted_run_obj.wait():
             _logger.info("=== Run (ID '%s') succeeded ===", run_id)
@@ -442,10 +442,10 @@ def _maybe_set_run_terminated(active_run, status):
     if active_run is None:
         return
     run_id = active_run.info.run_id
-    cur_status = tracking.MlflowClient().get_run(run_id).info.status
+    cur_status = MlflowClient().get_run(run_id).info.status
     if RunStatus.is_terminated(cur_status):
         return
-    tracking.MlflowClient().set_terminated(run_id, status)
+    MlflowClient().set_terminated(run_id, status)
 
 
 def _get_entry_point_command(project, entry_point, parameters, storage_dir):
@@ -547,12 +547,12 @@ def _create_run(uri, experiment_id, work_dir, entry_point):
     the run (metrics/params) to the tracking server.
     """
     if _is_local_uri(uri):
-        source_name = tracking._tracking_service.utils._get_git_url_if_present(
+        source_name = _tracking_service.utils._get_git_url_if_present(
             _expand_uri(uri))
     else:
         source_name = _expand_uri(uri)
     source_version = _get_git_commit(work_dir)
-    existing_run = fluent.active_run()
+    existing_run = active_run()
     if existing_run:
         parent_run_id = existing_run.info.run_id
     else:
@@ -569,7 +569,7 @@ def _create_run(uri, experiment_id, work_dir, entry_point):
     if parent_run_id is not None:
         tags[MLFLOW_PARENT_RUN_ID] = parent_run_id
 
-    active_run = tracking.MlflowClient().create_run(
+    active_run = MlflowClient().create_run(
         experiment_id=experiment_id, tags=tags)
     return active_run
 
@@ -578,9 +578,9 @@ def _get_run_env_vars(run_id, experiment_id):
     """Returns a dictionary of environment variable key-value pairs to set in
     subprocess launched to run MLflow projects."""
     return {
-        tracking._RUN_ID_ENV_VAR: run_id,
-        tracking._TRACKING_URI_ENV_VAR: tracking.get_tracking_uri(),
-        tracking._EXPERIMENT_ID_ENV_VAR: str(experiment_id),
+        _RUN_ID_ENV_VAR: run_id,
+        _TRACKING_URI_ENV_VAR: get_tracking_uri(),
+        _EXPERIMENT_ID_ENV_VAR: str(experiment_id),
     }
 
 

@@ -12,8 +12,8 @@ with open('README.md', 'r') as f:
 setuptools.setup(
     name='segmind',
     version=version,
-    author='T Pratik',
-    author_email='pratik@segmind.com',
+    author='Saurabh Chopra',
+    author_email='Saurabh.Chopra.2021@live.rhul.ac.uk',
     description='A tracking tool for deep-learning',
     long_description=long_description,
     long_description_content_type='text/markdown',
