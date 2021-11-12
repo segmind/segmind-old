@@ -6,6 +6,7 @@ import sys
 from segmind.lite_extensions.client_utils import (SECRET_FILE, SEGMIND_FOLDER,
                                                   LoginError, fetch_token)
 from segmind.utils import cyan_print, green_print, red_print
+from segmind.data.public import upload as upload_data
 
 # import jsonpickle
 # from click import UsageError
@@ -40,3 +41,28 @@ def config():
         file.write('password={}\n'.format(password))
 
     green_print('Log-In Successful !!!')
+
+
+@cli.command()
+@click.option("-p", "--path",
+              required=True,
+              type=click.Path(exists=True),
+              help="String, path to the file/folder")
+@click.option("--destination_path",
+              required=False,
+              type=str,
+              help="String, example README.md OR new_folder/README.md OR old_folder/new_folder/README.md")
+@click.option("--datastore_name",
+              required=True,
+              type=str,
+              help="String, name of your datastore, created via Segmind UI from https://cloud.segmind.com/")
+def upload(path, destination_path, datastore_name, *args, **kwargs):
+    upload_data(
+        path=path,
+        destination_path=destination_path,
+        datastore_name=datastore_name,
+        via_cli=True
+    )
+    green_print(
+        "Success! To view your file/folder, login to your account in https://cloud.segmind.com"
+    )

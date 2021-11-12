@@ -26,13 +26,15 @@ from segmind.exceptions import MlflowException
 from segmind.lite_extensions.client_utils import (_EXPERIMENT_ID_ENV_VAR,
                                                   _RUN_ID_ENV_VAR,
                                                   _get_experiment_id,
-                                                  _runid_exists)
+                                                  _runid_exists,
+                                                  get_token)
 from segmind.protos.service_lite_pb2 import RunTag as RunTagProto
 from segmind.tracking.client import MlflowClient
 from segmind.tracking.context import registry as context_registry
 from segmind.utils import env
 from segmind.utils.mlflow_tags import MLFLOW_PARENT_RUN_ID, MLFLOW_RUN_NAME
 from segmind.utils.validation import _validate_run_id
+from segmind.data.public import upload as upload_data
 
 # _EXPERIMENT_ID_ENV_VAR = "MLFLOW_EXPERIMENT_ID"
 # _EXPERIMENT_NAME_ENV_VAR = 'MLFLOW_EXPERIMENT_NAME'
@@ -233,6 +235,17 @@ def start_run(run_name=None, nested=False):
     return _active_run_stack[-1]
 
 
+def get_experiment_run(experiment_id=None, run_id=None, create_run_if_not_exists=False):
+    experiment_obj = MlflowClient().get_experiment(experiment_id=experiment_id)
+    os.environ[_EXPERIMENT_ID_ENV_VAR] = experiment_obj.experiment_id
+    if not run_id:
+        pass
+    else:
+        run_obj = MlflowClient().get_run(run_id=run_id)
+
+    return experiment_obj, run_obj
+
+
 def end_run(status=RunStatus.to_string(RunStatus.FINISHED)):
     """End an active MLflow run (if there is one).
 
@@ -289,6 +302,19 @@ def get_run(run_id):
         Otherwise, raises an exception.
     """
     return MlflowClient().get_run(run_id)
+
+
+def _get_or_start_run():
+    """Summary.
+
+    Returns:
+        TYPE: Description
+    """
+    if len(_active_run_stack) > 0:
+        return _active_run_stack[-1]
+
+    return start_run()
+
 
 
 def set_tag(key, value):
@@ -877,18 +903,6 @@ def _get_paginated_runs(experiment_ids, filter_string, run_view_type,
         else:
             break
     return all_runs
-
-
-def _get_or_start_run():
-    """Summary.
-
-    Returns:
-        TYPE: Description
-    """
-    if len(_active_run_stack) > 0:
-        return _active_run_stack[-1]
-
-    return start_run()
 
 
 def _get_experiment_id_from_env():
