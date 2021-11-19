@@ -68,23 +68,56 @@ def _get_token(via_cli):
     return token
 
 
+# Print iterations progress
+def print_progress_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
+    # Print New Line on Complete
+    if iteration == total:
+        print()
+
 def _upload_folder_to_s3(s3, path, bucket_name, s3_path):
     """
         boto3 does not support s3 folder upload, os.walk to upload every file
         in the desired directory
     """
+    # Initial call to print 0% progress
+    _, _, files = next(os.walk(path))
+    length_of_items = len(files)
+    print_progress_bar(0, length_of_items, prefix='Progress:', suffix='Complete')
     for root, dirs, files in os.walk(path):
-        for file in files:
+        for index, file in enumerate(files):
             dest_path = path.replace(path, "")
             __s3file = os.path.normpath(s3_path + '/' + dest_path + '/' + file)
             __local_file = os.path.join(path, file)
             s3.Bucket(bucket_name).upload_file(__local_file, __s3file)
 
+            # Update Progress Bar
+            print_progress_bar(index + 1, length_of_items, prefix='Progress:', suffix='Complete')
+
 
 def _upload_file_to_s3(s3, path, bucket_name, s3_path):
     # Upload a new file
+    print_progress_bar(0, 1, prefix='Progress:', suffix='Complete')
     with open(path, 'rb') as data:
         s3.Bucket(bucket_name).put_object(Key=s3_path, Body=data)
+
+        # Update Progress Bar
+        print_progress_bar(1, 1, prefix='Progress:', suffix='Complete')
 
 
 def upload(path, datastore_name, destination_path="", via_cli=True):
