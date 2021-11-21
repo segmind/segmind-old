@@ -60,17 +60,12 @@ def config():
               type=str,
               help="String, name of your datastore, created via Segmind UI from https://cloud.segmind.com/")
 def upload(path, destination_path, datastore_name, *args, **kwargs):
-    t1 = time.time()
-    cyan_print("upload started at: " + str(t1))
     upload_data(
         path=path,
         destination_path=destination_path,
         datastore_name=datastore_name,
         via_cli=True
     )
-    t2 = time.time()
-    cyan_print("upload ended at: " + str(t2))
-    cyan_print("total time taken: " + str(t2 - t1))
     green_print(
         "Success! To view your file/folder, login to your account in https://cloud.segmind.com"
     )

@@ -69,7 +69,7 @@ def _get_token(via_cli):
 
 
 # Print iterations progress
-def print_progress_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
     """
     Call in a loop to create terminal progress bar
     @params:
@@ -85,10 +85,11 @@ def print_progress_bar(iteration, total, prefix = '', suffix = '', decimals = 1,
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
-    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=printEnd)
     # Print New Line on Complete
     if iteration == total:
         print()
+
 
 def _upload_folder_to_s3(s3, path, bucket_name, s3_path):
     """
