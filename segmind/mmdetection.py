@@ -49,4 +49,3 @@ def init_segmind_hook(cfg=None):
         cfg.custom_hooks = custom_hooks
 
     return custom_imports, custom_hooks, cfg
-    
