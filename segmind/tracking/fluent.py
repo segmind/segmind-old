@@ -413,11 +413,11 @@ def log_metrics(metrics, step=None, epoch=0, tags={'sys_metric': 'no'}):
     run_id = _get_or_start_run().info.run_id
     timestamp = int(time.time() * 1000)
     tags_arr = [RunTagProto(
-        key=str(key).replace("/", "-"),
+        key=key,
         value=str(value)) for key, value in tags.items()]
     metrics_arr = [
         Metric(
-            key,
+            str(key).replace("/", "-"),
             value,
             timestamp,
             step or 0,
