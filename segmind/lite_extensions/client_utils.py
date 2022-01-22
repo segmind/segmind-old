@@ -8,6 +8,7 @@ from pathlib import Path
 from segmind.exceptions import MlflowException
 from segmind.lite_extensions.urls import SEGMIND_API_URL, TRACKING_URI
 from segmind.utils import env
+from segmind.utils.user_utils import get_user_info
 from .utils import cyan_print
 
 _EXPERIMENT_ID_ENV_VAR = 'TRACK_EXPERIMENT_ID'
@@ -59,6 +60,17 @@ def get_secret_config():
         sys.exit()
     config.read(SECRET_FILE)
     return config
+
+
+def get_user_info_with_new_token(access_token):
+    os.environ[_ACCESS_TOKEN] = access_token
+    user_info = get_user_info(token=access_token)
+
+    # Set New AccessToken & RefreshToken
+    os.environ[_ACCESS_TOKEN] = user_info['access_token']
+    os.environ[_REFRESH_TOKEN] = user_info['refresh_token']
+
+    return user_info
 
 
 def fetch_token(email, password):
