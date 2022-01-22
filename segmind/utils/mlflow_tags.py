@@ -38,3 +38,9 @@ MLFLOW_PROJECT_BACKEND = 'cral.tracking.project.backend'
 # The following legacy tags are deprecated and will be removed by MLflow 1.0.
 LEGACY_MLFLOW_GIT_BRANCH_NAME = 'cral.tracking.gitBranchName'
 LEGACY_MLFLOW_GIT_REPO_URL = 'cral.tracking.gitRepoURL'
+
+# Segmind Restricted Tags
+MLFLOW_SEGMIND_RUN_NAME = 'segmind_run_name'
+MLFLOW_SEGMIND_RUN_ALGO_NAME = 'segmind_run_algo_name'
+MLFLOW_SEGMIND_USER_USERNAME = 'segmind_user_username'
+MLFLOW_SEGMIND_USER_EMAIL = 'segmind_user_email'

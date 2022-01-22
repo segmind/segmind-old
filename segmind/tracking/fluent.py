@@ -32,7 +32,12 @@ from segmind.protos.service_lite_pb2 import RunTag as RunTagProto
 from segmind.tracking.client import MlflowClient
 from segmind.tracking.context import registry as context_registry
 from segmind.utils import env
-from segmind.utils.mlflow_tags import MLFLOW_PARENT_RUN_ID, MLFLOW_RUN_NAME
+from segmind.utils.mlflow_tags import (MLFLOW_PARENT_RUN_ID, MLFLOW_RUN_NAME,
+                                       MLFLOW_SEGMIND_RUN_NAME,
+                                       MLFLOW_SEGMIND_RUN_ALGO_NAME,
+                                       MLFLOW_SEGMIND_USER_USERNAME,
+                                       MLFLOW_SEGMIND_USER_EMAIL)
+from segmind.utils.user_utils import get_user_info
 from segmind.utils.validation import _validate_run_id
 from segmind.data.public import upload as upload_data
 
@@ -136,7 +141,7 @@ class ActiveRun(Run):  # pylint: disable=W0223
         return exc_type is None
 
 
-def start_run(run_name=None, nested=False):
+def start_run(run_name=None, run_algo_name=None, nested=False):
     """Start a new MLflow run, setting it as the active run under which metrics
     and parameters will be logged. The return value can be used as a context
     manager within a ``with`` block; otherwise, you must call ``end_run()`` to
@@ -225,6 +230,18 @@ def start_run(run_name=None, nested=False):
             user_specified_tags[MLFLOW_PARENT_RUN_ID] = parent_run_id
         if run_name is not None:
             user_specified_tags[MLFLOW_RUN_NAME] = run_name
+            user_specified_tags[MLFLOW_SEGMIND_RUN_NAME] = run_name
+        if run_algo_name is not None:
+            user_specified_tags[MLFLOW_SEGMIND_RUN_ALGO_NAME] = run_algo_name
+
+        # Set Run - User Name
+        try:
+            user_info = get_user_info(username=True, email=True)
+        except Exception as err:
+            pass
+        else:
+            user_specified_tags[MLFLOW_SEGMIND_USER_USERNAME] = user_info['username']
+            user_specified_tags[MLFLOW_SEGMIND_USER_EMAIL] = user_info['email']
 
         tags = context_registry.resolve_tags(user_specified_tags)
 
