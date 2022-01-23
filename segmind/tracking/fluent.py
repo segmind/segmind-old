@@ -333,8 +333,14 @@ def _get_or_start_run():
     return start_run()
 
 
+def _get_active_run_id_or_none():
+    if len(_active_run_stack) > 0:
+        return _active_run_stack[-1]
 
-def set_tag(key, value):
+    return None
+
+
+def set_tag(key, value, run_id=None):
     """Set a tag under the current run. If no run is active, this method will
     create a new active run.
 
@@ -342,7 +348,14 @@ def set_tag(key, value):
         key (str): Tag name
         value (str): Tag value (string, but will be string-ified if not)
     """
-    run_id = _get_or_start_run().info.run_id
+    if not run_id:
+        run_id = _get_active_run_id_or_none()
+        if not run_id:
+            raise ValueError("No Active run found, Please start a run with `start_run()`")
+
+    if str(key).startswith("segmind_"):
+        return ValueError("Tags with prefix segmind_ are restricted!")
+
     MlflowClient().set_tag(run_id, key, value)
 
 
