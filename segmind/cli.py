@@ -24,23 +24,14 @@ def cli():
     type=click.STRING,
     help="String, Segmind Access Token",
 )
-@click.option(
-    "-r",
-    "--refresh_token",
-    required=False,
-    type=click.STRING,
-    help="String, Segmind Refresh Token",
-)
-def config(access_token, refresh_token):
+def config(access_token):
     cyan_print("Please enter your credentials for Segmind:")
 
     if not access_token:
         access_token = input("Enter Access token: ")
-    if not refresh_token:
-        refresh_token = input("Enter Refresh Token")
 
     try:
-        user_info = get_user_info_with_new_token()
+        user_info = get_user_info_with_new_token(access_token=access_token)
     except Exception as err:
         red_print(f"Log-In failed !!! Error: {err}")
         sys.exit()
