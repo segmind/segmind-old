@@ -64,7 +64,7 @@ def get_secret_config():
 
 def get_user_info_with_new_token(access_token):
     os.environ[_ACCESS_TOKEN] = access_token
-    user_info = get_user_info(token=access_token)
+    user_info = get_user_info(token=access_token, access_token=True, refresh_token=False)
 
     # Set New AccessToken & RefreshToken
     os.environ[_ACCESS_TOKEN] = user_info['access_token']
