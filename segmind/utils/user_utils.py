@@ -1,12 +1,8 @@
 import requests
-from segmind.lite_extensions.client_utils import get_token
 from segmind.lite_extensions.urls import SEGMIND_API_URL
 
 
-def get_user_info(username=True, email=False, token=None):
-    if not token:
-        token = get_token()
-
+def get_user_info(token, username=True, email=False):
     url = SEGMIND_API_URL + "/auth/profile"
     headers = {
         "Authorization": "Bearer " + str(token),

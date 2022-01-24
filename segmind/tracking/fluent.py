@@ -236,7 +236,7 @@ def start_run(run_name=None, run_algo_name=None, nested=False):
 
         # Set Run - User Name
         try:
-            user_info = get_user_info(username=True, email=True)
+            user_info = get_user_info(token=get_token(), username=True, email=True)
         except Exception as err:
             pass
         else:
