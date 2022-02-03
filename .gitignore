@@ -1,5 +1,6 @@
 .venv*
 .idea*
+.DS_Store
 *.pyc
 lightning_logs/
 segmind_track.egg-info/

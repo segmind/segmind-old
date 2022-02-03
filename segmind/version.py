@@ -1,3 +1,3 @@
-# Copyright 2020 Segmind Solutions Pvt Ltd.
+# Copyright 2022 Segmind Solutions Pvt Ltd.
 
-VERSION = '0.1.6'
+VERSION = "0.1.7-beta04"

@@ -41,8 +41,6 @@ def http_request(endpoint,
     hostname = get_host_uri()
 
     token = get_token()
-    # TODO: @tanay Get create experiment endpoint from protos
-    print("endpoint: ", endpoint, kwargs)
     if endpoint == '/api/2.0/mlflow/experiments/create':
         experiment_id = None
     elif endpoint == '/api/2.0/mlflow/experiments/get':

@@ -417,7 +417,7 @@ def log_metrics(metrics, step=None, epoch=0, tags={'sys_metric': 'no'}):
         value=str(value)) for key, value in tags.items()]
     metrics_arr = [
         Metric(
-            key,
+            str(key).replace("/", "-"),
             value,
             timestamp,
             step or 0,
