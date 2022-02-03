@@ -61,6 +61,30 @@ def get_secret_config():
     return config
 
 
+def get_user_info_with_new_token(access_token):
+    os.environ[_ACCESS_TOKEN] = access_token
+    user_tokens = get_new_tokens(token=access_token)
+
+    # Set New AccessToken & RefreshToken
+    os.environ[_ACCESS_TOKEN] = user_tokens['access_token']
+    os.environ[_REFRESH_TOKEN] = user_tokens['refresh_token']
+
+    return user_tokens
+
+def get_new_tokens(token):
+    url = SEGMIND_API_URL + "/auth/profile"
+
+    headers = {
+        "Authorization": "Bearer " + str(token),
+        "Content-Type": "application/json",
+    }
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    response_data = response.json()
+
+    return response_data
+
+
 def fetch_token(email, password):
     payload = {
         'email': email,
