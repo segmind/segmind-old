@@ -91,20 +91,28 @@ def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, lengt
         print()
 
 
-def _upload_folder_to_s3(s3, path, bucket_name, s3_path):
+def _upload_folder_to_s3(s3, path, bucket_name, s3_folder_name, destination_path):
     """
         boto3 does not support s3 folder upload, os.walk to upload every file
         in the desired directory
     """
-    # Initial call to print 0% progress
+    abspath_of_folder = os.path.abspath(path)
+    folder_name = abspath_of_folder.split('/')[-1]
+
+    if destination_path:
+        s3_path = s3_folder_name + "/" + destination_path
+    else:
+        s3_path = s3_folder_name + "/" + folder_name
+
+     # Initial call to print 0% progress
     _, _, files = next(os.walk(path))
     length_of_items = len(files)
     print_progress_bar(0, length_of_items, prefix='Progress:', suffix='Complete')
-    for root, dirs, files in os.walk(path):
+    for root, _, files in os.walk(path):
         for index, file in enumerate(files):
-            dest_path = path.replace(path, "")
-            __s3file = os.path.normpath(s3_path + '/' + dest_path + '/' + file)
-            __local_file = os.path.join(path, file)
+            __local_file = root + "/" + file
+            __s3file = root.replace(abspath_of_folder, s3_path) + "/" + file
+
             s3.Bucket(bucket_name).upload_file(__local_file, __s3file)
 
             # Update Progress Bar
@@ -129,12 +137,12 @@ def upload(path, datastore_name, destination_path="", via_cli=True):
     )
 
     if os.path.isdir(path):
-        s3_path = folder_name + "/" + destination_path
         _upload_folder_to_s3(
             s3=s3,
             path=path,
             bucket_name=bucket_name,
-            s3_path=s3_path
+            s3_folder_name=folder_name,
+            destination_path=destination_path
         )
     else:
         s3_path = folder_name + "/" + destination_path
