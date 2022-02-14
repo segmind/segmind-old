@@ -105,8 +105,7 @@ def _upload_folder_to_s3(s3, path, bucket_name, s3_folder_name, destination_path
         s3_path = s3_folder_name + "/" + folder_name
 
      # Initial call to print 0% progress
-    _, _, files = next(os.walk(path))
-    length_of_items = len(files)
+    length_of_items = len([name for name in os.listdir(path) if os.path.isfile(name)])
     print_progress_bar(0, length_of_items, prefix='Progress:', suffix='Complete')
     for root, _, files in os.walk(path):
         for index, file in enumerate(files):
