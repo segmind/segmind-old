@@ -134,10 +134,14 @@ def get_token():
             access_token = os.environ.get(_ACCESS_TOKEN)
         return access_token
 
-    config = get_secret_config()
-    email = config['secret']['email']
-    password = config['secret']['password']
-    return fetch_token(email, password)
+    raise ValueError(
+        f'Could not locate your credentials, Please use segmind.config_nb(access_token=...) to configure segmind.'
+    )
+
+    # config = get_secret_config()
+    # email = config['secret']['email']
+    # password = config['secret']['password']
+    # return fetch_token(email, password)
 
 
 def catch_mlflowlite_exception(func):

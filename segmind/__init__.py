@@ -16,6 +16,7 @@ from .tracking import fluent
 from .utils.logging_utils import log_params_decorator  # noqa: F401
 from .utils.logging_utils import _configure_mlflow_loggers
 from .version import VERSION as __version__  # noqa: F401
+from segmind.lite_extensions.client_utils import get_user_info_with_new_token
 
 warnings.filterwarnings(
     'ignore', message='numpy.dtype size changed')  # noqa: E402
@@ -193,6 +194,16 @@ def set_runid(*args, **kwargs):
     return fluent.set_runid(*args, **kwargs)
 
 
+def config_nb(access_token):
+    try:
+        user_info = get_user_info_with_new_token(access_token=access_token)
+    except Exception as err:
+        print(f"Log-In failed !!! Error: {err}")
+        return
+
+    print(f"Welcome {user_info['username']}, Log-In Successful !!!")
+
+
 get_experiment = fluent.get_experiment
 # get_experiment_by_name = fluent.get_experiment_by_name
 get_tracking_uri = get_tracking_uri
@@ -209,5 +220,5 @@ get_tracking_uri = get_tracking_uri
 run = projects.run
 
 __all__ = [
-    'ActiveRun', 'run',
+    'ActiveRun', 'run', 'config_nb'
 ]
