@@ -6,7 +6,7 @@ import requests
 
 from segmind.lite_extensions.client_utils import get_token
 from segmind.lite_extensions.urls import SEGMIND_API_URL, SEGMIND_SPOT_URL
-from segmind.utils import red_print
+from segmind.utils import red_print, green_print
 
 
 def get_s3_session(key, secret):
@@ -104,7 +104,8 @@ def _upload_folder_to_s3(s3, path, bucket_name, s3_folder_name, destination_path
     else:
         s3_path = s3_folder_name + "/" + folder_name
 
-     # Initial call to print 0% progress
+    # Initial call to print 0% progress
+    total_files_uploaded = 0
     for root, _, files in os.walk(path):
         length_of_items = len(files)
         if not length_of_items:
@@ -115,9 +116,12 @@ def _upload_folder_to_s3(s3, path, bucket_name, s3_folder_name, destination_path
             __s3file = root.replace(abspath_of_folder, s3_path) + "/" + file
 
             s3.Bucket(bucket_name).upload_file(__local_file, __s3file)
+            total_files_uploaded += 1
 
             # Update Progress Bar
             print_progress_bar(index + 1, length_of_items, prefix='Progress:', suffix='Complete')
+
+    green_print(f"Total files uploaded: {total_files_uploaded}")
 
 
 def _upload_file_to_s3(s3, path, bucket_name, s3_path):
