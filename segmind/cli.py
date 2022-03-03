@@ -25,8 +25,6 @@ def cli():
     help="String, Segmind Access Token",
 )
 def config(access_token):
-    cyan_print("Please enter your credentials for Segmind:")
-
     if not access_token:
         access_token = input("Enter Access token: ")
 
