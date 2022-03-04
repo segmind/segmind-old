@@ -204,17 +204,17 @@ def get_token():
     if not access_token:
         # check token in token-file
         tokens = get_token_config()
-        access_token = tokens.get('TOKENS', {}).get('access_token')
-
-        # token not found, show guides
-        if not access_token:
+        try:
+            access_token = tokens['TOKENS']['access_token']
+        except:
+            # token not found, show guides
             create_token_file_guide()
             cyan_print('Alternatively ..')
             set_access_token_guide()
             sys.exit()
 
         # token found in token-file, update env
-        set_tokens_in_env(tokens)
+        set_tokens_in_env(dict(tokens['TOKENS']))
 
     # token found, check if expired
     if token_has_expired(access_token=access_token):
