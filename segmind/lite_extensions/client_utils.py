@@ -37,8 +37,13 @@ def create_secret_file_guide():
     cyan_print(message)
 
 
+def create_token_file_guide():
+    message = "couldn't locate your credentials, please configure by typing `segmind config` in a terminal"
+    cyan_print(message)
+
+
 def set_access_token_guide():
-    message = f'set your access-token as env variable by `export {_ACCESS_TOKEN}=your-access-token` in terminal'  # noqa
+    message = f'set your access-token as env variable by `export {_ACCESS_TOKEN}=your-access-token` in terminal'
     cyan_print(message)
 
 
@@ -61,15 +66,36 @@ def get_secret_config():
     return config
 
 
+def get_token_config():
+    config = configparser.ConfigParser()
+    if not os.path.isfile(TOKENS_FILE):
+        create_token_file_guide()
+        cyan_print('Alternatively ..')
+        set_access_token_guide()
+        sys.exit()
+
+    config.read(TOKENS_FILE)
+
+    return config
+
+
+def set_tokens_in_env(user_tokens):
+    os.environ[_ACCESS_TOKEN] = user_tokens['access_token']
+    os.environ[_REFRESH_TOKEN] = user_tokens['refresh_token']
+
+
 def get_user_info_with_new_token(access_token):
     os.environ[_ACCESS_TOKEN] = access_token
     user_tokens = get_new_tokens(token=access_token)
 
     # Set New AccessToken & RefreshToken
-    os.environ[_ACCESS_TOKEN] = user_tokens['access_token']
-    os.environ[_REFRESH_TOKEN] = user_tokens['refresh_token']
+    set_tokens_in_env(user_tokens)
+
+    # save token in a file
+    save_tokens_in_file(user_tokens)
 
     return user_tokens
+
 
 def get_new_tokens(token):
     url = SEGMIND_API_URL + "/auth/profile"
@@ -85,6 +111,21 @@ def get_new_tokens(token):
     return response_data
 
 
+def save_tokens_in_file(user_tokens):
+    # make sure folder and file are present
+    folder_path = os.path.join(os.path.expanduser('~'), '.segmind')
+    os.makedirs(folder_path, exist_ok=True)
+
+    ftoken = configparser.ConfigParser()
+    ftoken['TOKENS'] = {
+        'access_token': user_tokens['access_token'],
+        'refresh_token': user_tokens['refresh_token'],
+    }
+    with open(TOKENS_FILE, 'w') as config:
+        ftoken.write(config)
+
+
+# Deprecated
 def fetch_token(email, password):
     payload = {
         'email': email,
@@ -105,43 +146,83 @@ def fetch_token(email, password):
     return os.environ.get(_ACCESS_TOKEN)
 
 
-def token_has_expired():
-    # ftoken = configparser.ConfigParser()
-    # ftoken.read(TOKENS_FILE)
-    headers = {'authorization': f'Bearer {os.environ.get(_ACCESS_TOKEN)}'}
+def token_has_expired(access_token=None):
+    if not access_token:
+        # check token in env first.
+        if os.environ.get(_ACCESS_TOKEN):
+            access_token = os.environ.get(_ACCESS_TOKEN)
+        else:
+            # check token in token-file
+            tokens = get_token_config()
+            access_token = tokens['TOKENS']['access_token']
+
+    headers = {'authorization': f'Bearer {access_token}'}
     query = requests.get(
-        f'{SEGMIND_API_URL}/auth/authenticate', headers=headers)
+        f'{SEGMIND_API_URL}/auth/authenticate',
+        headers=headers
+    )
     if query.status_code != 200:
         return True
+
     return False
 
 
-def refresh_token():
-    headers = {'authorization': f'Bearer {os.environ.get(_REFRESH_TOKEN)}'}
+def refresh_token(refresh_token=None):
+    if not refresh_token:
+        # check token in env first.
+        if os.environ.get(_REFRESH_TOKEN):
+            refresh_token = os.environ.get(_REFRESH_TOKEN)
+        else:
+            # check token in token-file
+            tokens = get_token_config()
+            refresh_token = tokens['TOKENS']['refresh_token']
+
+    headers = {'authorization': f'Bearer {refresh_token}'}
     query = requests.post(
-        f'{SEGMIND_API_URL}/auth/refresh-token', headers=headers)
+        f'{SEGMIND_API_URL}/auth/refresh-token',
+        headers=headers
+    )
     if query.status_code != 200:
         raise MlflowException(query.json()['message'])
-    else:
-        os.environ[_ACCESS_TOKEN] = query.json()['access_token']
+
+    access_token = query.json()['access_token']
+
+    # set new token in env
+    os.environ[_ACCESS_TOKEN] = access_token
+
+    # save new token in token-file
+    save_tokens_in_file({
+        'access_token': access_token,
+        'refresh_token': refresh_token,
+    })
+
+    return access_token
 
 
 def get_token():
     access_token = os.environ.get(_ACCESS_TOKEN)
-    if access_token is not None:
-        if token_has_expired():
-            refresh_token()
-            access_token = os.environ.get(_ACCESS_TOKEN)
-        return access_token
+    if not access_token:
+        # check token in token-file
+        tokens = get_token_config()
+        access_token = tokens.get('TOKENS', {}).get('access_token')
 
-    raise ValueError(
-        f'Could not locate your credentials, Please use segmind.config_nb(access_token=...) to configure segmind.'
-    )
+        # token not found, show guides
+        if not access_token:
+            create_token_file_guide()
+            cyan_print('Alternatively ..')
+            set_access_token_guide()
+            sys.exit()
 
-    # config = get_secret_config()
-    # email = config['secret']['email']
-    # password = config['secret']['password']
-    # return fetch_token(email, password)
+        # token found in token-file, update env
+        set_tokens_in_env(tokens)
+
+    # token found, check if expired
+    if token_has_expired(access_token=access_token):
+
+        # token is expired, generate new token
+        access_token = refresh_token()
+
+    return access_token
 
 
 def catch_mlflowlite_exception(func):
