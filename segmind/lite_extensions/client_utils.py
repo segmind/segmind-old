@@ -183,7 +183,7 @@ def refresh_token(refresh_token=None):
         headers=headers
     )
     if query.status_code != 200:
-        raise MlflowException(query.json()['message'])
+        raise MlflowException(query.json()['msg'])
 
     access_token = query.json()['access_token']
 
