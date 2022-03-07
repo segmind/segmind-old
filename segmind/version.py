@@ -1,3 +1,3 @@
 # Copyright 2022 Segmind Solutions Pvt Ltd.
 
-VERSION = "0.1.8-beta02"
+VERSION = "0.1.8-beta04"
