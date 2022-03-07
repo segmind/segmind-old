@@ -44,6 +44,29 @@ def _get_upload_credentials(token, datastore_name):
     return s3, bucket_name, folder_name
 
 
+def _get_credentials_str(token, datastore_name):
+    headers = {
+        "Authorization": "Bearer " + str(token),
+        "Content-Type": "application/json",
+    }
+    url = SEGMIND_API_URL + "/clusters/s3-creds"
+    response = requests.get(url, headers=headers)
+    response_data = response.json()
+    response.raise_for_status()
+    sync_str = f"AWS_ACCESS_KEY_ID={response_data.get('access_key')} AWS_SECRET_ACCESS_KEY={response_data.get('secret_key')} aws s3 sync"
+
+    payload = {"name": datastore_name}
+    url = SEGMIND_SPOT_URL + "/datastore/details"
+    response = requests.get(url, headers=headers, data=json.dumps(payload))
+    response_data = response.json()
+    response.raise_for_status()
+    bucket_name = response_data.get("s3_bucket_name")
+    folder_name = response_data.get("folder_name")
+    sync_str_destination = f"s3://{bucket_name}/{folder_name}"
+
+    return sync_str + " {source} " + sync_str_destination + "{destination}"
+
+
 def _get_token(via_cli):
     try:
         # Check user-credentials and fetch the token.
@@ -74,7 +97,7 @@ def _upload_folder_to_s3(s3, path, bucket_name, s3_folder_name, destination_path
     folder_name = abspath_of_folder.split("/")[-1]
 
     if destination_path:
-        s3_path = s3_folder_name + "/" + destination_path
+        s3_path = s3_folder_name + destination_path
     else:
         s3_path = s3_folder_name + "/" + folder_name
 
@@ -133,6 +156,11 @@ def upload(path, datastore_name, destination_path="", via_cli=True):
         token=token, datastore_name=datastore_name
     )
 
+    if destination_path and destination_path in ('.', '/'):
+        raise ValueError("destination_path can't be . or / Please specify a file/folder name.")
+    if destination_path and not destination_path.startswith('/'):
+        destination_path = '/' + destination_path
+
     if os.path.isdir(path):
         _upload_folder_to_s3(
             s3=s3,
@@ -149,3 +177,23 @@ def upload(path, datastore_name, destination_path="", via_cli=True):
             bucket_name=bucket_name,
             s3_path=s3_path,
         )
+
+
+def sync(path, datastore_name, destination_path="", via_cli=True):
+    token = _get_token(via_cli=via_cli)
+    sync_str = _get_credentials_str(
+        token=token, datastore_name=datastore_name
+    )
+
+    abspath_of_folder = os.path.abspath(path)
+    folder_name = abspath_of_folder.split("/")[-1]
+
+    if destination_path:
+        if destination_path.startswith('/'):
+            destination = destination_path
+        else:
+            destination = "/" + destination_path
+    else:
+        destination = "/" + folder_name
+
+    os.system(sync_str.format(source=path, destination=destination))
