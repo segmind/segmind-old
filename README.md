@@ -36,3 +36,18 @@ pre-commit install
 ```
 
 After this on every commit check code linters and formatter will be enforced.
+
+
+
+# Run locally
+
+`cd .`
+
+`pip install virtualenv`
+
+`virtualenv venv`
+
+`source ./venv/bin/activate`
+
+pip install -r requirements.txt
+pip install -e .
