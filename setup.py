@@ -20,7 +20,7 @@ setuptools.setup(
     # url="https://github.com/pk00095/keras_jukebox/archive/0.0.3.tar.gz",
     packages=setuptools.find_packages(),
     install_requires=[
-        'pycocotools', 'click', 'protobuf==3.15.0', 'lxml',
+        'pycocotools', 'click', 'protobuf==3.18.3', 'lxml',
         'pascal_voc_writer', 'GPUtil', 'PYyaml', 'pandas',
         'entrypoints', 'psutil', 'boto3', 'requests', 'tqdm',
         'awscli',
