@@ -7,6 +7,7 @@ import click
 
 from segmind.data.public import upload as upload_data
 from segmind.data.public import sync as sync_data
+from segmind.data.public import ls as list_data
 from segmind.utils import cyan_print, green_print, red_print
 from segmind.lite_extensions.client_utils import get_user_info_with_new_token
 from segmind.version import VERSION
@@ -97,7 +98,46 @@ def sync(path, destination_path, datastore_name, *args, **kwargs):
         via_cli=True,
     )
     green_print(
-        "Success! To view your file/folder, login to your account in https://cloud.segmind.com"
+        "Finished! To view your file/folder, login to your account in https://cloud.segmind.com"
+    )
+
+@cli.command()
+@click.option(
+    "--datastore_name",
+    required=True,
+    type=str,
+    help="String, name of your datastore, created via Segmind UI from https://cloud.segmind.com/",
+)
+@click.option(
+    "-p",
+    "--path",
+    required=False,
+    help="String, path to the file/folder - in datastore/<THIS-PATH>",
+)
+@click.option(
+    "--human-readable",
+    required=False,
+    is_flag=True
+)
+@click.option(
+    "--summarize",
+    required=False,
+    is_flag=True
+)
+@click.option(
+    "--recursive",
+    required=False,
+    is_flag=True
+)
+def ls(datastore_name, path='', human_readable=False, summarize=False, recursive=False, *args, **kwargs):
+    green_print("ls result: ")
+    list_data(
+        path=path,
+        datastore_name=datastore_name,
+        human_readable=human_readable,
+        summarize=summarize,
+        recursive=recursive,
+        via_cli=True,
     )
 
 

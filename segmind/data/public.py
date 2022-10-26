@@ -44,7 +44,7 @@ def _get_upload_credentials(token, datastore_name):
     return s3, bucket_name, folder_name
 
 
-def _get_credentials_str(token, datastore_name):
+def _get_credentials_str(token, datastore_name, command='s3', option='sync', use_source=True):
     headers = {
         "Authorization": "Bearer " + str(token),
         "Content-Type": "application/json",
@@ -53,7 +53,7 @@ def _get_credentials_str(token, datastore_name):
     response = requests.get(url, headers=headers)
     response_data = response.json()
     response.raise_for_status()
-    sync_str = f"AWS_ACCESS_KEY_ID={response_data.get('access_key')} AWS_SECRET_ACCESS_KEY={response_data.get('secret_key')} aws s3 sync"
+    sync_str = f"AWS_ACCESS_KEY_ID={response_data.get('access_key')} AWS_SECRET_ACCESS_KEY={response_data.get('secret_key')} aws {command} {option}"
 
     payload = {"name": datastore_name}
     url = SEGMIND_SPOT_URL + "/datastore/details"
@@ -64,7 +64,10 @@ def _get_credentials_str(token, datastore_name):
     folder_name = response_data.get("folder_name")
     sync_str_destination = f"s3://{bucket_name}/{folder_name}"
 
-    return sync_str + " {source} " + sync_str_destination + "{destination}"
+    if use_source:
+        return sync_str + " {source} " + sync_str_destination + "{destination}"
+    else:
+        return sync_str + " " + sync_str_destination + "{destination}"
 
 
 def _get_token(via_cli):
@@ -196,4 +199,36 @@ def sync(path, datastore_name, destination_path="", via_cli=True):
     else:
         destination = "/" + folder_name
 
-    os.system(sync_str.format(source=path, destination=destination))
+    return os.system(sync_str.format(source=path, destination=destination))
+
+
+def ls(path, datastore_name, human_readable, summarize, recursive, via_cli=True):
+    token = _get_token(via_cli=via_cli)
+
+    if path and path in ('.', '/'):
+        raise ValueError("path can't be . or / Please specify a file/folder name.")
+
+    if path:
+        if path.startswith('/'):
+            _path = path
+        else:
+            _path = "/" + path
+    else:
+        _path = "/"
+
+    ls_str = _get_credentials_str(
+        token=token,
+        datastore_name=datastore_name,
+        option='ls',
+        use_source=False
+    )
+
+    ls_str = ls_str.format(destination=_path)
+    if human_readable:
+        ls_str += ' --human-readable'
+    if summarize:
+        ls_str += ' --summarize'
+    if recursive:
+        ls_str += ' --recursive'
+
+    return os.system(ls_str)
